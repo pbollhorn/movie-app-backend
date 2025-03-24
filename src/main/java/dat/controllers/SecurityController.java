@@ -39,7 +39,7 @@ public class SecurityController implements ISecurityController
 
     public SecurityController()
     {
-        this.securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory());
+        this.securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory("update"));
     }
 
     public SecurityController(EntityManagerFactory emf)

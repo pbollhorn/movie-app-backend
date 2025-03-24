@@ -11,8 +11,7 @@ import org.hibernate.service.ServiceRegistry;
 
 import java.util.Properties;
 
-public class HibernateConfig
-{
+public class HibernateConfig {
     private static EntityManagerFactory emf;
     private static EntityManagerFactory emfTest;
     private static Boolean isTest = false;
@@ -25,16 +24,16 @@ public class HibernateConfig
         return isTest;
     }
 
-    public static EntityManagerFactory getEntityManagerFactory() {
+    public static EntityManagerFactory getEntityManagerFactory(String hbm2ddlAutoProperty) {
         if (emf == null)
-            emf = createEMF(getTest());
+            emf = createEMF(getTest(), hbm2ddlAutoProperty);
         return emf;
     }
 
     public static EntityManagerFactory getEntityManagerFactoryForTest() {
-        if (emfTest == null){
+        if (emfTest == null) {
             setTest(true);
-            emfTest = createEMF(getTest());  // No DB needed for test
+            emfTest = createEMF(getTest(), "create-drop");  // No DB needed for test
         }
         return emfTest;
     }
@@ -52,12 +51,12 @@ public class HibernateConfig
         configuration.addAnnotatedClass(Roles.class);
     }
 
-    private static EntityManagerFactory createEMF(boolean forTest) {
+    private static EntityManagerFactory createEMF(boolean forTest, String hbm2ddlAutoProperty) {
         try {
             Configuration configuration = new Configuration();
             Properties props = new Properties();
             // Set the properties
-            setBaseProperties(props);
+            setBaseProperties(props, hbm2ddlAutoProperty);
             if (forTest) {
                 props = setTestProperties(props);
             } else if (System.getenv("DEPLOYED") != null) {
@@ -73,16 +72,15 @@ public class HibernateConfig
                     .build();
             SessionFactory sf = configuration.buildSessionFactory(serviceRegistry);
             return sf.unwrap(EntityManagerFactory.class);
-        }
-        catch (Throwable ex) {
+        } catch (Throwable ex) {
             System.err.println("Initial SessionFactory creation failed." + ex);
             throw new ExceptionInInitializerError(ex);
         }
     }
 
-    private static Properties setBaseProperties(Properties props) {
+    private static Properties setBaseProperties(Properties props, String hbm2ddlAutoProperty) {
         props.put("hibernate.connection.driver_class", "org.postgresql.Driver");
-        props.put("hibernate.hbm2ddl.auto", "create");  // set to "update" when in production
+        props.put("hibernate.hbm2ddl.auto", hbm2ddlAutoProperty);  // set to "update" when in production
         props.put("hibernate.current_session_context_class", "thread");
         props.put("hibernate.show_sql", "false");
         props.put("hibernate.format_sql", "false");

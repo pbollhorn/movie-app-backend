@@ -10,7 +10,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 public class Main
 {
-    private final static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+    private final static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("update");
 
 
     public static void main(String[] args)
