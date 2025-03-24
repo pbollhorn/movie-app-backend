@@ -51,7 +51,7 @@ public class TmdbService {
 
             long startTime = System.currentTimeMillis();
 
-            String url = "https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&primary_release_date.gte=2020-01-01&with_origin_country=DK&page=" + page + "&api_key=" + ApiKey;
+            String url = "https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&primary_release_date.gte=2020-01-01&language=da&with_original_language=da&page=" + page + "&api_key=" + ApiKey;
             String json = new DataAPIReader().getDataFromClient(url);
             System.out.println(json);
 
