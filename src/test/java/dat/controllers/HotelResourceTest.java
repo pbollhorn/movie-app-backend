@@ -20,8 +20,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class HotelResourceTest
-{
+class HotelResourceTest {
 
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
     final ObjectMapper objectMapper = new ObjectMapper();
@@ -30,11 +29,11 @@ class HotelResourceTest
 
 
     @BeforeAll
-    static void setUpAll()
-    {
+    static void setUpAll() {
+        MovieController movieController = new MovieController(emf);
         HotelController hotelController = new HotelController(emf);
         SecurityController securityController = new SecurityController(emf);
-        Routes routes = new Routes(hotelController, securityController);
+        Routes routes = new Routes(movieController, hotelController, securityController);
         ApplicationConfig
                 .getInstance()
                 .initiateServer()
@@ -47,10 +46,8 @@ class HotelResourceTest
     }
 
     @BeforeEach
-    void setUp()
-    {
-        try (EntityManager em = emf.createEntityManager())
-        {
+    void setUp() {
+        try (EntityManager em = emf.createEntityManager()) {
             //TestEntity[] entities = EntityPopulator.populate(genericDAO);
             t1 = new Hotel("TestEntityA");
             t2 = new Hotel("TestEntityB");
@@ -61,33 +58,27 @@ class HotelResourceTest
             em.persist(t1);
             em.persist(t2);
             em.getTransaction().commit();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             logger.error("Error setting up test", e);
         }
     }
 
     @Test
-    void getAll()
-    {
+    void getAll() {
         given().when().get("/hotel").then().statusCode(200).body("size()", equalTo(2));
     }
 
     @Test
-    void getById()
-    {
+    void getById() {
         given().when().get("/hotel/" + t2.getId()).then().statusCode(200).body("id", equalTo(t2.getId().intValue()));
     }
 
     @Test
-    void create()
-    {
+    void create() {
         Hotel entity = new Hotel("Thor Partner Hotel", "Carl Gustavs Gade 1");
         Room room = new Room("201");
         entity.addRoom(room);
-        try
-        {
+        try {
             String json = objectMapper.writeValueAsString(new HotelDTO(entity));
             given().when()
                     .contentType("application/json")
@@ -98,9 +89,8 @@ class HotelResourceTest
                     .statusCode(200)
                     .body("name", equalTo(entity.getName()))
                     .body("address", equalTo(entity.getAddress()));
-                    //.body("rooms.size()", equalTo(1));
-        } catch (JsonProcessingException e)
-        {
+            //.body("rooms.size()", equalTo(1));
+        } catch (JsonProcessingException e) {
             logger.error("Error creating hotel", e);
 
             fail();
@@ -108,11 +98,9 @@ class HotelResourceTest
     }
 
     @Test
-    void update()
-    {
+    void update() {
         Hotel entity = new Hotel("New entity2");
-        try
-        {
+        try {
             String json = objectMapper.writeValueAsString(new HotelDTO(entity));
             given().when()
                     .contentType("application/json")
@@ -122,16 +110,14 @@ class HotelResourceTest
                     .then()
                     .statusCode(200)
                     .body("name", equalTo("New entity2"));
-        } catch (JsonProcessingException e)
-        {
+        } catch (JsonProcessingException e) {
             logger.error("Error updating hotel", e);
             fail();
         }
     }
 
     @Test
-    void delete()
-    {
+    void delete() {
         given().when()
                 .delete("/hotel/" + t1.getId())
                 .then()

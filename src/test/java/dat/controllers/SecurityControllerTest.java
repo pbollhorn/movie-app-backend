@@ -32,9 +32,10 @@ class SecurityControllerTest {
 
     @BeforeAll
     static void setUpAll() {
+        MovieController movieController = new MovieController(emf);
         HotelController hotelController = new HotelController(emf);
         SecurityController securityController = new SecurityController(emf);
-        Routes routes = new Routes(hotelController, securityController);
+        Routes routes = new Routes(movieController, hotelController, securityController);
         ApplicationConfig
                 .getInstance()
                 .initiateServer()
@@ -73,11 +74,11 @@ class SecurityControllerTest {
     @Test
     void healtcheck_test() {
         given()
-        .when()
-            .get("/auth/healthcheck")
-        .then()
-            .statusCode(200)
-            .body("msg", equalTo("API is up and running"));
+                .when()
+                .get("/auth/healthcheck")
+                .then()
+                .statusCode(200)
+                .body("msg", equalTo("API is up and running"));
     }
 
     @Test
@@ -87,14 +88,14 @@ class SecurityControllerTest {
         loginRequest.put("password", TEST_PASSWORD);
 
         given()
-            .contentType(ContentType.JSON)
-            .body(loginRequest)
-        .when()
-            .post("/auth/login")
-        .then()
-            .statusCode(200)
-            .body("token", notNullValue())
-            .body("username", equalTo(TEST_USER));
+                .contentType(ContentType.JSON)
+                .body(loginRequest)
+                .when()
+                .post("/auth/login")
+                .then()
+                .statusCode(200)
+                .body("token", notNullValue())
+                .body("username", equalTo(TEST_USER));
     }
 
     @Test
@@ -104,13 +105,13 @@ class SecurityControllerTest {
         loginRequest.put("password", "wrongpassword");
 
         given()
-            .contentType(ContentType.JSON)
-            .body(loginRequest)
-        .when()
-            .post("/auth/login")
-        .then()
-            .statusCode(401)
-            .body("message", containsString("Could not verify user"));
+                .contentType(ContentType.JSON)
+                .body(loginRequest)
+                .when()
+                .post("/auth/login")
+                .then()
+                .statusCode(401)
+                .body("message", containsString("Could not verify user"));
     }
 
     @Test
@@ -120,13 +121,13 @@ class SecurityControllerTest {
         loginRequest.put("password", TEST_PASSWORD);
 
         given()
-            .contentType(ContentType.JSON)
-            .body(loginRequest)
-        .when()
-            .post("/auth/login")
-        .then()
-            .statusCode(401)
-            .body("message", containsString("Could not verify user"));
+                .contentType(ContentType.JSON)
+                .body(loginRequest)
+                .when()
+                .post("/auth/login")
+                .then()
+                .statusCode(401)
+                .body("message", containsString("Could not verify user"));
     }
 
     @Test
@@ -136,14 +137,14 @@ class SecurityControllerTest {
         registerRequest.put("password", "newpassword");
 
         given()
-            .contentType(ContentType.JSON)
-            .body(registerRequest)
-        .when()
-            .post("/auth/register")
-        .then()
-            .statusCode(201)
-            .body("token", notNullValue())
-            .body("username", equalTo("newuser"));
+                .contentType(ContentType.JSON)
+                .body(registerRequest)
+                .when()
+                .post("/auth/register")
+                .then()
+                .statusCode(201)
+                .body("token", notNullValue())
+                .body("username", equalTo("newuser"));
     }
 
     @Test
@@ -158,10 +159,10 @@ class SecurityControllerTest {
 
         try {
             given()
-                .contentType(ContentType.JSON)
-                .body(registerRequest)
-            .when()
-                .post("/auth/register");
+                    .contentType(ContentType.JSON)
+                    .body(registerRequest)
+                    .when()
+                    .post("/auth/register");
         } catch (Exception e) {
             // Ignore any exceptions - we expect this to fail
             logger.info("Expected exception: {}", e.getMessage());
@@ -188,39 +189,39 @@ class SecurityControllerTest {
         loginRequest.put("password", TEST_PASSWORD);
 
         Response loginResponse = given()
-            .contentType(ContentType.JSON)
-            .body(loginRequest)
-            .post("/auth/login");
+                .contentType(ContentType.JSON)
+                .body(loginRequest)
+                .post("/auth/login");
 
         String token = loginResponse.jsonPath().getString("token");
 
         // Then verify the token
         given()
-            .header("Authorization", "Bearer " + token)
-        .when()
-            .get("/auth/verify")
-        .then()
-            .statusCode(200)
-            .body("msg", equalTo("Token is valid"));
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/auth/verify")
+                .then()
+                .statusCode(200)
+                .body("msg", equalTo("Token is valid"));
     }
 
     @Test
     void testVerify_InvalidToken() {
         given()
-            .header("Authorization", "Bearer invalidtoken")
-        .when()
-            .get("/auth/verify")
-        .then()
-            .statusCode(401);
+                .header("Authorization", "Bearer invalidtoken")
+                .when()
+                .get("/auth/verify")
+                .then()
+                .statusCode(401);
     }
 
     @Test
     void testVerify_NoToken() {
         given()
-        .when()
-            .get("/auth/verify")
-        .then()
-            .statusCode(401);
+                .when()
+                .get("/auth/verify")
+                .then()
+                .statusCode(401);
     }
 
     @Test
@@ -231,23 +232,23 @@ class SecurityControllerTest {
         loginRequest.put("password", TEST_PASSWORD);
 
         Response loginResponse = given()
-            .contentType(ContentType.JSON)
-            .body(loginRequest)
-            .post("/auth/login");
+                .contentType(ContentType.JSON)
+                .body(loginRequest)
+                .post("/auth/login");
 
         String token = loginResponse.jsonPath().getString("token");
 
         // Then check token lifespan
         given()
-            .header("Authorization", "Bearer " + token)
-        .when()
-            .get("/auth/tokenlifespan")
-        .then()
-            .statusCode(200)
-            .body("msg", containsString("Token is valid until"))
-            .body("expireTime", notNullValue())
-            .body("secondsToLive", notNullValue());
-            // The token might have already expired, so we're just checking that the field exists
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/auth/tokenlifespan")
+                .then()
+                .statusCode(200)
+                .body("msg", containsString("Token is valid until"))
+                .body("expireTime", notNullValue())
+                .body("secondsToLive", notNullValue());
+        // The token might have already expired, so we're just checking that the field exists
     }
 
     @Test
@@ -258,20 +259,20 @@ class SecurityControllerTest {
         loginRequest.put("password", TEST_PASSWORD);
 
         Response loginResponse = given()
-            .contentType(ContentType.JSON)
-            .body(loginRequest)
-            .post("/auth/login");
+                .contentType(ContentType.JSON)
+                .body(loginRequest)
+                .post("/auth/login");
 
         String token = loginResponse.jsonPath().getString("token");
 
         // Then access protected user endpoint
         given()
-            .header("Authorization", "Bearer " + token)
-        .when()
-            .get("/protected/user_demo")
-        .then()
-            .statusCode(200)
-            .body("msg", equalTo("Hello from USER Protected"));
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/protected/user_demo")
+                .then()
+                .statusCode(200)
+                .body("msg", equalTo("Hello from USER Protected"));
     }
 
     @Test
@@ -282,19 +283,19 @@ class SecurityControllerTest {
         loginRequest.put("password", TEST_PASSWORD);
 
         Response loginResponse = given()
-            .contentType(ContentType.JSON)
-            .body(loginRequest)
-            .post("/auth/login");
+                .contentType(ContentType.JSON)
+                .body(loginRequest)
+                .post("/auth/login");
 
         String token = loginResponse.jsonPath().getString("token");
 
         // Then try to access protected admin endpoint
         given()
-            .header("Authorization", "Bearer " + token)
-        .when()
-            .get("/protected/admin_demo")
-        .then()
-            .statusCode(403); // Forbidden
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/protected/admin_demo")
+                .then()
+                .statusCode(403); // Forbidden
     }
 
     @Test
@@ -305,19 +306,19 @@ class SecurityControllerTest {
         loginRequest.put("password", TEST_PASSWORD);
 
         Response loginResponse = given()
-            .contentType(ContentType.JSON)
-            .body(loginRequest)
-            .post("/auth/login");
+                .contentType(ContentType.JSON)
+                .body(loginRequest)
+                .post("/auth/login");
 
         String token = loginResponse.jsonPath().getString("token");
 
         // Then access protected admin endpoint
         given()
-            .header("Authorization", "Bearer " + token)
-        .when()
-            .get("/protected/admin_demo")
-        .then()
-            .statusCode(200)
-            .body("msg", equalTo("Hello from ADMIN Protected"));
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/protected/admin_demo")
+                .then()
+                .statusCode(200)
+                .body("msg", equalTo("Hello from ADMIN Protected"));
     }
 }
