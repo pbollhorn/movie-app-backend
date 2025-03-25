@@ -13,7 +13,7 @@ import lombok.*;
 @Entity
 public class Movie {
 
-    private static final int MINIMUM_VOTE_COUNT_FOR_RATING = 10;
+    private static final int MINIMUM_VOTES_FOR_RATING = 10;
 
     @Id
     private Integer id;
@@ -33,6 +33,8 @@ public class Movie {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Genre> genres;
 
+    private String posterPath;
+
     @ToString.Exclude
     @OneToMany(mappedBy = "movie", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<Credit> credits = new HashSet<>();
@@ -40,7 +42,7 @@ public class Movie {
     @Column(length = 1000)
     private String overview;
 
-    public Movie(Integer id, String title, String originalTitle, Boolean adult, String originalLanguage, Double popularity, Double voteAverage, Integer voteCount, LocalDate releaseDate, Set<Genre> genres, String overview) {
+    public Movie(Integer id, String title, String originalTitle, Boolean adult, String originalLanguage, Double popularity, Double voteAverage, Integer voteCount, LocalDate releaseDate, String posterPath, Set<Genre> genres, String overview) {
         this.id = id;
         this.title = title;
         this.originalTitle = originalTitle;
@@ -51,13 +53,16 @@ public class Movie {
         this.voteAverage = voteAverage;
         this.voteCount = voteCount;
 
-        if (voteCount >= MINIMUM_VOTE_COUNT_FOR_RATING) {
+        if (voteCount >= MINIMUM_VOTES_FOR_RATING) {
             this.rating = voteAverage;
         } else {
             this.rating = null;
         }
 
         this.releaseDate = releaseDate;
+
+        this.posterPath = posterPath;
+
         this.genres = genres;
         this.overview = overview;
     }

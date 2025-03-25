@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import dat.dto.MovieDto;
+import dat.dto.TmdbMovieDto;
 import dat.dto.GenreDto;
 import dat.dto.CreditDto;
 import dat.utils.DataAPIReader;
@@ -39,15 +39,15 @@ public class TmdbService {
     }
 
 
-    public static Set<MovieDto> getDanishMoviesSince2020(long delayMilliseconds) {
+    public static Set<TmdbMovieDto> getDanishMoviesSince2020(long delayMilliseconds) {
 
-        Set<MovieDto> movies = new HashSet<>();
+        Set<TmdbMovieDto> movies = new HashSet<>();
 
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.registerModule(new JavaTimeModule());
 
-        for (int page = 1; ; page++) {
+        for (int page = 1; page<2; page++) {
 
             long startTime = System.currentTimeMillis();
 
@@ -119,7 +119,7 @@ public class TmdbService {
             Set<CreditDto> crew) {
     }
 
-    private record MoviesResponseDto(Set<MovieDto> results) {
+    private record MoviesResponseDto(Set<TmdbMovieDto> results) {
     }
 
     private record GenresResponseDto(Set<GenreDto> genres) {

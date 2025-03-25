@@ -15,7 +15,7 @@ import dat.dao.MovieDao;
 import dat.dao.PersonDao;
 import dat.dto.CreditDto;
 import dat.dto.GenreDto;
-import dat.dto.MovieDto;
+import dat.dto.TmdbMovieDto;
 import dat.entities.Genre;
 import dat.entities.Movie;
 import dat.entities.Person;
@@ -50,13 +50,13 @@ public class BuildMain {
 
         // Get all danish movies since 2020 from TMDB and persist them in database
         Set<Movie> movies = new HashSet<>();
-        for (MovieDto m : TmdbService.getDanishMoviesSince2020(DELAY_MILLISECONDS)) {
+        for (TmdbMovieDto m : TmdbService.getDanishMoviesSince2020(DELAY_MILLISECONDS)) {
 
             Set<Genre> genresForThisMovie = genres.stream()
                     .filter(g -> m.genreIds().contains(g.getId()))
                     .collect(Collectors.toUnmodifiableSet());
 
-            Movie movie = new Movie(m.id(), m.title(), m.originalTitle(), m.adult(), m.originalLanguage(), m.popularity(), m.voteAverage(), m.voteCount(), m.releaseDate(), genresForThisMovie, m.overview());
+            Movie movie = new Movie(m.id(), m.title(), m.originalTitle(), m.adult(), m.originalLanguage(), m.popularity(), m.voteAverage(), m.voteCount(), m.releaseDate(), m.posterPath(), genresForThisMovie, m.overview());
             movie = movieDao.create(movie);
             movies.add(movie);
             System.out.println("Got and persisted movie: " + movie);

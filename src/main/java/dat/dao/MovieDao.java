@@ -110,7 +110,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
     public List<FrontendMovieDto> getMoviesByTextInTitle(String text) {
 
-        String jpql = "SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating) FROM Movie m WHERE LOWER(m.title) LIKE :title";
+        String jpql = "SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath) FROM Movie m WHERE LOWER(m.title) LIKE :title";
 
         try (EntityManager em = emf.createEntityManager()) {
             TypedQuery<FrontendMovieDto> query = em.createQuery(jpql, FrontendMovieDto.class);
