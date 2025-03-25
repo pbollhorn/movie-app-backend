@@ -1,5 +1,6 @@
 package dat.dao;
 
+import dat.dto.FrontendMovieDto;
 import dat.entities.Genre;
 import dat.entities.Movie;
 import jakarta.persistence.EntityManager;
@@ -106,6 +107,18 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         }
     }
 
+
+    public List<FrontendMovieDto> getMoviesByTextInTitle(String text) {
+
+        String jpql = "SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating) FROM Movie m WHERE LOWER(m.title) LIKE :title";
+
+        try (EntityManager em = emf.createEntityManager()) {
+            TypedQuery<FrontendMovieDto> query = em.createQuery(jpql, FrontendMovieDto.class);
+            query.setParameter("title", "%" + text.toLowerCase() + "%");
+            return query.getResultList();
+        }
+
+    }
 
 
 }

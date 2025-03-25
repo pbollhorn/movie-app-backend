@@ -2,7 +2,7 @@ PUT localhost:7070/api/movie/movie-search
 Content-Type: "application/json"
 
 {
-    "text": "bal"
+    "text": "evi"
 }
 
 ###

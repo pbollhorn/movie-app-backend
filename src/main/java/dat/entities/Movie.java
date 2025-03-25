@@ -12,6 +12,9 @@ import lombok.*;
 @NoArgsConstructor
 @Entity
 public class Movie {
+
+    private static final int MINIMUM_VOTE_COUNT_FOR_RATING = 10;
+
     @Id
     private Integer id;
 
@@ -24,6 +27,7 @@ public class Movie {
     private Double popularity;
     private Double voteAverage;
     private Integer voteCount;
+    private Double rating;
     private LocalDate releaseDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -43,8 +47,16 @@ public class Movie {
         this.adult = adult;
         this.originalLanguage = originalLanguage;
         this.popularity = popularity;
+
         this.voteAverage = voteAverage;
         this.voteCount = voteCount;
+
+        if (voteCount >= MINIMUM_VOTE_COUNT_FOR_RATING) {
+            this.rating = voteAverage;
+        } else {
+            this.rating = null;
+        }
+
         this.releaseDate = releaseDate;
         this.genres = genres;
         this.overview = overview;
