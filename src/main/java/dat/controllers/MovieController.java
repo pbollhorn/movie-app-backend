@@ -3,6 +3,7 @@ package dat.controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import dat.dto.FrontendMovieDto;
 import dat.dto.GenreDto;
+import dk.bugelhartmann.UserDTO;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
@@ -16,9 +17,11 @@ public class MovieController implements IController {
 
     private final MovieDao movieDao;
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
+    private final SecurityController securityController;
 
-    public MovieController(EntityManagerFactory emf) {
+    public MovieController(EntityManagerFactory emf, SecurityController securityController) {
         movieDao = MovieDao.getInstance(emf);
+        this.securityController=securityController;
     }
 
     @Override
@@ -55,6 +58,22 @@ public class MovieController implements IController {
         ctx.json(frontendMovieDtos);
 
     }
+
+
+    public void createRating(Context ctx) {
+
+        int movieId = Integer.parseInt(ctx.pathParam("id"));
+
+        Boolean rating = ctx.bodyAsClass(JsonNode.class).get("rating").asBoolean();
+
+        System.out.println("HALLÅ FRA id: " + movieId);
+        System.out.println("BOOLEAN: " + rating);
+
+        UserDTO verifiedTokenUser = securityController.getUserFromToken(ctx);
+        System.out.println(verifiedTokenUser);
+
+    }
+
 
     public void test(Context ctx) {
 

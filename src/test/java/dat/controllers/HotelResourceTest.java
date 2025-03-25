@@ -30,9 +30,9 @@ class HotelResourceTest {
 
     @BeforeAll
     static void setUpAll() {
-        MovieController movieController = new MovieController(emf);
-        HotelController hotelController = new HotelController(emf);
         SecurityController securityController = new SecurityController(emf);
+        MovieController movieController = new MovieController(emf, securityController);
+        HotelController hotelController = new HotelController(emf);
         Routes routes = new Routes(movieController, hotelController, securityController);
         ApplicationConfig
                 .getInstance()

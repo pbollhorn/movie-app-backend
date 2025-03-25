@@ -1,8 +1,11 @@
 package dat.dao;
 
 import dat.dto.FrontendMovieDto;
+import dat.entities.Account;
+import dat.entities.AccountMovieRating;
 import dat.entities.Genre;
 import dat.entities.Movie;
+import dat.exceptions.DaoException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
@@ -118,6 +121,20 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             return query.getResultList();
         }
 
+    }
+
+
+    public void createRating(int accountId, int movieId, boolean rating) {
+
+        try (EntityManager em = emf.createEntityManager()) {
+            Account account = em.find(Account.class, accountId);
+            Movie movie = em.find(Movie.class, movieId);
+            AccountMovieRating accountMovieRating = new AccountMovieRating(null, account, movie, rating);
+
+            em.getTransaction().begin();
+            em.persist(accountMovieRating);
+            em.getTransaction().commit();
+        }
     }
 
 

@@ -128,7 +128,8 @@ public class SecurityController implements ISecurityController
 
     }
 
-    private UserDTO getUserFromToken(Context ctx)
+    // TODO: Jeg PETER, har gjort denne metode public og static
+    public UserDTO getUserFromToken(Context ctx)
     {
         String header = ctx.header("Authorization");
         if (header == null)
