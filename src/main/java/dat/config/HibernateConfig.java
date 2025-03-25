@@ -45,10 +45,12 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Genre.class);
         configuration.addAnnotatedClass(Credit.class);
 
-        configuration.addAnnotatedClass(Hotel.class);
-        configuration.addAnnotatedClass(Room.class);
-        configuration.addAnnotatedClass(UserAccount.class);
+//        configuration.addAnnotatedClass(Hotel.class);
+//        configuration.addAnnotatedClass(Room.class);
+        configuration.addAnnotatedClass(Account.class);
         configuration.addAnnotatedClass(Roles.class);
+
+        configuration.addAnnotatedClass(AccountMovieRating.class);
     }
 
     private static EntityManagerFactory createEMF(boolean forTest, String hbm2ddlAutoProperty) {

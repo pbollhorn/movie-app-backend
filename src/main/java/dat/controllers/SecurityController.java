@@ -6,7 +6,7 @@ import dat.config.HibernateConfig;
 import dat.dao.ISecurityDAO;
 import dat.dao.SecurityDAO;
 import dat.dto.ErrorMessage;
-import dat.entities.UserAccount;
+import dat.entities.Account;
 import dat.enums.Roles;
 import dat.exceptions.ApiException;
 import dat.exceptions.DaoException;
@@ -84,7 +84,7 @@ public class SecurityController implements ISecurityController
         ObjectNode returnJson = objectMapper.createObjectNode();
         try {
             UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
-            UserAccount createdUserAccount = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
+            Account createdUserAccount = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
             String token = createToken(new UserDTO(createdUserAccount.getUsername(), Set.of("USER")));
             returnJson.put("token", token)
                     .put("username", createdUserAccount.getUsername());

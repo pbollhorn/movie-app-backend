@@ -4,14 +4,14 @@ GET http://localhost:7070/api/auth/test
 POST http://localhost:7070/api/auth/register
 
 {
-    "username": "admin",
+    "username": "testuser1",
     "password": "test123"
 }
 ###
 POST http://localhost:7070/api/auth/login
 
 {
-    "username": "admin",
+    "username": "testuser1",
     "password": "test123"
 }
 > {%

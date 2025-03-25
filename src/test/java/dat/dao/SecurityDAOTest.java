@@ -1,7 +1,7 @@
 package dat.dao;
 
 import dat.config.HibernateConfig;
-import dat.entities.UserAccount;
+import dat.entities.Account;
 import dat.enums.Roles;
 import dat.exceptions.DaoException;
 import dat.exceptions.ValidationException;
@@ -17,17 +17,17 @@ import static org.junit.jupiter.api.Assertions.*;
 class SecurityDAOTest {
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
     private static final SecurityDAO securityDAO = new SecurityDAO(emf);
-    private  UserAccount testUserAccount;
+    private Account testUserAccount;
 
     @BeforeEach
     void setUp() {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             // Clean up existing data
-            em.createQuery("DELETE FROM UserAccount").executeUpdate();
+            em.createQuery("DELETE FROM Account").executeUpdate();
 
             // Create test user with user role
-            testUserAccount = new UserAccount("testuser", "password123");
+            testUserAccount = new Account("testuser", "password123");
             testUserAccount.addRole(Roles.USER);
             em.persist(testUserAccount);
 
@@ -85,7 +85,7 @@ class SecurityDAOTest {
         String password = "newpassword";
 
         // Act
-        UserAccount result = securityDAO.createUser(username, password);
+        Account result = securityDAO.createUser(username, password);
 
         // Assert
         assertNotNull(result);
@@ -93,7 +93,7 @@ class SecurityDAOTest {
 
         // Verify user was persisted with the user role
         try (EntityManager em = emf.createEntityManager()) {
-            UserAccount persistedUserAccount = em.find(UserAccount.class, username);
+            Account persistedUserAccount = em.find(Account.class, username);
             assertNotNull(persistedUserAccount);
             assertEquals(1, persistedUserAccount.getRoles().size());
             assertTrue(persistedUserAccount.getRolesAsString().contains("USER"));
@@ -119,7 +119,7 @@ class SecurityDAOTest {
         String username = testUserAccount.getUsername();
 
         // Act
-        UserAccount result = securityDAO.addRoleToUser(username, Roles.ADMIN);
+        Account result = securityDAO.addRoleToUser(username, Roles.ADMIN);
 
         // Assert
         assertNotNull(result);
@@ -130,7 +130,7 @@ class SecurityDAOTest {
 
         // Verify role was added in the database
         try (EntityManager em = emf.createEntityManager()) {
-            UserAccount persistedUserAccount = em.find(UserAccount.class, username);
+            Account persistedUserAccount = em.find(Account.class, username);
             assertNotNull(persistedUserAccount);
             assertEquals(2, persistedUserAccount.getRoles().size());
             assertTrue(persistedUserAccount.getRolesAsString().contains("ADMIN"));
@@ -159,7 +159,7 @@ class SecurityDAOTest {
         String username = "testuser";
 
         // Act
-        UserAccount result = securityDAO.removeRoleFromUser(username, Roles.ADMIN);
+        Account result = securityDAO.removeRoleFromUser(username, Roles.ADMIN);
 
         // Assert
         assertNotNull(result);
@@ -170,7 +170,7 @@ class SecurityDAOTest {
 
         // Verify role was removed in the database
         try (EntityManager em = emf.createEntityManager()) {
-            UserAccount persistedUserAccount = em.find(UserAccount.class, username);
+            Account persistedUserAccount = em.find(Account.class, username);
             assertNotNull(persistedUserAccount);
             assertEquals(1, persistedUserAccount.getRoles().size());
             assertFalse(persistedUserAccount.getRoles().contains(Roles.ADMIN));

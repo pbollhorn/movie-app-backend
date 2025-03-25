@@ -2,7 +2,7 @@ package dat.controllers;
 
 import dat.config.ApplicationConfig;
 import dat.config.HibernateConfig;
-import dat.entities.UserAccount;
+import dat.entities.Account;
 import dat.enums.Roles;
 import dat.routes.Routes;
 import io.restassured.RestAssured;
@@ -52,16 +52,16 @@ class SecurityControllerTest {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             // Clean up existing data
-            em.createQuery("DELETE FROM UserAccount").executeUpdate();
+            em.createQuery("DELETE FROM Account").executeUpdate();
 
 
             // Create test user with user role
-            UserAccount testUserAccount = new UserAccount(TEST_USER, TEST_PASSWORD);
+            Account testUserAccount = new Account(TEST_USER, TEST_PASSWORD);
             testUserAccount.addRole(Roles.USER);
             em.persist(testUserAccount);
 
             // Create test admin with admin role
-            UserAccount testAdmin = new UserAccount(TEST_ADMIN, TEST_PASSWORD);
+            Account testAdmin = new Account(TEST_ADMIN, TEST_PASSWORD);
             testAdmin.addRole(Roles.USER);
             testAdmin.addRole(Roles.ADMIN);
             em.persist(testAdmin);
@@ -177,7 +177,7 @@ class SecurityControllerTest {
 
     private int countUsers() {
         try (EntityManager em = emf.createEntityManager()) {
-            return em.createQuery("SELECT COUNT(u) FROM UserAccount u", Long.class).getSingleResult().intValue();
+            return em.createQuery("SELECT COUNT(u) FROM Account u", Long.class).getSingleResult().intValue();
         }
     }
 

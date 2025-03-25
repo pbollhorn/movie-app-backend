@@ -264,7 +264,7 @@ Hvis du ikke allerede har gjort det, så er det nu du skriver test til din Secur
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             // Clean up existing data
-            em.createQuery("DELETE FROM UserAccount").executeUpdate();
+            em.createQuery("DELETE FROM Account").executeUpdate();
 
             // Create test user with user role
             testUserAccount = new UserAccount("testuser", "password123");
