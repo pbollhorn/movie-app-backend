@@ -17,6 +17,7 @@ public record FrontendMovieDto(Integer id,
                                String originalTitle,
                                LocalDate releaseDate,
                                Double rating,
-                               String posterPath) {
+                               String posterPath,
+                               Boolean likes) {
 
 }
