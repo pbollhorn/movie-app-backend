@@ -2,7 +2,7 @@ package dat.dao;
 
 import dat.dto.FrontendMovieDto;
 import dat.entities.Account;
-import dat.entities.AccountMovieRating;
+import dat.entities.AccountMovieLike;
 import dat.entities.Genre;
 import dat.entities.Movie;
 import dat.exceptions.DaoException;
@@ -75,7 +75,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             if (rowsAffected == 0) {
                 Account account = em.find(Account.class, accountId);
                 Movie movie = em.find(Movie.class, movieId);
-                em.persist(new AccountMovieRating(null, account, movie, rating));
+                em.persist(new AccountMovieLike(null, account, movie, rating));
             }
 
             em.getTransaction().commit();
@@ -88,7 +88,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     public void deleteRating(int accountId, int movieId) {
 
         try (EntityManager em = emf.createEntityManager()) {
-            String jpql = "DELETE FROM AccountMovieRating r WHERE r.account.id = :accountId AND r.movie.id = :movieId";
+            String jpql = "DELETE FROM AccountMovieLike r WHERE r.account.id = :accountId AND r.movie.id = :movieId";
             em.getTransaction().begin();
             Query query = em.createQuery(jpql);
             query.setParameter("accountId", accountId);
@@ -106,7 +106,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
 
 //            // Get list of id of movies, which the user likes
-            String jpql = "SELECT r.movie.id FROM AccountMovieRating r WHERE r.account.id = :accountId AND rating=true";
+            String jpql = "SELECT r.movie.id FROM AccountMovieLike r WHERE r.account.id = :accountId AND rating=true";
             TypedQuery<Integer> query = em.createQuery(jpql, Integer.class);
             query.setParameter("accountId", accountId);
             List<Integer> movieIds = query.getResultList();
@@ -127,7 +127,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             // Exclude movies already liked or disliked by user
             jpql = """
                     SELECT m.id FROM Movie m WHERE m.id IN :movieIds AND m.id NOT IN
-                    (SELECT a.movie.id FROM AccountMovieRating a WHERE a.account.id=:accountId)
+                    (SELECT a.movie.id FROM AccountMovieLike a WHERE a.account.id=:accountId)
                     ORDER BY m.voteAverage DESC LIMIT :limit""";
             query = em.createQuery(jpql, Integer.class);
             query.setParameter("movieIds", movieIds);
