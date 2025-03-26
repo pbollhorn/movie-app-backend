@@ -1,7 +1,6 @@
 package dat.routes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dat.controllers.HotelController;
 import dat.controllers.MovieController;
 import dat.controllers.SecurityController;
 import dat.enums.Roles;
