@@ -20,8 +20,12 @@ Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
 {
-    "rating": true
+    "rating": false
 }
+
+###
+DELETE localhost:7070/api/movie/movie-rating/663870
+Authorization: Bearer {{token}}
 
 ###
 GET localhost:7070/api/movie/test

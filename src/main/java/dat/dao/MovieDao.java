@@ -203,4 +203,18 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
+    public void deleteRating(int accountId, int movieId) {
+
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = "DELETE FROM AccountMovieRating r WHERE r.account.id = :accountId AND r.movie.id = :movieId";
+            em.getTransaction().begin();
+            Query query = em.createQuery(jpql);
+            query.setParameter("accountId", accountId);
+            query.setParameter("movieId", movieId);
+            int rowsAffected = query.executeUpdate();
+            em.getTransaction().commit();
+        }
+
+    }
+
 }

@@ -103,6 +103,14 @@ public class MovieController implements IController {
 
     }
 
+    public void deleteRating(Context ctx) {
+
+        int accountId = securityController.getAccountIdFromToken(ctx);
+        int movieId = Integer.parseInt(ctx.pathParam("id"));
+
+        movieDao.deleteRating(accountId, movieId);
+    }
+
 
     public void test(Context ctx) {
 
