@@ -1,15 +1,16 @@
 package dat.config;
 
-import dat.entities.*;
-import dat.enums.Roles;
-import dat.utils.PropertyReader;
+import java.util.Properties;
+
 import jakarta.persistence.EntityManagerFactory;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
-import java.util.Properties;
+import dat.entities.*;
+import dat.enums.Roles;
+import dat.utils.PropertyReader;
 
 public class HibernateConfig {
     private static EntityManagerFactory emf;
@@ -45,8 +46,6 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Genre.class);
         configuration.addAnnotatedClass(Credit.class);
 
-//        configuration.addAnnotatedClass(Hotel.class);
-//        configuration.addAnnotatedClass(Room.class);
         configuration.addAnnotatedClass(Account.class);
         configuration.addAnnotatedClass(Roles.class);
 

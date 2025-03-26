@@ -1,37 +1,34 @@
 package dat.config;
 
-import dat.controllers.ISecurityController;
-import dat.controllers.SecurityController;
-import dat.dto.ErrorMessage;
-import dat.exceptions.ApiException;
 import io.javalin.Javalin;
 import io.javalin.apibuilder.EndpointGroup;
 import io.javalin.config.JavalinConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dat.controllers.ISecurityController;
+import dat.controllers.SecurityController;
+import dat.dto.ErrorMessage;
+import dat.exceptions.ApiException;
 
-public class ApplicationConfig
-{
+public class ApplicationConfig {
     private static ApplicationConfig instance;
     private static Javalin app;
     private static JavalinConfig javalinConfig;
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
     private static final ISecurityController securityController = new SecurityController();
 
-    private ApplicationConfig() {}
+    private ApplicationConfig() {
+    }
 
-    public static ApplicationConfig getInstance()
-    {
-        if (instance == null)
-        {
+    public static ApplicationConfig getInstance() {
+        if (instance == null) {
             instance = new ApplicationConfig();
         }
         return instance;
     }
 
-    public ApplicationConfig initiateServer()
-    {
+    public ApplicationConfig initiateServer() {
         app = Javalin.create(config -> {
             javalinConfig = config;
             config.showJavalinBanner = false;
@@ -44,8 +41,7 @@ public class ApplicationConfig
         return instance;
     }
 
-    public ApplicationConfig setRoute(EndpointGroup routes)
-    {
+    public ApplicationConfig setRoute(EndpointGroup routes) {
         javalinConfig.router.apiBuilder(routes);
         logger.info("Routes set");
         return instance;
@@ -56,8 +52,7 @@ public class ApplicationConfig
         return instance;
     }
 
-    public ApplicationConfig setApiExceptionHandling()
-    {
+    public ApplicationConfig setApiExceptionHandling() {
         // Might be overruled by the setErrorHandling method
         app.exception(ApiException.class, (e, ctx) -> {
             logger.error("ApiException: {}", e.getMessage());
@@ -67,8 +62,8 @@ public class ApplicationConfig
         return instance;
     }
 
-    public ApplicationConfig handleException(){
-        app.exception(Exception.class, (e,ctx)->{
+    public ApplicationConfig handleException() {
+        app.exception(Exception.class, (e, ctx) -> {
             logger.error("Exception: {}", e.getMessage());
             ctx.status(500).json(new ErrorMessage(500, e.getMessage()));
         });
@@ -76,15 +71,13 @@ public class ApplicationConfig
         return instance;
     }
 
-    public void startServer(int port)
-    {
+    public void startServer(int port) {
         app.start(port);
         logger.info("Server started on port: {}", port);
     }
 
 
-    public ApplicationConfig stopServer()
-    {
+    public ApplicationConfig stopServer() {
         app.stop();
         logger.info("Server stopped");
         return instance;

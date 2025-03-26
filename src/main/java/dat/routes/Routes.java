@@ -11,20 +11,17 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class Routes {
     private final MovieController movieController;
-    private final HotelController hotelController;
     private final SecurityController securityController;
     private final ObjectMapper jsonMapper = new ObjectMapper();
 
-    public Routes(MovieController movieController, HotelController hotelController, SecurityController securityController) {
+    public Routes(MovieController movieController, SecurityController securityController) {
         this.movieController = movieController;
-        this.hotelController = hotelController;
         this.securityController = securityController;
     }
 
     public EndpointGroup getRoutes() {
         return () -> {
             path("movie", movieRoutes());
-            path("hotel", hotelRoutes());
             path("auth", authRoutes());
             path("protected", protectedRoutes());
         };
@@ -46,16 +43,6 @@ public class Routes {
         };
     }
 
-    private EndpointGroup hotelRoutes() {
-        return () -> {
-            get(hotelController::getAll);
-            post(hotelController::create);
-            get("/{id}", hotelController::getById);
-            put("/{id}", hotelController::update);
-            delete("/{id}", hotelController::delete);
-            get("/{id}/rooms", hotelController::getRooms);
-        };
-    }
 
     private EndpointGroup authRoutes() {
         return () -> {

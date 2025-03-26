@@ -9,18 +9,15 @@ import dat.routes.Routes;
 import jakarta.persistence.EntityManagerFactory;
 
 
-public class Main
-{
+public class Main {
     private final static EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("update");
 
 
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         SecurityController securityController = new SecurityController(emf);
         MovieController movieController = new MovieController(emf, securityController);
-        HotelController hotelController = new HotelController(emf);
 
-        Routes routes = new Routes(movieController, hotelController, securityController);
+        Routes routes = new Routes(movieController, securityController);
 
         ApplicationConfig
                 .getInstance()

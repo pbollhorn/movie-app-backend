@@ -1,10 +1,8 @@
 package dat.controllers;
 
-import dat.config.ApplicationConfig;
-import dat.config.HibernateConfig;
-import dat.entities.Account;
-import dat.enums.Roles;
-import dat.routes.Routes;
+import java.util.HashMap;
+import java.util.Map;
+
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -14,12 +12,15 @@ import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import dat.config.ApplicationConfig;
+import dat.config.HibernateConfig;
+import dat.entities.Account;
+import dat.enums.Roles;
+import dat.routes.Routes;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SecurityControllerTest {
@@ -34,8 +35,7 @@ class SecurityControllerTest {
     static void setUpAll() {
         SecurityController securityController = new SecurityController(emf);
         MovieController movieController = new MovieController(emf, securityController);
-        HotelController hotelController = new HotelController(emf);
-        Routes routes = new Routes(movieController, hotelController, securityController);
+        Routes routes = new Routes(movieController, securityController);
         ApplicationConfig
                 .getInstance()
                 .initiateServer()
