@@ -98,9 +98,9 @@ public class MovieController implements IController {
 
         int accountId = securityController.getAccountIdFromToken(ctx);
 
-        List<Integer> frontendMovieDtos = movieDao.getRecommendations(accountId);
+        List<FrontendMovieDto> recommendations = movieDao.getRecommendations(accountId, 25);
 
-        ctx.json(frontendMovieDtos);
+        ctx.json(recommendations);
 
     }
 

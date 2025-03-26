@@ -182,7 +182,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
     // TODO: Her skal min algoritme være, der benytter instruktør og rating
     // og bagefter frasortere em man har disliket
-    public List<Integer> getRecommendations(int accountId) {
+    public List<FrontendMovieDto> getRecommendations(int accountId, int limit) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
@@ -192,20 +192,38 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             query.setParameter("accountId", accountId);
             List<Integer> movieIds = query.getResultList();
 
-
             // Get list of director ids which have made movies, which the user likes
             jpql = "SELECT p.id FROM Person p JOIN Credit c ON c.person.id=p.id WHERE c.job='Director' AND c.movie.id IN :movieIds";
             query = em.createQuery(jpql, Integer.class);
             query.setParameter("movieIds", movieIds);
-            List<Integer> personIds = query.getResultList();
+            List<Integer> directorIds = query.getResultList();
 
-//            // Get list of directors which have made those movies
-//            jpql = "SELECT m.movie.id FROM Movie m WHERE m.id IN :movieIds";
-//            TypedQuery<Integer> query = em.createQuery(jpql, Integer.class);
-//            query.setParameter("accountId", accountId);
-//            List<Integer> directorIds =query.getResultList();
+            // Select all movies from these directors
+            jpql = "SELECT m.id FROM Movie m JOIN Credit c ON c.movie.id=m.id WHERE c.job='Director' AND c.person.id IN :directorIds";
+            query = em.createQuery(jpql, Integer.class);
+            query.setParameter("directorIds", directorIds);
+            movieIds = query.getResultList();
+            movieIds.forEach(System.out::println);
 
-            return personIds;
+            // Exclude movies already liked or disliked by user
+            jpql = """
+                    SELECT m.id FROM Movie m WHERE m.id IN :movieIds AND m.id NOT IN
+                    (SELECT a.movie.id FROM AccountMovieRating a WHERE a.account.id=:accountId)
+                    ORDER BY m.voteAverage DESC LIMIT :limit""";
+            query = em.createQuery(jpql, Integer.class);
+            query.setParameter("movieIds", movieIds);
+            query.setParameter("accountId", accountId);
+            query.setParameter("limit", limit);
+            movieIds = query.getResultList();
+
+            // Now finally get the data for all these movieIds
+            jpql = "SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, NULL) FROM Movie m WHERE m.id IN :movieIds";
+            TypedQuery<FrontendMovieDto> newQuery = em.createQuery(jpql, FrontendMovieDto.class);
+            newQuery.setParameter("movieIds", movieIds);
+            List<FrontendMovieDto> recommendations = newQuery.getResultList();
+
+            return recommendations;
+
         }
     }
 
