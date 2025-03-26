@@ -1,12 +1,13 @@
 package dat.routes;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dat.controllers.MovieController;
-import dat.controllers.SecurityController;
-import dat.enums.Roles;
 import io.javalin.apibuilder.EndpointGroup;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
+
+import dat.controllers.MovieController;
+import dat.controllers.SecurityController;
+import dat.enums.Roles;
 
 public class Routes {
     private final MovieController movieController;
@@ -33,12 +34,6 @@ public class Routes {
             get("/", movieController::getAllMoviesWithLikes);
             put("/{id}", movieController::updateOrCreateMovieLike);
             delete("/{id}", movieController::deleteMovieLike);
-
-//            get(movieController::getAll);
-//            post(movieController::create);
-//            get("/{id}", movieController::getById);
-//            put("/{id}", movieController::update);
-//            delete("/{id}", movieController::delete);
         };
     }
 
