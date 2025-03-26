@@ -1,13 +1,20 @@
-PUT localhost:7070/api/movie/movie-search
+GET localhost:7070/api/movies/search
 Content-Type: "application/json"
 
 {
     "text": "evi"
 }
 
+###
+GET localhost:7070/api/movies/recommendations
+Authorization: Bearer {{token}}
 
 ###
-PUT localhost:7070/api/movie/movie-rating/1078249
+GET localhost:7070/api/movies
+Authorization: Bearer {{token}}
+
+###
+PUT localhost:7070/api/movies/1078249
 Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
@@ -16,13 +23,5 @@ Content-Type: "application/json"
 }
 
 ###
-DELETE localhost:7070/api/movie/movie-rating/663870
-Authorization: Bearer {{token}}
-
-###
-GET localhost:7070/api/movie/movie-rating
-Authorization: Bearer {{token}}
-
-###
-GET localhost:7070/api/movie/movie-recommendation
+DELETE localhost:7070/api/movies/663870
 Authorization: Bearer {{token}}

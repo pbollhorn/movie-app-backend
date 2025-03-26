@@ -20,7 +20,7 @@ public class Routes {
 
     public EndpointGroup getRoutes() {
         return () -> {
-            path("movie", movieRoutes());
+            path("movies", movieRoutes());
             path("auth", authRoutes());
             path("protected", protectedRoutes());
         };
@@ -28,17 +28,17 @@ public class Routes {
 
     private EndpointGroup movieRoutes() {
         return () -> {
-            put("/movie-search", movieController::search);
-            get("/movie-rating", movieController::getMoviesAndRatings);
-            put("/movie-rating/{id}", movieController::updateOrCreateRating);
-            delete("/movie-rating/{id}", movieController::deleteRating);
-            get("/movie-recommendation", movieController::getRecommendations);
+            get("/search", movieController::search);
+            get("/recommendations", movieController::getRecommendations);
+            get("/", movieController::getMoviesAndRatings);
+            put("/{id}", movieController::updateOrCreateRating);
+            delete("/{id}", movieController::deleteRating);
 
-            get(movieController::getAll);
-            post(movieController::create);
-            get("/{id}", movieController::getById);
-            put("/{id}", movieController::update);
-            delete("/{id}", movieController::delete);
+//            get(movieController::getAll);
+//            post(movieController::create);
+//            get("/{id}", movieController::getById);
+//            put("/{id}", movieController::update);
+//            delete("/{id}", movieController::delete);
         };
     }
 

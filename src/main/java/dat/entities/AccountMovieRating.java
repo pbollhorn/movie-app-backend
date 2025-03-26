@@ -25,6 +25,7 @@ public class AccountMovieRating {
     private Movie movie;
 
     @Setter
+    @Column(nullable = false)
     private Boolean rating;
 
 }
