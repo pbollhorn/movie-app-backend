@@ -33,10 +33,8 @@ public class Routes {
     private EndpointGroup movieRoutes() {
         return () -> {
             put("/movie-search", movieController::search);
-            post("/movie-rating/{id}", movieController::createRating);
-            put("/movie-rating/{id}", movieController::createOrUpdateRating);
+            put("/movie-rating/{id}", movieController::updateOrCreateRating);
             delete("/movie-rating/{id}", movieController::deleteRating);
-            get("/test", movieController::test);
 
             get(movieController::getAll);
             post(movieController::create);

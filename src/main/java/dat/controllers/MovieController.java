@@ -60,48 +60,18 @@ public class MovieController implements IController {
     }
 
 
-    public void createRating(Context ctx) {
-
-        int movieId = Integer.parseInt(ctx.pathParam("id"));
-
-        Boolean rating = ctx.bodyAsClass(JsonNode.class).get("rating").asBoolean();
-
-        System.out.println("HALLÅ FRA id: " + movieId);
-        System.out.println("BOOLEAN: " + rating);
-
-        int accountId = securityController.getAccountIdFromToken(ctx);
-        System.out.println(accountId);
-
-        movieDao.createRating(accountId, movieId, rating);
-
-    }
-
-    public void updateRating(Context ctx) {
-
-        int movieId = Integer.parseInt(ctx.pathParam("id"));
-
-        Boolean rating = ctx.bodyAsClass(JsonNode.class).get("rating").asBoolean();
-
-        System.out.println("HALLÅ FRA id: " + movieId);
-        System.out.println("BOOLEAN: " + rating);
-
-        int accountId = securityController.getAccountIdFromToken(ctx);
-        System.out.println(accountId);
-
-        movieDao.updateRating(accountId, movieId, rating);
-
-    }
 
 
-    public void createOrUpdateRating(Context ctx) {
+    public void updateOrCreateRating(Context ctx) {
 
         int accountId = securityController.getAccountIdFromToken(ctx);
         int movieId = Integer.parseInt(ctx.pathParam("id"));
         Boolean rating = ctx.bodyAsClass(JsonNode.class).get("rating").asBoolean();
 
-        movieDao.createOrUpdateRating(accountId, movieId, rating);
+        movieDao.updateOrCreateRating(accountId, movieId, rating);
 
     }
+
 
     public void deleteRating(Context ctx) {
 
@@ -111,15 +81,6 @@ public class MovieController implements IController {
         movieDao.deleteRating(accountId, movieId);
     }
 
-
-    public void test(Context ctx) {
-
-        GenreDto genreDto = new GenreDto(5, "Five");
-
-        ctx.json(genreDto);
-//        ctx.status(404);
-
-    }
 
 
 }

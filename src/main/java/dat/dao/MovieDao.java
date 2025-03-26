@@ -112,6 +112,9 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
+
+
+
     public List<FrontendMovieDto> getMoviesByTextInTitle(String text) {
 
         String jpql = "SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath) FROM Movie m WHERE LOWER(m.title) LIKE :title";
@@ -125,57 +128,11 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
-    public void createRating(int accountId, int movieId, boolean rating) {
-
-        try (EntityManager em = emf.createEntityManager()) {
-            Account account = em.find(Account.class, accountId);
-            Movie movie = em.find(Movie.class, movieId);
-            AccountMovieRating accountMovieRating = new AccountMovieRating(null, account, movie, rating);
-
-            em.getTransaction().begin();
-            em.persist(accountMovieRating);
-            em.getTransaction().commit();
-        }
-    }
 
 
-    public void updateRating(int accountId, int movieId, boolean rating) {
-
-        try (EntityManager em = emf.createEntityManager()) {
-
-            String jpql = "SELECT a FROM AccountMovieRating a WHERE a.account.id = :accountId AND a.movie.id = :movieId";
-            TypedQuery<AccountMovieRating> query = em.createQuery(jpql, AccountMovieRating.class);
-            query.setParameter("accountId", accountId);
-            query.setParameter("movieId", movieId);
-            List<AccountMovieRating> resultList = query.getResultList();
-            System.out.println("AccountMovieRating: " + resultList.size());
-
-            // Create new rating
-            if (resultList.isEmpty()) {
-                Account account = em.find(Account.class, accountId);
-                Movie movie = em.find(Movie.class, movieId);
-                em.getTransaction().begin();
-                em.persist(new AccountMovieRating(null, account, movie, rating));
-                em.getTransaction().commit();
-                return;
-            }
-
-            // Update existing rating
-            AccountMovieRating accountMovieRating = resultList.get(0);
-            accountMovieRating.setRating(rating);
 
 
-//            Account account = em.find(Account.class, accountId);
-//            Movie movie = em.find(Movie.class, movieId);
-//            AccountMovieRating accountMovieRating = new AccountMovieRating(null, account, movie, rating);
-//
-//            em.getTransaction().begin();
-//            em.persist(accountMovieRating);
-//            em.getTransaction().commit();
-        }
-    }
-
-    public void createOrUpdateRating(int accountId, int movieId, boolean rating) {
+    public void updateOrCreateRating(int accountId, int movieId, boolean rating) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
