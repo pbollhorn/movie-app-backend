@@ -6,7 +6,7 @@ Content-Type: "application/json"
 }
 
 ###
-POST localhost:7070/api/movie/movie-rating/5
+POST localhost:7070/api/movie/movie-rating/580175
 Authorization: Bearer {{token}}
 Content-Type: "application/json"
 

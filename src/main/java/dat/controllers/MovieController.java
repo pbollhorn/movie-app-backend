@@ -72,6 +72,8 @@ public class MovieController implements IController {
         int accountId = securityController.getAccountIdFromToken(ctx);
         System.out.println(accountId);
 
+        movieDao.createRating(accountId, movieId, rating);
+
     }
 
 
