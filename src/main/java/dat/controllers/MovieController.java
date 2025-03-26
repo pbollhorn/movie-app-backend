@@ -53,7 +53,7 @@ public class MovieController implements IController {
 
         String text = ctx.bodyAsClass(JsonNode.class).get("text").asText();
 
-        List<FrontendMovieDto> frontendMovieDtos = movieDao.getMoviesByTextInTitle(text);
+        List<FrontendMovieDto> frontendMovieDtos = movieDao.getMoviesByTextInTitleOrOrignalTitle(text);
 
         ctx.json(frontendMovieDtos);
 
