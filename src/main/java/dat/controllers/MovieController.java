@@ -1,19 +1,17 @@
 package dat.controllers;
 
+import java.util.List;
+
 import com.fasterxml.jackson.databind.JsonNode;
-import dat.dto.FrontendMovieDto;
-import dat.dto.GenreDto;
-import dk.bugelhartmann.UserDTO;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dat.dao.MovieDao;
+import dat.dto.FrontendMovieDto;
 
-import java.util.List;
-
-public class MovieController implements IController {
+public class MovieController {
 
     private final MovieDao movieDao;
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
@@ -24,30 +22,6 @@ public class MovieController implements IController {
         this.securityController = securityController;
     }
 
-    @Override
-    public void create(Context ctx) {
-
-    }
-
-    @Override
-    public void getById(Context ctx) {
-
-    }
-
-    @Override
-    public void getAll(Context ctx) {
-
-    }
-
-    @Override
-    public void update(Context ctx) {
-
-    }
-
-    @Override
-    public void delete(Context ctx) {
-
-    }
 
     public void search(Context ctx) {
 
@@ -103,6 +77,5 @@ public class MovieController implements IController {
         ctx.json(recommendations);
 
     }
-
 
 }
