@@ -34,6 +34,7 @@ public class Routes {
         return () -> {
             put("/movie-search", movieController::search);
             post("/movie-rating/{id}", movieController::createRating);
+            put("/movie-rating/{id}", movieController::createOrUpdateRating);
             get("/test", movieController::test);
 
             get(movieController::getAll);

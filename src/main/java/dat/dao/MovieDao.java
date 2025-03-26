@@ -8,6 +8,7 @@ import dat.entities.Movie;
 import dat.exceptions.DaoException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
@@ -135,6 +136,70 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             em.persist(accountMovieRating);
             em.getTransaction().commit();
         }
+    }
+
+
+    public void updateRating(int accountId, int movieId, boolean rating) {
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+            String jpql = "SELECT a FROM AccountMovieRating a WHERE a.account.id = :accountId AND a.movie.id = :movieId";
+            TypedQuery<AccountMovieRating> query = em.createQuery(jpql, AccountMovieRating.class);
+            query.setParameter("accountId", accountId);
+            query.setParameter("movieId", movieId);
+            List<AccountMovieRating> resultList = query.getResultList();
+            System.out.println("AccountMovieRating: " + resultList.size());
+
+            // Create new rating
+            if (resultList.isEmpty()) {
+                Account account = em.find(Account.class, accountId);
+                Movie movie = em.find(Movie.class, movieId);
+                em.getTransaction().begin();
+                em.persist(new AccountMovieRating(null, account, movie, rating));
+                em.getTransaction().commit();
+                return;
+            }
+
+            // Update existing rating
+            AccountMovieRating accountMovieRating = resultList.get(0);
+            accountMovieRating.setRating(rating);
+
+
+//            Account account = em.find(Account.class, accountId);
+//            Movie movie = em.find(Movie.class, movieId);
+//            AccountMovieRating accountMovieRating = new AccountMovieRating(null, account, movie, rating);
+//
+//            em.getTransaction().begin();
+//            em.persist(accountMovieRating);
+//            em.getTransaction().commit();
+        }
+    }
+
+    public void createOrUpdateRating(int accountId, int movieId, boolean rating) {
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+            em.getTransaction().begin();
+
+            // First try to update existing rating
+            String jpql = "UPDATE AccountMovieRating r SET r.rating =:rating WHERE r.account.id=:accountId AND r.movie.id = :movieId";
+            Query query = em.createQuery(jpql);
+            query.setParameter("accountId", accountId);
+            query.setParameter("movieId", movieId);
+            query.setParameter("rating", rating);
+            int rowsAffected = query.executeUpdate();
+
+            // Create new rating, if rating does not already exist
+            if (rowsAffected == 0) {
+                Account account = em.find(Account.class, accountId);
+                Movie movie = em.find(Movie.class, movieId);
+                em.persist(new AccountMovieRating(null, account, movie, rating));
+            }
+
+            em.getTransaction().commit();
+
+        }
+
     }
 
 

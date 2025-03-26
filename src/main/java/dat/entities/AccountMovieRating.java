@@ -3,7 +3,10 @@ package dat.entities;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -21,6 +24,7 @@ public class AccountMovieRating {
     @JoinColumn(nullable = false)
     private Movie movie;
 
+    @Setter
     private Boolean rating;
 
 }

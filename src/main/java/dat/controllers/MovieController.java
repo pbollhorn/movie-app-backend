@@ -21,7 +21,7 @@ public class MovieController implements IController {
 
     public MovieController(EntityManagerFactory emf, SecurityController securityController) {
         movieDao = MovieDao.getInstance(emf);
-        this.securityController=securityController;
+        this.securityController = securityController;
     }
 
     @Override
@@ -73,6 +73,33 @@ public class MovieController implements IController {
         System.out.println(accountId);
 
         movieDao.createRating(accountId, movieId, rating);
+
+    }
+
+    public void updateRating(Context ctx) {
+
+        int movieId = Integer.parseInt(ctx.pathParam("id"));
+
+        Boolean rating = ctx.bodyAsClass(JsonNode.class).get("rating").asBoolean();
+
+        System.out.println("HALLÅ FRA id: " + movieId);
+        System.out.println("BOOLEAN: " + rating);
+
+        int accountId = securityController.getAccountIdFromToken(ctx);
+        System.out.println(accountId);
+
+        movieDao.updateRating(accountId, movieId, rating);
+
+    }
+
+
+    public void createOrUpdateRating(Context ctx) {
+
+        int accountId = securityController.getAccountIdFromToken(ctx);
+        int movieId = Integer.parseInt(ctx.pathParam("id"));
+        Boolean rating = ctx.bodyAsClass(JsonNode.class).get("rating").asBoolean();
+
+        movieDao.createOrUpdateRating(accountId, movieId, rating);
 
     }
 
