@@ -60,6 +60,18 @@ public class MovieController implements IController {
     }
 
 
+    public void getMoviesAndRatings(Context ctx) {
+
+        int accountId = securityController.getAccountIdFromToken(ctx);
+
+        System.out.println("endpointet er ramt");
+
+        List<FrontendMovieDto> frontendMovieDtos = movieDao.getMoviesAndRatings(accountId);
+
+        System.out.println("HALLO: "+frontendMovieDtos.size());
+        ctx.json(frontendMovieDtos);
+
+    }
 
 
     public void updateOrCreateRating(Context ctx) {
@@ -80,7 +92,6 @@ public class MovieController implements IController {
 
         movieDao.deleteRating(accountId, movieId);
     }
-
 
 
 }

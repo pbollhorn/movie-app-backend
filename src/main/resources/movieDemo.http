@@ -7,7 +7,7 @@ Content-Type: "application/json"
 
 
 ###
-PUT localhost:7070/api/movie/movie-rating/663870
+PUT localhost:7070/api/movie/movie-rating/1078249
 Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
@@ -20,4 +20,5 @@ DELETE localhost:7070/api/movie/movie-rating/663870
 Authorization: Bearer {{token}}
 
 ###
-GET localhost:7070/api/movie/test
+GET localhost:7070/api/movie/movie-rating
+Authorization: Bearer {{token}}
