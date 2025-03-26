@@ -49,7 +49,7 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Account.class);
         configuration.addAnnotatedClass(Roles.class);
 
-        configuration.addAnnotatedClass(AccountMovieLike.class);
+        configuration.addAnnotatedClass(AccountMovieLikes.class);
     }
 
     private static EntityManagerFactory createEMF(boolean forTest, String hbm2ddlAutoProperty) {

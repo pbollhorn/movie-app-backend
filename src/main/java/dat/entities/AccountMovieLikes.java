@@ -10,8 +10,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "account_movie_like")
-public class AccountMovieLike {
+@Table(name = "account_movie_likes")
+public class AccountMovieLikes {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -26,6 +26,6 @@ public class AccountMovieLike {
 
     @Setter
     @Column(nullable = false)
-    private Boolean rating;
+    private Boolean likes;
 
 }
