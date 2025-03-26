@@ -28,26 +28,51 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
-    public List<FrontendMovieDto> getMoviesByTextInTitleOrOrignalTitle(String text) {
-
-        String jpql = """
-                SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, NULL)
-                FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title""";
+    public List<FrontendMovieDto> searchMoviesOpen(String text) {
 
         try (EntityManager em = emf.createEntityManager()) {
+
+            String jpql = """
+                    SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, NULL)
+                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title""";
+
             TypedQuery<FrontendMovieDto> query = em.createQuery(jpql, FrontendMovieDto.class);
             query.setParameter("title", "%" + text.toLowerCase() + "%");
             return query.getResultList();
+
         }
 
     }
 
 
-    public List<FrontendMovieDto> getMoviesAndRatings(int accountId) {
-
-        String jpql = "SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, a.likes) FROM AccountMovieLikes a JOIN Movie m ON a.movie.id=m.id WHERE a.account.id=:accountId";
+    public List<FrontendMovieDto> searchMovies(String text, int accountId) {
 
         try (EntityManager em = emf.createEntityManager()) {
+
+            // TODO: Find a way to get likes to be NULL if user has not liked/disliked yet
+            String jpql = """
+                    SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, a.likes)
+                    FROM Movie m JOIN AccountMovieLikes a ON a.movie.id=m.id
+                    LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title""";
+
+            TypedQuery<FrontendMovieDto> query = em.createQuery(jpql, FrontendMovieDto.class);
+            query.setParameter("title", "%" + text.toLowerCase() + "%");
+            query.setParameter("accountId", accountId);
+            return query.getResultList();
+
+        }
+
+    }
+
+
+    public List<FrontendMovieDto> getAllMoviesWithLikes(int accountId) {
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+            String jpql = """
+                    SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, a.likes)
+                    FROM AccountMovieLikes a JOIN Movie m ON a.movie.id=m.id WHERE a.account.id=:accountId""";
+
             TypedQuery<FrontendMovieDto> query = em.createQuery(jpql, FrontendMovieDto.class);
             query.setParameter("accountId", accountId);
             return query.getResultList();
@@ -56,7 +81,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
-    public void updateOrCreateRating(int accountId, int movieId, boolean likes) {
+    public void updateOrCreateMovieLike(int accountId, int movieId, boolean likes) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
@@ -84,7 +109,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
-    public void deleteRating(int accountId, int movieId) {
+    public void deleteMovieLike(int accountId, int movieId) {
 
         try (EntityManager em = emf.createEntityManager()) {
             String jpql = "DELETE FROM AccountMovieLikes a WHERE a.account.id = :accountId AND a.movie.id = :movieId";
@@ -100,7 +125,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
     // TODO: Her skal min algoritme være, der benytter instruktør og rating
     // og bagefter frasortere em man har disliket
-    public List<FrontendMovieDto> getRecommendations(int accountId, int limit) {
+    public List<FrontendMovieDto> getMovieRecommendations(int accountId, int limit) {
 
         try (EntityManager em = emf.createEntityManager()) {
 

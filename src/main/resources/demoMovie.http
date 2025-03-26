@@ -1,4 +1,13 @@
+GET localhost:7070/api/movies/search-open
+Content-Type: "application/json"
+
+{
+    "text": "evi"
+}
+
+###
 GET localhost:7070/api/movies/search
+Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
 {

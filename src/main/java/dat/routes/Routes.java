@@ -29,11 +29,12 @@ public class Routes {
 
     private EndpointGroup movieRoutes() {
         return () -> {
-            get("/search", movieController::searchMovies);
-            get("/recommendations", movieController::getMovieRecommendations);
-            get("/", movieController::getAllMoviesWithLikes);
-            put("/{id}", movieController::updateOrCreateMovieLike);
-            delete("/{id}", movieController::deleteMovieLike);
+            get("/search-open", movieController::searchMoviesOpen, Roles.ANYONE);
+            get("/search", movieController::searchMovies, Roles.USER);
+            get("/recommendations", movieController::getMovieRecommendations, Roles.USER);
+            get("/", movieController::getAllMoviesWithLikes, Roles.USER);
+            put("/{id}", movieController::updateOrCreateMovieLike, Roles.USER);
+            delete("/{id}", movieController::deleteMovieLike, Roles.USER);
         };
     }
 

@@ -8,21 +8,21 @@ import java.util.Set;
 public record TmdbMovieDto(Integer id,
                            String title,
                            @JsonProperty("original_title")
-                       String originalTitle,
+                           String originalTitle,
                            Boolean adult,
                            @JsonProperty("original_language")
-                       String originalLanguage,
+                           String originalLanguage,
                            Double popularity,
                            @JsonProperty("vote_average")
-                       Double voteAverage,
+                           Double voteAverage,
                            @JsonProperty("vote_count")
-                       Integer voteCount,
+                           Integer voteCount,
                            @JsonProperty("release_date")
-                       LocalDate releaseDate,
+                           LocalDate releaseDate,
                            @JsonProperty("poster_path")
-                       String posterPath,
+                           String posterPath,
                            @JsonProperty("genre_ids")
-                       Set<Integer> genreIds,
+                           Set<Integer> genreIds,
                            String overview
 ) {
 }

@@ -23,13 +23,21 @@ public class MovieController {
     }
 
 
-    public void searchMovies(Context ctx) {
+    public void searchMoviesOpen(Context ctx) {
 
         String text = ctx.bodyAsClass(JsonNode.class).get("text").asText();
+        List<FrontendMovieDto> movies = movieDao.searchMoviesOpen(text);
+        ctx.json(movies);
 
-        List<FrontendMovieDto> frontendMovieDtos = movieDao.getMoviesByTextInTitleOrOrignalTitle(text);
+    }
 
-        ctx.json(frontendMovieDtos);
+
+    public void searchMovies(Context ctx) {
+
+        int accountId = securityController.getAccountIdFromToken(ctx);
+        String text = ctx.bodyAsClass(JsonNode.class).get("text").asText();
+        List<FrontendMovieDto> movies = movieDao.searchMovies(text, accountId);
+        ctx.json(movies);
 
     }
 
@@ -40,7 +48,7 @@ public class MovieController {
 
         System.out.println("endpointet er ramt");
 
-        List<FrontendMovieDto> frontendMovieDtos = movieDao.getMoviesAndRatings(accountId);
+        List<FrontendMovieDto> frontendMovieDtos = movieDao.getAllMoviesWithLikes(accountId);
 
         System.out.println("HALLO: " + frontendMovieDtos.size());
         ctx.json(frontendMovieDtos);
@@ -54,7 +62,7 @@ public class MovieController {
         int movieId = Integer.parseInt(ctx.pathParam("id"));
         Boolean rating = ctx.bodyAsClass(JsonNode.class).get("rating").asBoolean();
 
-        movieDao.updateOrCreateRating(accountId, movieId, rating);
+        movieDao.updateOrCreateMovieLike(accountId, movieId, rating);
 
     }
 
@@ -64,7 +72,7 @@ public class MovieController {
         int accountId = securityController.getAccountIdFromToken(ctx);
         int movieId = Integer.parseInt(ctx.pathParam("id"));
 
-        movieDao.deleteRating(accountId, movieId);
+        movieDao.deleteMovieLike(accountId, movieId);
     }
 
 
@@ -72,7 +80,7 @@ public class MovieController {
 
         int accountId = securityController.getAccountIdFromToken(ctx);
 
-        List<FrontendMovieDto> recommendations = movieDao.getRecommendations(accountId, 25);
+        List<FrontendMovieDto> recommendations = movieDao.getMovieRecommendations(accountId, 25);
 
         ctx.json(recommendations);
 
