@@ -23,7 +23,7 @@ public class MovieController {
     }
 
 
-    public void search(Context ctx) {
+    public void searchMovies(Context ctx) {
 
         String text = ctx.bodyAsClass(JsonNode.class).get("text").asText();
 
@@ -34,7 +34,7 @@ public class MovieController {
     }
 
 
-    public void getMoviesAndRatings(Context ctx) {
+    public void getAllMoviesWithLikes(Context ctx) {
 
         int accountId = securityController.getAccountIdFromToken(ctx);
 
@@ -48,7 +48,7 @@ public class MovieController {
     }
 
 
-    public void updateOrCreateRating(Context ctx) {
+    public void updateOrCreateMovieLike(Context ctx) {
 
         int accountId = securityController.getAccountIdFromToken(ctx);
         int movieId = Integer.parseInt(ctx.pathParam("id"));
@@ -59,7 +59,7 @@ public class MovieController {
     }
 
 
-    public void deleteRating(Context ctx) {
+    public void deleteMovieLike(Context ctx) {
 
         int accountId = securityController.getAccountIdFromToken(ctx);
         int movieId = Integer.parseInt(ctx.pathParam("id"));
@@ -68,7 +68,7 @@ public class MovieController {
     }
 
 
-    public void getRecommendations(Context ctx) {
+    public void getMovieRecommendations(Context ctx) {
 
         int accountId = securityController.getAccountIdFromToken(ctx);
 

@@ -28,11 +28,11 @@ public class Routes {
 
     private EndpointGroup movieRoutes() {
         return () -> {
-            get("/search", movieController::search);
-            get("/recommendations", movieController::getRecommendations);
-            get("/", movieController::getMoviesAndRatings);
-            put("/{id}", movieController::updateOrCreateRating);
-            delete("/{id}", movieController::deleteRating);
+            get("/search", movieController::searchMovies);
+            get("/recommendations", movieController::getMovieRecommendations);
+            get("/", movieController::getAllMoviesWithLikes);
+            put("/{id}", movieController::updateOrCreateMovieLike);
+            delete("/{id}", movieController::deleteMovieLike);
 
 //            get(movieController::getAll);
 //            post(movieController::create);
