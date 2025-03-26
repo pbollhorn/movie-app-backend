@@ -36,6 +36,7 @@ public class Routes {
             get("/movie-rating", movieController::getMoviesAndRatings);
             put("/movie-rating/{id}", movieController::updateOrCreateRating);
             delete("/movie-rating/{id}", movieController::deleteRating);
+            get("/movie-recommendation", movieController::getRecommendations);
 
             get(movieController::getAll);
             post(movieController::create);

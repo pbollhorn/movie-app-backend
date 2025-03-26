@@ -180,4 +180,33 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
     }
 
+    // TODO: Her skal min algoritme være, der benytter instruktør og rating
+    // og bagefter frasortere em man har disliket
+    public List<Integer> getRecommendations(int accountId) {
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+//            // Get list of id of movies, which the user likes
+            String jpql = "SELECT r.movie.id FROM AccountMovieRating r WHERE r.account.id = :accountId AND rating=true";
+            TypedQuery<Integer> query = em.createQuery(jpql, Integer.class);
+            query.setParameter("accountId", accountId);
+            List<Integer> movieIds = query.getResultList();
+
+
+            // Get list of director ids which have made movies, which the user likes
+            jpql = "SELECT p.id FROM Person p JOIN Credit c ON c.person.id=p.id WHERE c.job='Director' AND c.movie.id IN :movieIds";
+            query = em.createQuery(jpql, Integer.class);
+            query.setParameter("movieIds", movieIds);
+            List<Integer> personIds = query.getResultList();
+
+//            // Get list of directors which have made those movies
+//            jpql = "SELECT m.movie.id FROM Movie m WHERE m.id IN :movieIds";
+//            TypedQuery<Integer> query = em.createQuery(jpql, Integer.class);
+//            query.setParameter("accountId", accountId);
+//            List<Integer> directorIds =query.getResultList();
+
+            return personIds;
+        }
+    }
+
 }

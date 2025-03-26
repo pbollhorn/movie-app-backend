@@ -68,7 +68,7 @@ public class MovieController implements IController {
 
         List<FrontendMovieDto> frontendMovieDtos = movieDao.getMoviesAndRatings(accountId);
 
-        System.out.println("HALLO: "+frontendMovieDtos.size());
+        System.out.println("HALLO: " + frontendMovieDtos.size());
         ctx.json(frontendMovieDtos);
 
     }
@@ -91,6 +91,17 @@ public class MovieController implements IController {
         int movieId = Integer.parseInt(ctx.pathParam("id"));
 
         movieDao.deleteRating(accountId, movieId);
+    }
+
+
+    public void getRecommendations(Context ctx) {
+
+        int accountId = securityController.getAccountIdFromToken(ctx);
+
+        List<Integer> frontendMovieDtos = movieDao.getRecommendations(accountId);
+
+        ctx.json(frontendMovieDtos);
+
     }
 
 

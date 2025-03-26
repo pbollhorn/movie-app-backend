@@ -12,7 +12,7 @@ Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
 {
-    "rating": false
+    "rating": true
 }
 
 ###
@@ -21,4 +21,8 @@ Authorization: Bearer {{token}}
 
 ###
 GET localhost:7070/api/movie/movie-rating
+Authorization: Bearer {{token}}
+
+###
+GET localhost:7070/api/movie/movie-recommendation
 Authorization: Bearer {{token}}
