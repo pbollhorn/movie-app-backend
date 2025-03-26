@@ -1,10 +1,10 @@
 package dat.dao;
 
+import java.util.List;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
-
-import java.util.List;
 
 public abstract class AbstractDao<T, I> {
 
