@@ -69,8 +69,8 @@ public class MovieController implements IController {
         System.out.println("HALLÅ FRA id: " + movieId);
         System.out.println("BOOLEAN: " + rating);
 
-        UserDTO verifiedTokenUser = securityController.getUserFromToken(ctx);
-        System.out.println(verifiedTokenUser);
+        int accountId = securityController.getAccountIdFromToken(ctx);
+        System.out.println(accountId);
 
     }
 

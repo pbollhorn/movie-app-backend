@@ -37,7 +37,7 @@ public class SecurityDAO extends GenericDAO implements ISecurityDAO {
             logger.error("{} {}", userAccount.getUsername(), userAccount.getPassword());
             throw new ValidationException("Password does not match");
         }
-        return new UserDTO(userAccount.getUsername(), userAccount.getRoles()
+        return new UserDTO(userAccount.getId().toString(), userAccount.getRoles()
                 .stream()
                 .map(Roles::toString)
                 .collect(Collectors.toSet()));
