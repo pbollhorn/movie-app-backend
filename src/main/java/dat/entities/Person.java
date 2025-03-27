@@ -5,12 +5,12 @@ import java.util.Set;
 import jakarta.persistence.*;
 import lombok.*;
 
+import dat.dto.CreditDto;
 import dat.enums.Gender;
 
 @ToString
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Person {
     @Id
@@ -22,9 +22,14 @@ public class Person {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private Double popularity;
-
     @ToString.Exclude
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private Set<Credit> credits;
+
+    public Person(CreditDto c) {
+        this.id = c.personId();
+        this.name = c.name();
+        this.gender = c.gender();
+    }
+
 }

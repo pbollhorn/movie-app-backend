@@ -56,7 +56,7 @@ public class BuildMain {
                     .filter(g -> m.genreIds().contains(g.getId()))
                     .collect(Collectors.toUnmodifiableSet());
 
-            Movie movie = new Movie(m.id(), m.title(), m.originalTitle(), m.adult(), m.originalLanguage(), m.popularity(), m.voteAverage(), m.voteCount(), m.releaseDate(), m.posterPath(), genresForThisMovie, m.overview());
+            Movie movie = new Movie(m, genresForThisMovie);
             movie = movieDao.create(movie);
             movies.add(movie);
             System.out.println("Got and persisted movie: " + movie);
@@ -109,7 +109,8 @@ public class BuildMain {
             for (CreditDto c : TmdbService.getCreditsForMovie(movie.getId())) {
 
                 // This creates person in database if it does not already exist
-                Person person = personDao.update(new Person(c.personId(), c.name(), c.gender(), c.popularity(), null));
+//                Person person = personDao.update(new Person(c.personId(), c.name(), c.gender(), null));
+                Person person = personDao.update(new Person(c));
 
                 movie.addCredit(person, c.job(), c.character());
 

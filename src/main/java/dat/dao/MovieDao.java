@@ -161,7 +161,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             // Now finally get the data for all these movieIds
             jpql = """
                     SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, NULL)
-                    FROM Movie m WHERE m.id IN :movieIds ORDER BY m.voteAverage*m.voteCount DESC""";
+                    FROM Movie m WHERE m.id IN :movieIds ORDER BY m.rating DESC""";
             TypedQuery<FrontendMovieDto> newQuery = em.createQuery(jpql, FrontendMovieDto.class);
             newQuery.setParameter("movieIds", movieIds);
             List<FrontendMovieDto> recommendations = newQuery.getResultList();

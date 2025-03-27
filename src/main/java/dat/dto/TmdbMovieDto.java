@@ -12,13 +12,14 @@ public record TmdbMovieDto(Integer id,
                            Boolean adult,
                            @JsonProperty("original_language")
                            String originalLanguage,
-                           Double popularity,
                            @JsonProperty("vote_average")
                            Double voteAverage,
                            @JsonProperty("vote_count")
                            Integer voteCount,
                            @JsonProperty("release_date")
                            LocalDate releaseDate,
+                           @JsonProperty("backdrop_path")
+                           String backdropPath,
                            @JsonProperty("poster_path")
                            String posterPath,
                            @JsonProperty("genre_ids")

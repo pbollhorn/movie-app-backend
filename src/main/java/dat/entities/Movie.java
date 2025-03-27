@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import dat.dto.TmdbMovieDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,48 +25,48 @@ public class Movie {
     private String originalTitle;
     private Boolean adult;
     private String originalLanguage;
-    private Double popularity;
     private Double voteAverage;
     private Integer voteCount;
     private Double rating;
     private LocalDate releaseDate;
+    private String backdropPath;
+    private String posterPath;
+
+    @ToString.Exclude
+    @Column(length = 1000)
+    private String overview;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Genre> genres;
-
-    private String posterPath;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "movie", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<Credit> credits = new HashSet<>();
 
-    @Column(length = 1000)
-    private String overview;
 
-    public Movie(Integer id, String title, String originalTitle, Boolean adult, String originalLanguage, Double popularity, Double voteAverage, Integer voteCount, LocalDate releaseDate, String posterPath, Set<Genre> genres, String overview) {
-        this.id = id;
-        this.title = title;
-        this.originalTitle = originalTitle;
-        this.adult = adult;
-        this.originalLanguage = originalLanguage;
-        this.popularity = popularity;
+    public Movie(TmdbMovieDto m, Set<Genre> genres) {
+        this.id = m.id();
+        this.title = m.title();
+        this.originalTitle = m.originalTitle();
+        this.adult = m.adult();
+        this.originalLanguage = m.originalLanguage();
+        this.voteAverage = m.voteAverage();
+        this.voteCount = m.voteCount();
+        this.releaseDate = m.releaseDate();
+        this.backdropPath = m.backdropPath();
+        this.posterPath = m.posterPath();
+        this.overview = m.overview();
+        this.genres = genres;
 
-        this.voteAverage = voteAverage;
-        this.voteCount = voteCount;
-
-        if (voteCount >= MINIMUM_VOTES_FOR_RATING) {
-            this.rating = voteAverage;
+        if (m.voteCount() >= MINIMUM_VOTES_FOR_RATING) {
+            this.rating = m.voteAverage();
         } else {
             this.rating = null;
         }
 
-        this.releaseDate = releaseDate;
 
-        this.posterPath = posterPath;
-
-        this.genres = genres;
-        this.overview = overview;
     }
+
 
     public void addCredit(Person person, String job, String character) {
         credits.add(new Credit(null, this, person, job, character));
