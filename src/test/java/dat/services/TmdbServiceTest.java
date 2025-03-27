@@ -6,7 +6,6 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import dat.dto.CreditDto;
 import dat.dto.GenreDto;
@@ -34,12 +33,11 @@ public class TmdbServiceTest {
 
 
     @Test
-    void getDanishMoviesSince2020() {
+    void getDanishMoviesFromYear() {
 
-
-        Set<TmdbMovieDto> movieDtos = TmdbService.getDanishMoviesSince2020(DELAY_MILLISECONDS);
-        System.out.println(movieDtos.size());
-        assertTrue(movieDtos.size() > 1200);
+        Set<TmdbMovieDto> movieDtos = TmdbService.getDanishMoviesFromYear(2020, DELAY_MILLISECONDS);
+        System.out.println("Number of movies in 2020: " + movieDtos.size());
+        assertEquals(145, movieDtos.size());
 
         TmdbMovieDto movieDto = movieDtos.stream()
                 .filter(m -> m.id() == 1275299)
