@@ -1,10 +1,5 @@
 package dat.dao;
 
-import dat.config.HibernateConfig;
-import dat.entities.Account;
-import dat.enums.Roles;
-import dat.exceptions.DaoException;
-import dat.exceptions.ValidationException;
 import dk.bugelhartmann.UserDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
@@ -12,6 +7,12 @@ import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import dat.config.HibernateConfig;
+import dat.entities.Account;
+import dat.enums.Roles;
+import dat.exceptions.DaoException;
+import dat.exceptions.ValidationException;
 
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class SecurityDAOTest {
@@ -60,7 +61,7 @@ class SecurityDAOTest {
 
         // Act & Assert
         ValidationException exception = assertThrows(ValidationException.class,
-                                                        () -> securityDAO.getVerifiedUser(username, wrongPassword));
+                () -> securityDAO.getVerifiedUser(username, wrongPassword));
 
         assertEquals("Password does not match", exception.getMessage());
     }
@@ -73,7 +74,7 @@ class SecurityDAOTest {
 
         // Act & Assert
         DaoException exception = assertThrows(DaoException.class,
-                                                () -> securityDAO.getVerifiedUser(nonExistentUsername, password));
+                () -> securityDAO.getVerifiedUser(nonExistentUsername, password));
 
         assertTrue(exception.getMessage().contains("Error reading object from db"));
     }
@@ -108,7 +109,7 @@ class SecurityDAOTest {
 
         // Act & Assert
         EntityExistsException exception = assertThrows(EntityExistsException.class,
-                                                        () -> securityDAO.createUser(existingUsername, password));
+                () -> securityDAO.createUser(existingUsername, password));
 
         assertTrue(exception.getMessage().contains("Error creating user"));
     }
@@ -144,7 +145,7 @@ class SecurityDAOTest {
 
         // Act & Assert
         DaoException exception = assertThrows(DaoException.class,
-                                                () -> securityDAO.addRoleToUser(nonExistentUsername, Roles.USER));
+                () -> securityDAO.addRoleToUser(nonExistentUsername, Roles.USER));
 
         assertTrue(exception.getMessage().contains("Error reading object from db"));
     }
@@ -184,7 +185,7 @@ class SecurityDAOTest {
 
         // Act & Assert
         DaoException exception = assertThrows(DaoException.class,
-                                                () -> securityDAO.removeRoleFromUser(nonExistentUsername, Roles.USER));
+                () -> securityDAO.removeRoleFromUser(nonExistentUsername, Roles.USER));
 
         assertTrue(exception.getMessage().contains("Error reading object from db"));
     }

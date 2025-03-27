@@ -1,7 +1,8 @@
 package dat.dao;
 
-import dat.entities.Genre;
 import jakarta.persistence.EntityManagerFactory;
+
+import dat.entities.Genre;
 
 public class GenreDao extends AbstractDao<Genre, Integer> {
 

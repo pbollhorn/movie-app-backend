@@ -1,9 +1,9 @@
 package dat.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.time.LocalDate;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public record TmdbMovieDto(Integer id,
                            String title,

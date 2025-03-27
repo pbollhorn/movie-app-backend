@@ -4,9 +4,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import dat.dto.TmdbMovieDto;
 import jakarta.persistence.*;
 import lombok.*;
+
+import dat.dto.TmdbMovieDto;
 
 @ToString
 @Getter

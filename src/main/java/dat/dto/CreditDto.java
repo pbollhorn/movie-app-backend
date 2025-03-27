@@ -1,6 +1,7 @@
 package dat.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import dat.enums.Gender;
 
 public record CreditDto(

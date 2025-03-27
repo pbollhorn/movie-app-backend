@@ -1,11 +1,12 @@
 package dat.dao;
 
-import dat.entities.Person;
+import java.util.List;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.TypedQuery;
 
-import java.util.List;
+import dat.entities.Person;
 
 public class PersonDao extends AbstractDao<Person, Integer> {
 

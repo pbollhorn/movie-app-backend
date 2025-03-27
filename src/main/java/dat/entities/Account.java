@@ -1,6 +1,9 @@
 package dat.entities;
 
-import dat.enums.Roles;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,9 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import dat.enums.Roles;
 
 @Entity
 @Getter

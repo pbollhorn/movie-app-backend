@@ -1,9 +1,7 @@
 package dat.dao;
 
-import dat.entities.Account;
-import dat.enums.Roles;
-import dat.exceptions.DaoException;
-import dat.exceptions.ValidationException;
+import java.util.stream.Collectors;
+
 import dk.bugelhartmann.UserDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
@@ -12,7 +10,10 @@ import jakarta.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.stream.Collectors;
+import dat.entities.Account;
+import dat.enums.Roles;
+import dat.exceptions.DaoException;
+import dat.exceptions.ValidationException;
 
 public class SecurityDAO extends GenericDAO implements ISecurityDAO {
     private final Logger logger = LoggerFactory.getLogger(SecurityDAO.class);

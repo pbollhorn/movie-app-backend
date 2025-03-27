@@ -1,18 +1,16 @@
 package dat.controllers;
 
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Objects;
+import java.util.Set;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dat.config.HibernateConfig;
-import dat.dao.ISecurityDAO;
-import dat.dao.SecurityDAO;
-import dat.dto.ErrorMessage;
-import dat.entities.Account;
-import dat.enums.Roles;
-import dat.exceptions.ApiException;
-import dat.exceptions.DaoException;
-import dat.exceptions.ValidationException;
-import dat.utils.PropertyReader;
-
+import dk.bugelhartmann.UserDTO;
 import dk.bugelhartmann.ITokenSecurity;
 import dk.bugelhartmann.TokenSecurity;
 import dk.bugelhartmann.TokenVerificationException;
@@ -25,15 +23,16 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.ParseException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Objects;
-import java.util.Set;
-
-import dk.bugelhartmann.UserDTO;
+import dat.config.HibernateConfig;
+import dat.dao.ISecurityDAO;
+import dat.dao.SecurityDAO;
+import dat.dto.ErrorMessage;
+import dat.entities.Account;
+import dat.enums.Roles;
+import dat.exceptions.ApiException;
+import dat.exceptions.DaoException;
+import dat.exceptions.ValidationException;
+import dat.utils.PropertyReader;
 
 public class SecurityController implements ISecurityController {
     private final ObjectMapper objectMapper = new ObjectMapper();

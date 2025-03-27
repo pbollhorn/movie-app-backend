@@ -1,17 +1,17 @@
 package dat.utils;
 
-import dat.exceptions.DaoException;
-import org.slf4j.Logger;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class PropertyReader
-{
+import org.slf4j.Logger;
+
+import dat.exceptions.DaoException;
+
+public class PropertyReader {
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(PropertyReader.class);
 
-    public static String getPropertyValue(String propName, String resourceName)  {
+    public static String getPropertyValue(String propName, String resourceName) {
         // REMEMBER TO BUILD WITH MAVEN FIRST. Read the property file if not deployed (else read system vars instead)
         // Read from ressources/config.properties or from pom.xml depending on the ressourceName
         try (InputStream is = PropertyReader.class.getClassLoader().getResourceAsStream(resourceName)) {
