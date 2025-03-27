@@ -70,7 +70,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             String jpql = """
                     SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, a.likes)
-                    FROM AccountMovieLikes a JOIN Movie m ON a.movie.id=m.id WHERE a.account.id=:accountId""";
+                    FROM AccountMovieLikes a JOIN Movie m ON a.movie.id=m.id WHERE a.account.id=:accountId ORDER BY m.title""";
 
             TypedQuery<FrontendMovieDto> query = em.createQuery(jpql, FrontendMovieDto.class);
             query.setParameter("accountId", accountId);
@@ -147,7 +147,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             movieIds = query.getResultList();
             movieIds.forEach(System.out::println);
 
-            // Exclude movies already liked or disliked by user
+            // Exclude movies already liked or disliked by user. and ORDER BY and LIMIT
             jpql = """
                     SELECT m.id FROM Movie m WHERE m.id IN :movieIds AND m.id NOT IN
                     (SELECT a.movie.id FROM AccountMovieLikes a WHERE a.account.id=:accountId)
@@ -161,7 +161,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             // Now finally get the data for all these movieIds
             jpql = """
                     SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, NULL)
-                    FROM Movie m WHERE m.id IN :movieIds ORDER BY m.voteAverage DESC""";
+                    FROM Movie m WHERE m.id IN :movieIds ORDER BY m.voteAverage*m.voteCount DESC""";
             TypedQuery<FrontendMovieDto> newQuery = em.createQuery(jpql, FrontendMovieDto.class);
             newQuery.setParameter("movieIds", movieIds);
             List<FrontendMovieDto> recommendations = newQuery.getResultList();
