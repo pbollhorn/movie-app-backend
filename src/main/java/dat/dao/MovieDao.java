@@ -34,7 +34,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             String jpql = """
                     SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, NULL)
-                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title""";
+                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title""";
 
             TypedQuery<FrontendMovieDto> query = em.createQuery(jpql, FrontendMovieDto.class);
             query.setParameter("title", "%" + text.toLowerCase() + "%");
@@ -49,10 +49,10 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            // TODO: Find a way to get likes to be NULL if user has not liked/disliked yet
             String jpql = """
-                    SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, (SELECT a.likes FROM AccountMovieLikes a WHERE a.movie.id=m.id))
-                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title""";
+                    SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath,
+                    (SELECT a.likes FROM AccountMovieLikes a WHERE a.movie.id=m.id))
+                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title""";
 
             TypedQuery<FrontendMovieDto> query = em.createQuery(jpql, FrontendMovieDto.class);
             query.setParameter("title", "%" + text.toLowerCase() + "%");
