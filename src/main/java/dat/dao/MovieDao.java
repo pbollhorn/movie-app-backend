@@ -51,13 +51,12 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             // TODO: Find a way to get likes to be NULL if user has not liked/disliked yet
             String jpql = """
-                    SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, a.likes)
-                    FROM Movie m JOIN AccountMovieLikes a ON a.movie.id=m.id
-                    LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title""";
+                    SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, (SELECT a.likes FROM AccountMovieLikes a WHERE a.movie.id=m.id))
+                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title""";
 
             TypedQuery<FrontendMovieDto> query = em.createQuery(jpql, FrontendMovieDto.class);
             query.setParameter("title", "%" + text.toLowerCase() + "%");
-            query.setParameter("accountId", accountId);
+//            query.setParameter("accountId", accountId);
             return query.getResultList();
 
         }

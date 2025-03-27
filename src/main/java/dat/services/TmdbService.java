@@ -47,11 +47,11 @@ public class TmdbService {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.registerModule(new JavaTimeModule());
 
-        for (int page = 1; page<2; page++) {
+        for (int page = 1; ; page++) {
 
             long startTime = System.currentTimeMillis();
 
-            String url = "https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&primary_release_date.gte=2020-01-01&language=da&with_original_language=da&page=" + page + "&api_key=" + ApiKey;
+            String url = "https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&primary_release_date.gte=2010-01-01&language=da&with_original_language=da&page=" + page + "&api_key=" + ApiKey;
             String json = new DataAPIReader().getDataFromClient(url);
             System.out.println(json);
 
