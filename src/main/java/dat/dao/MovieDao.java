@@ -122,13 +122,12 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
     }
 
-    // TODO: Her skal min algoritme være, der benytter instruktør og rating
-    // og bagefter frasortere em man har disliket
+
     public List<FrontendMovieDto> getMovieRecommendations(int accountId, int limit) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-//            // Get list of id of movies, which the user likes
+            // Get list of id of movies, which the user likes
             String jpql = "SELECT a.movie.id FROM AccountMovieLikes a WHERE a.account.id = :accountId AND likes=TRUE";
             TypedQuery<Integer> query = em.createQuery(jpql, Integer.class);
             query.setParameter("accountId", accountId);
@@ -151,7 +150,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             jpql = """
                     SELECT m.id FROM Movie m WHERE m.id IN :movieIds AND m.id NOT IN
                     (SELECT a.movie.id FROM AccountMovieLikes a WHERE a.account.id=:accountId)
-                    ORDER BY m.voteAverage DESC LIMIT :limit""";
+                    ORDER BY m.rating DESC NULLS LAST LIMIT :limit""";
             query = em.createQuery(jpql, Integer.class);
             query.setParameter("movieIds", movieIds);
             query.setParameter("accountId", accountId);
@@ -161,7 +160,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             // Now finally get the data for all these movieIds
             jpql = """
                     SELECT NEW dat.dto.FrontendMovieDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, NULL)
-                    FROM Movie m WHERE m.id IN :movieIds ORDER BY m.rating DESC""";
+                    FROM Movie m WHERE m.id IN :movieIds ORDER BY m.rating DESC NULLS LAST""";
             TypedQuery<FrontendMovieDto> newQuery = em.createQuery(jpql, FrontendMovieDto.class);
             newQuery.setParameter("movieIds", movieIds);
             List<FrontendMovieDto> recommendations = newQuery.getResultList();

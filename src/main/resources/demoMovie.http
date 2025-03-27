@@ -11,7 +11,7 @@ Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
 {
-    "text": "dru"
+    "text": "olsen-banden"
 }
 
 ###
@@ -32,12 +32,12 @@ Content-Type: "application/json"
 }
 
 ###
-PUT localhost:7070/api/movies/714892
+PUT localhost:7070/api/movies/11389
 Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
 {
-    "rating": false
+    "rating": true
 }
 
 ###

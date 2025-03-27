@@ -39,6 +39,52 @@ public class TmdbService {
     }
 
 
+    public static Set<TmdbMovieDto> getDanishMoviesFromYear(int year, long delayMilliseconds) {
+
+        Set<TmdbMovieDto> movies = new HashSet<>();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.registerModule(new JavaTimeModule());
+
+        for (int page = 1; ; page++) {
+
+            long startTime = System.currentTimeMillis();
+
+            String url = "https://api.themoviedb.org/3/discover/movie?language=da&with_original_language=da&include_adult=true&include_video=false&primary_release_date.gte=" + year + "-01-01&primary_release_date.lte=" + year + "-12-31&page=" + page + "&api_key=" + ApiKey;
+//            String url = "https://api.themoviedb.org/3/discover/movie?language=da&with_original_language=da&include_adult=true&include_video=false&primary_release_date.gte=1800-01-01&primary_release_date.lte=1900-12-31&page=" + page + "&api_key=" + ApiKey;
+            String json = new DataAPIReader().getDataFromClient(url);
+
+            MoviesResponseDto response;
+
+            try {
+                response = objectMapper.readValue(json, MoviesResponseDto.class);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+                return null;
+            }
+
+            movies.addAll(response.results);
+
+            if (response.results.size() < 20) {
+                break;
+            }
+
+            long timeSpent = System.currentTimeMillis() - startTime;
+            long timeToSleep = Math.max(delayMilliseconds - timeSpent, 0);
+            try {
+                Thread.sleep(timeToSleep);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        return movies;
+
+    }
+
+
     public static Set<TmdbMovieDto> getDanishMoviesSince2020(long delayMilliseconds) {
 
         Set<TmdbMovieDto> movies = new HashSet<>();
@@ -53,7 +99,6 @@ public class TmdbService {
 
             String url = "https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&primary_release_date.gte=2010-01-01&language=da&with_original_language=da&page=" + page + "&api_key=" + ApiKey;
             String json = new DataAPIReader().getDataFromClient(url);
-            System.out.println(json);
 
             MoviesResponseDto response;
 

@@ -48,18 +48,22 @@ public class BuildMain {
             System.out.println("Got and persisted genre: " + genre);
         }
 
-        // Get all danish movies since 2020 from TMDB and persist them in database
+        // Get all danish movies from TMDB and persist them in database
         Set<Movie> movies = new HashSet<>();
-        for (TmdbMovieDto m : TmdbService.getDanishMoviesSince2020(DELAY_MILLISECONDS)) {
+        for (int year = 1897; year <= 2025; year++) {
 
-            Set<Genre> genresForThisMovie = genres.stream()
-                    .filter(g -> m.genreIds().contains(g.getId()))
-                    .collect(Collectors.toUnmodifiableSet());
+            for (TmdbMovieDto m : TmdbService.getDanishMoviesFromYear(year, DELAY_MILLISECONDS)) {
 
-            Movie movie = new Movie(m, genresForThisMovie);
-            movie = movieDao.create(movie);
-            movies.add(movie);
-            System.out.println("Got and persisted movie: " + movie);
+                Set<Genre> genresForThisMovie = genres.stream()
+                        .filter(g -> m.genreIds().contains(g.getId()))
+                        .collect(Collectors.toUnmodifiableSet());
+
+                Movie movie = new Movie(m, genresForThisMovie);
+                movie = movieDao.create(movie);
+                movies.add(movie);
+                System.out.println("Got and persisted movie: " + movie);
+            }
+
         }
 
 
@@ -109,7 +113,6 @@ public class BuildMain {
             for (CreditDto c : TmdbService.getCreditsForMovie(movie.getId())) {
 
                 // This creates person in database if it does not already exist
-//                Person person = personDao.update(new Person(c.personId(), c.name(), c.gender(), null));
                 Person person = personDao.update(new Person(c));
 
                 movie.addCredit(person, c.job(), c.character());
