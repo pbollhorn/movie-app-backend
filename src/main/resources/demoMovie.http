@@ -40,6 +40,15 @@ Content-Type: "application/json"
     "rating": false
 }
 
+###
+PUT localhost:7070/api/movies/1426674
+Authorization: Bearer {{token}}
+Content-Type: "application/json"
+
+{
+    "rating": false
+}
+
 
 ###
 DELETE localhost:7070/api/movies/1078249

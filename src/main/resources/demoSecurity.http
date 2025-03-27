@@ -4,7 +4,7 @@ GET http://localhost:7070/api/auth/test
 POST http://localhost:7070/api/auth/register
 
 {
-    "username": "testuser1",
+    "username": "testuser2",
     "password": "test123"
 }
 ###
