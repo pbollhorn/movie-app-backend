@@ -5,12 +5,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import dat.exceptions.ApiException;
 
 public class DataAPIReader {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     public String getDataFromClient(String url) {
         try {
@@ -33,4 +30,3 @@ public class DataAPIReader {
         }
     }
 }
-
