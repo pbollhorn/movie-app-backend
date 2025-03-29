@@ -6,6 +6,7 @@ import java.util.Set;
 import dat.dto.TmdbMovieDto;
 import dat.entities.Genre;
 import dat.entities.Movie;
+import jakarta.persistence.EntityManagerFactory;
 
 public class Populator {
 
@@ -29,12 +30,14 @@ public class Populator {
     private static final Genre WAR = new Genre(10752, "War");
     private static final Genre TV_MOVIE = new Genre(10770, "TV Movie");
 
-    public static TmdbMovieDto[] populate(MovieDao movieDao, GenreDao genreDao) {
+    public static TmdbMovieDto[] populate(MovieDao movieDao, GenreDao genreDao, EntityManagerFactory emf) {
 
+        // Populate with all genres
         Set<Genre> genres = Set.of(ADVENTURE, FANTASY, ANIMATION, DRAMA, HORROR, ACTION, COMEDY, HISTORY, WESTERN,
                 THRILLER, CRIME, DOCUMENTARY, SCIENCE_FICTION, MYSTERY, MUSIC, ROMANCE, FAMILY, WAR, TV_MOVIE);
         genres.forEach(genreDao::create);
 
+        // Populate with two movies
         TmdbMovieDto m1 = new TmdbMovieDto(23588, "Baby Doom", "Baby Doom", false,
                 "da", 5.7, 6, LocalDate.of(1998, 3, 20),
                 null, "/sf3AHsBHmyEcRxCA3pU7ggA5csk.jpg",
@@ -47,7 +50,20 @@ public class Populator {
                 Set.of(18, 35), "I 80'ernes Danmark...");
         movieDao.create(new Movie(m2, Set.of(DRAMA, COMEDY)));
 
+
+//        try (EntityManager em = emf.createEntityManager()) {
+//            em.getTransaction().begin();
+//            // Create test user with user role
+//            Account account1 = new Account("testuser1", "password1");
+//            account1.addRole(Roles.USER);
+//            em.persist(account1);
+//            em.getTransaction().commit();
+//        }
+
+
+
         return new TmdbMovieDto[]{m1, m2};
+
     }
 
 
