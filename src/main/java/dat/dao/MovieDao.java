@@ -2,6 +2,7 @@ package dat.dao;
 
 import java.util.List;
 
+import dat.dto.TmdbMovieDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
@@ -11,6 +12,7 @@ import dat.dto.FrontendMovieDto;
 import dat.entities.Account;
 import dat.entities.AccountMovieLikes;
 import dat.entities.Movie;
+
 
 public class MovieDao extends AbstractDao<Movie, Integer> {
 
@@ -26,7 +28,6 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         }
         return instance;
     }
-
 
     public List<FrontendMovieDto> searchMoviesOpen(String text) {
 
