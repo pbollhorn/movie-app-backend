@@ -26,6 +26,5 @@ public class Main {
                 .setApiExceptionHandling()
                 .checkSecurityRoles()
                 .startServer(7070);
-
     }
 }
