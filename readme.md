@@ -1,6 +1,14 @@
-# Group X SP2: Movie Recommendation API
+# sp-2-team-5: Movie Recommendation API
 
-The URL for the API is: https://movie.jcoder.dk/api
+Jeg har lavet en Movie Recommendation API.
+Jeg har brugt koden fra Andrés API Security Guide som udgangspunkt for mit projekt.
+
+## Visionen for projektet 
+
+
+## Endpoints
+
+URL'en API er: https://movie.jcoder.dk/api
 
 
 | Method           | URL          | Request Body (JSON) | Response (JSON) | Roles |
