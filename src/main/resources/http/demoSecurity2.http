@@ -1,0 +1,37 @@
+# Non-existing endpoint
+GET localhost:7070/api/auth/test
+###
+POST https://movie.jcoder.dk/api/auth/register
+
+{
+    "username": "testuser3",
+    "password": "password3"
+}
+###
+POST localhost:7070/api/auth/login
+
+{
+    "username": "testuser2",
+    "password": "password2"
+}
+> {%
+    client.global.set("token", response.body.token);
+    client.log("Logging Bearer Token.");
+    client.log("Bearer " + response.body.token);
+    client.log("Username: " + response.body.username);
+%}
+###
+GET localhost:7070/api/protected/user_demo
+Authorization: Bearer {{token}}
+###
+GET localhost:7070/api/protected/admin_demo
+Authorization: Bearer {{token}}
+###
+GET localhost:7070/api/routes
+Authorization: Bearer {{token}}
+###
+GET localhost:7070/api/auth/verify
+Authorization: Bearer {{token}}
+###
+GET localhost:7070/api/auth/tokenlifespan
+Authorization: Bearer {{token}}
