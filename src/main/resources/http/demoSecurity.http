@@ -1,18 +1,18 @@
 # Non-existing endpoint
-GET {{url}}/auth/test
+GET localhost:7070/api/auth/test
 ###
-POST {{url}}/auth/register
+POST localhost:7070/api/auth/register
 
 {
     "username": "testuser2",
-    "password": "test123"
+    "password": "password2"
 }
 ###
-POST {{url}}/auth/login
+POST localhost:7070/api/auth/login
 
 {
-    "username": "testuser1",
-    "password": "test123"
+    "username": "testuser2",
+    "password": "password2"
 }
 > {%
     client.global.set("token", response.body.token);
@@ -21,17 +21,17 @@ POST {{url}}/auth/login
     client.log("Username: " + response.body.username);
 %}
 ###
-GET {{url}}/protected/user_demo
+GET localhost:7070/api/protected/user_demo
 Authorization: Bearer {{token}}
 ###
-GET {{url}}/protected/admin_demo
+GET localhost:7070/api/protected/admin_demo
 Authorization: Bearer {{token}}
 ###
-GET {{url}}/routes
+GET localhost:7070/api/routes
 Authorization: Bearer {{token}}
 ###
-GET {{url}}/auth/verify
+GET localhost:7070/api/auth/verify
 Authorization: Bearer {{token}}
 ###
-GET {{url}}/auth/tokenlifespan
+GET localhost:7070/api/auth/tokenlifespan
 Authorization: Bearer {{token}}
