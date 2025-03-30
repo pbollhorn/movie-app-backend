@@ -1,3 +1,16 @@
+# Group X SP2: Movie Recommendation API
+
+The URL for the API is: https://movie.jcoder.dk/api
+
+
+| Method           | URL          | Request Body (JSON) | Response (JSON) | Roles |
+|--------------|--------------|----------|-----------|---|
+| Row 1, Col 1 | Row 1, Col 2 | Row 1, Col 3 |       |   |
+| Row 2, Col 1 | Row 2, Col 2 | Row 2, Col 3 |       |   |
+| Row 3, Col 1 | Row 3, Col 2 | Row 3, Col 3 |       |   |
+
+
+
 Remember to add a config.properties file in the resources directory. The config.properties file should contain the following properties:
 ```
 DB_NAME=
