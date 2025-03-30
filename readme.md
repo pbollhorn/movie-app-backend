@@ -3,29 +3,31 @@
 Jeg har lavet en Movie Recommendation API.
 Jeg har brugt koden fra Andrés API Security Guide som udgangspunkt for mit projekt.
 
-## Visionen for projektet 
-
+## Visionen for projektet
 
 ## Endpoints
 
-URL'en API er: https://movie.jcoder.dk/api
+API'ens URL er: https://movie.jcoder.dk/api
 
+| Method | URL                     | Request Body (JSON)     | Response (JSON)                         | Roles  |
+|--------|-------------------------|-------------------------|-----------------------------------------|--------|
+| POST   | /auth/register          | `{"username": String,"password": String}` | `{"token": String, "username": String}` | ANYONE |
+| POST   | /auth/login             | `{"username": String,"password": String}`                  | `{"token": String, "username": String}` | ANYONE |
+| GET    | /movies                 | (empty)                 | `[movie,movie,...]`                     | USER   |
+| PUT    | /movies/(id)            | `{"likes": Boolean}`    | (empty)                                 | USER   |
+| DELETE | /movies/(id)            | (empty)                 | (empty)                                 | USER   |
+| GET    | /movies/recommendations | (empty)                 | `[movie,movie,...]`                     | USER   |
+| GET    | /movies/search          | `{"text": String}`      | `[movie,movie,...]`                     | USER   |
+| GET    | /movies/search-open     | `{"text": String}`      | `[movie,movie,...]`                     | ANYONE |
 
-| Method           | URL          | Request Body (JSON) | Response (JSON) | Roles |
-|--------------|--------------|----------|-----------|---|
-| Row 1, Col 1 | Row 1, Col 2 | Row 1, Col 3 |       |   |
-| Row 2, Col 1 | Row 2, Col 2 | Row 2, Col 3 |       |   |
-| Row 3, Col 1 | Row 3, Col 2 | Row 3, Col 3 |       |   |
-
-
-
-Remember to add a config.properties file in the resources directory. The config.properties file should contain the following properties:
 ```
-DB_NAME=
-DB_USERNAME=postgres
-DB_PASSWORD=
-SECRET_KEY=minimum32characterslong
-ISSUER=
-TOKEN_EXPIRE_TIME=3600000
+movie =
+{
+    "id": Number,
+    "title": String,
+    "originalTitle": String,
+    "releaseDate": [YYYY,MM,DD],
+    "rating": Number,
+    "posterPath": String
+}
 ```
-The DB_NAME, DB_USERNAME, DB_PASSWORD, ISSUER, and TOKEN_EXPIRE_TIME properties should be filled in with the appropriate values. The SECRET_KEY property should be a minimum of 32 characters long.
