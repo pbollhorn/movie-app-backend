@@ -23,7 +23,7 @@ public class Main {
                 (")_(")                                            (")_(")
                 ----------------------------------------------------------\n""");
 
-        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("create"); // change back to update
+        EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("update"); // change back to update
         SecurityController securityController = new SecurityController(emf);
         MovieController movieController = new MovieController(emf, securityController);
 

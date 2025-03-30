@@ -80,7 +80,6 @@ public class HibernateConfig {
     }
 
     private static Properties setBaseProperties(Properties props, String hbm2ddlAutoProperty) {
-        props.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         props.put("hibernate.connection.driver_class", "org.postgresql.Driver");
         props.put("hibernate.hbm2ddl.auto", hbm2ddlAutoProperty);  // set to "update" when in production
         props.put("hibernate.current_session_context_class", "thread");
@@ -92,7 +91,6 @@ public class HibernateConfig {
 
     private static Properties setDeployedProperties(Properties props) {
         String DBName = System.getenv("DB_NAME");
-//        props.setProperty("hibernate.connection.url", String.format(System.getenv("CONNECTION_STR"), DBName));
         props.setProperty("hibernate.connection.url", System.getenv("CONNECTION_STR") + DBName);
         props.setProperty("hibernate.connection.username", System.getenv("DB_USERNAME"));
         props.setProperty("hibernate.connection.password", System.getenv("DB_PASSWORD"));
