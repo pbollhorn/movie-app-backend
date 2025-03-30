@@ -23,11 +23,17 @@ API'ens URL er: https://movie.jcoder.dk/api
 ```
 movie =
 {
-    "id": Number,
+    "id": Number, (samme id som på TMDB)
     "title": String,
     "originalTitle": String,
     "releaseDate": [YYYY,MM,DD],
     "rating": Number,
-    "posterPath": String
+    "posterPath": String,
+    "likes": Boolean
 }
+
+Boolean "likes" er:
+ - TRUE hvis brugeren kan lide filmen
+ - FALSE hvis brugeren ikke kan lide filmen
+ - NULL hvis brugeren ikke har udtrykt sin holdning til filmen
 ```
