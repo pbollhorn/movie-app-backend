@@ -1,4 +1,4 @@
-GET localhost:7070/api/movies/search-open
+GET {{url}}/movies/search-open
 Content-Type: "application/json"
 
 {
@@ -6,7 +6,7 @@ Content-Type: "application/json"
 }
 
 ###
-GET localhost:7070/api/movies/search
+GET {{url}}/movies/search
 Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
@@ -15,24 +15,15 @@ Content-Type: "application/json"
 }
 
 ###
-GET localhost:7070/api/movies/recommendations
+GET {{url}}/movies/recommendations
 Authorization: Bearer {{token}}
 
 ###
-GET localhost:7070/api/movies
+GET {{url}}/movies
 Authorization: Bearer {{token}}
 
 ###
-PUT localhost:7070/api/movies/580175
-Authorization: Bearer {{token}}
-Content-Type: "application/json"
-
-{
-    "rating": true
-}
-
-###
-PUT localhost:7070/api/movies/11389
+PUT {{url}}/movies/580175
 Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
@@ -41,7 +32,16 @@ Content-Type: "application/json"
 }
 
 ###
-PUT localhost:7070/api/movies/1426674
+PUT {{url}}/movies/11389
+Authorization: Bearer {{token}}
+Content-Type: "application/json"
+
+{
+    "rating": true
+}
+
+###
+PUT {{url}}/movies/1426674
 Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
@@ -51,5 +51,5 @@ Content-Type: "application/json"
 
 
 ###
-DELETE localhost:7070/api/movies/1078249
+DELETE {{url}}/api/movies/1078249
 Authorization: Bearer {{token}}
