@@ -18,7 +18,7 @@ Link til 200x200 pixel logo: https://github.com/pbollhorn/MovieRecommendationApi
 
 ## Endpoints
 
-API'ens URL er: https://movie.jcoder.dk/api
+API'en er deployet. Dens URL er: https://movie.jcoder.dk/api
 
 | Method | URL                     | Request Body (JSON)                        | Response (JSON)                         | Roles  |
 |--------|-------------------------|--------------------------------------------|-----------------------------------------|--------|
