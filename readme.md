@@ -7,6 +7,8 @@ Link til GitHub repo: https://github.com/pbollhorn/MovieRecommendationApi
 
 Link til 200x200 pixel logo: https://github.com/pbollhorn/MovieRecommendationApi/blob/main/src/main/resources/logo_200x200.jpg
 
+Link til deployet API: https://movie.jcoder.dk/api
+
 ## Vision for min API
 
 - Min database skal indeholde alle dansksprogede film fra TMDB (5547 pr. 31. marts 2025).
@@ -18,7 +20,7 @@ Link til 200x200 pixel logo: https://github.com/pbollhorn/MovieRecommendationApi
 
 ## Endpoints
 
-API'en er deployet. Dens URL er: https://movie.jcoder.dk/api
+URL for API'en er: https://movie.jcoder.dk/api
 
 | Method | URL                     | Request Body (JSON)                        | Response (JSON)                         | Roles  |
 |--------|-------------------------|--------------------------------------------|-----------------------------------------|--------|
