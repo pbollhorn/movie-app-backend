@@ -4,7 +4,8 @@ Jeg har lavet en Movie Recommendation API.
 Jeg har brugt koden fra Andrés API Security Guide som udgangspunkt for mit projekt.
 
 Link til GitHub repo: https://github.com/pbollhorn/MovieRecommendationApi
-Link til 200x200 pixel logo: 
+
+Link til 200x200 pixel logo: https://github.com/pbollhorn/MovieRecommendationApi/blob/main/src/main/resources/logo_200x200.jpg
 
 ## Vision for min API
 
