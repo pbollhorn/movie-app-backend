@@ -2,7 +2,6 @@ package dat.dao;
 
 import java.util.List;
 
-import dat.dto.TmdbMovieDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;

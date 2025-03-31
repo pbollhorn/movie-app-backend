@@ -3,6 +3,9 @@
 Jeg har lavet en Movie Recommendation API.
 Jeg har brugt koden fra Andrés API Security Guide som udgangspunkt for mit projekt.
 
+Link til GitHub repo: https://github.com/pbollhorn/MovieRecommendationApi
+Link til 200x200 pixel logo: 
+
 ## Vision for min API
 
 - Min database skal indeholde alle dansksprogede film fra TMDB (5547 pr. 31. marts 2025).
@@ -16,16 +19,16 @@ Jeg har brugt koden fra Andrés API Security Guide som udgangspunkt for mit proj
 
 API'ens URL er: https://movie.jcoder.dk/api
 
-| Method | URL                     | Request Body (JSON)                        | Response (JSON)                         | Roles  | Idempotent |
-|--------|-------------------------|--------------------------------------------|-----------------------------------------|--------|------------|
-| POST   | /auth/register          | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE | Yes        |
-| POST   | /auth/login             | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE | Yes        |
-| GET    | /movies                 | (empty)                                    | `[movie,movie,...]`                     | USER   | Yes        |
-| PUT    | /movies/(id)            | `{"likes": Boolean}`                       | (empty)                                 | USER   | Yes        |
-| DELETE | /movies/(id)            | (empty)                                    | (empty)                                 | USER   | Yes        |
-| GET    | /movies/recommendations | (empty)                                    | `[movie,movie,...]`                     | USER   | Yes        |
-| GET    | /movies/search          | `{"text": String}`                         | `[movie,movie,...]`                     | USER   | Yes        |
-| GET    | /movies/search-open     | `{"text": String}`                         | `[movie,movie,...]`                     | ANYONE | Yes        |
+| Method | URL                     | Request Body (JSON)                        | Response (JSON)                         | Roles  |
+|--------|-------------------------|--------------------------------------------|-----------------------------------------|--------|
+| POST   | /auth/register          | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
+| POST   | /auth/login             | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
+| GET    | /movies                 | (empty)                                    | `[movie,movie,...]`                     | USER   |
+| PUT    | /movies/(id)            | `{"likes": Boolean}`                       | (empty)                                 | USER   |
+| DELETE | /movies/(id)            | (empty)                                    | (empty)                                 | USER   |
+| GET    | /movies/recommendations | (empty)                                    | `[movie,movie,...]`                     | USER   |
+| GET    | /movies/search          | `{"text": String}`                         | `[movie,movie,...]`                     | USER   |
+| GET    | /movies/search-open     | `{"text": String}`                         | `[movie,movie,...]`                     | ANYONE |
 
 ```
 movie =
