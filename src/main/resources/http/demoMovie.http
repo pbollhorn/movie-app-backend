@@ -2,7 +2,7 @@ GET {{url}}/movies/search-open
 Content-Type: "application/json"
 
 {
-    "text": "dru"
+    "text": "hund"
 }
 
 ###
@@ -32,12 +32,12 @@ Content-Type: "application/json"
 }
 
 ###
-PUT {{url}}/movies/11389
+PUT {{url}}/movies/12231
 Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
 {
-    "rating": true
+    "rating": false
 }
 
 ###

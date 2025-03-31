@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="MovieRecommendationDB@localhost" uuid="6f502b33-685b-4755-a66e-453137d9b514">
+    <data-source source="LOCAL" name="moviedb@localhost" uuid="3bb7e804-c504-43af-8b5c-438abea4795f">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/MovieRecommendationDB</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/moviedb</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />

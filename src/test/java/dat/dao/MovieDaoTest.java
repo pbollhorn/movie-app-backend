@@ -1,16 +1,18 @@
 package dat.dao;
 
-import dat.config.HibernateConfig;
-import dat.dto.FrontendMovieDto;
-import dat.entities.Genre;
+import java.util.List;
+
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-import java.util.Set;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import dat.config.HibernateConfig;
+import dat.dto.FrontendMovieDto;
+
 
 public class MovieDaoTest {
 
@@ -41,6 +43,26 @@ public class MovieDaoTest {
         // Negative test: Try to search for movie which does not exist
         movies = movieDao.searchMoviesOpen("does not exist in test db");
         assertEquals(0, movies.size());
+    }
+
+    @AfterEach
+    void tearDown() {
+
+        try (EntityManager em = emf.createEntityManager()) {
+            // Delete everything from tables and reset id's to start with 1
+            em.getTransaction().begin();
+            em.createNativeQuery("DELETE FROM movie_genre").executeUpdate();
+            em.createNativeQuery("DELETE FROM movie").executeUpdate();
+            em.createNativeQuery("DELETE FROM genre").executeUpdate();
+//            em.createNativeQuery("ALTER SEQUENCE movie_id_seq RESTART WITH 1").executeUpdate();
+//            em.createNativeQuery("ALTER SEQUENCE hotel_id_seq RESTART WITH 1").executeUpdate();
+            em.getTransaction().commit();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
 }

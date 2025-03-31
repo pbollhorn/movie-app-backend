@@ -4,8 +4,8 @@ GET {{url}}/auth/test
 POST {{url}}/auth/register
 
 {
-    "username": "testuser2",
-    "password": "password2"
+    "username": "testuser1",
+    "password": "password1"
 }
 ###
 POST {{url}}/auth/login
