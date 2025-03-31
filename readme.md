@@ -47,4 +47,7 @@ movie =
 ## Status på implementation
 
 - Jeg har fået implementeret alle ovenstående endpoints.
+- Mine endpoints giver fejlkoder i tilfælde af fejl, men ikke altid de korrekte fejlkoder (4xx for Client Error, 5xx Server Error)
 - Jeg har kun 5112 film i min database, for min kode har et problem med at få hentet alle film ned.
+- Jeg har ikke fået skrevet særligt mange tests
+- Min kode trænger til noget cleanup, f.eks. har jeg både en AbstractDao og en GenericDao
