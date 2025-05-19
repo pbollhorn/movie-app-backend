@@ -73,10 +73,10 @@ public class ApplicationConfig {
     }
 
     public void startServer(int port) {
-        app.start(port);
-        logger.info("Server started on port: {}", port);
         app.before(ApplicationConfig::corsHeaders);
         app.options("/*", ApplicationConfig::corsHeadersOptions);
+        app.start(port);
+        logger.info("Server started on port: {}", port);
     }
 
 
