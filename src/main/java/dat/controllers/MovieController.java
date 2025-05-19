@@ -25,7 +25,8 @@ public class MovieController {
     }
 
     public void searchMoviesOpen(Context ctx) {
-        String text = ctx.bodyAsClass(JsonNode.class).get("text").asText();
+//        String text = ctx.bodyAsClass(JsonNode.class).get("text").asText();
+        String text = ctx.queryParam("text");
         List<FrontendMovieDto> movies = movieDao.searchMoviesOpen(text);
         ctx.json(movies);
     }
