@@ -25,7 +25,6 @@ public class MovieController {
     }
 
     public void searchMoviesOpen(Context ctx) {
-//        String text = ctx.bodyAsClass(JsonNode.class).get("text").asText();
         String text = ctx.queryParam("text");
         List<FrontendMovieDto> movies = movieDao.searchMoviesOpen(text);
         ctx.json(movies);
@@ -33,7 +32,7 @@ public class MovieController {
 
     public void searchMovies(Context ctx) {
         int accountId = securityController.getAccountIdFromToken(ctx);
-        String text = ctx.bodyAsClass(JsonNode.class).get("text").asText();
+        String text = ctx.queryParam("text");
         List<FrontendMovieDto> movies = movieDao.searchMovies(text, accountId);
         ctx.json(movies);
     }

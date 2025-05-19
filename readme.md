@@ -5,7 +5,8 @@ Jeg har brugt koden fra Andrés API Security Guide som udgangspunkt for mit proj
 
 Link til GitHub repo: https://github.com/pbollhorn/MovieRecommendationApi
 
-Link til 200x200 pixel logo: https://github.com/pbollhorn/MovieRecommendationApi/blob/main/src/main/resources/logo_200x200.jpg
+Link til 200x200 pixel
+logo: https://github.com/pbollhorn/MovieRecommendationApi/blob/main/src/main/resources/logo_200x200.jpg
 
 Link til deployet API: https://movie.jcoder.dk/api
 
@@ -22,16 +23,16 @@ Link til deployet API: https://movie.jcoder.dk/api
 
 URL for API'en er: https://movie.jcoder.dk/api
 
-| Method | URL                     | Request Body (JSON)                        | Response (JSON)                         | Roles  |
-|--------|-------------------------|--------------------------------------------|-----------------------------------------|--------|
-| POST   | /auth/register          | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
-| POST   | /auth/login             | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
-| GET    | /movies                 | (empty)                                    | `[movie,movie,...]`                     | USER   |
-| PUT    | /movies/(id)            | `{"likes": Boolean}`                       | (empty)                                 | USER   |
-| DELETE | /movies/(id)            | (empty)                                    | (empty)                                 | USER   |
-| GET    | /movies/recommendations | (empty)                                    | `[movie,movie,...]`                     | USER   |
-| GET    | /movies/search          | `{"text": String}`                         | `[movie,movie,...]`                     | USER   |
-| GET    | /movies/search-open     | `{"text": String}`                         | `[movie,movie,...]`                     | ANYONE |
+| Method | URL                               | Request Body (JSON)                        | Response (JSON)                         | Roles  |
+|--------|-----------------------------------|--------------------------------------------|-----------------------------------------|--------|
+| POST   | /auth/register                    | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
+| POST   | /auth/login                       | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
+| GET    | /movies                           | (empty)                                    | `[movie,movie,...]`                     | USER   |
+| PUT    | /movies/(id)                      | `{"likes": Boolean}`                       | (empty)                                 | USER   |
+| DELETE | /movies/(id)                      | (empty)                                    | (empty)                                 | USER   |
+| GET    | /movies/recommendations           | (empty)                                    | `[movie,movie,...]`                     | USER   |
+| GET    | /movies/search?text=(String)      | (empty)                                    | `[movie,movie,...]`                     | USER   |
+| GET    | /movies/search-open?text=(String) | (empty)                                    | `[movie,movie,...]`                     | ANYONE |
 
 ```
 movie =
