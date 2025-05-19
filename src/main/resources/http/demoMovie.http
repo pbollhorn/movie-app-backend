@@ -1,9 +1,4 @@
-GET {{url}}/movies/search-open
-Content-Type: "application/json"
-
-{
-    "text": "olsen"
-}
+GET {{url}}/movies/search-open?text=olsen
 
 ###
 GET {{url}}/movies/search
