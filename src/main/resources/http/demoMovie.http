@@ -1,13 +1,8 @@
 GET {{url}}/movies/search-open?text=olsen
 
 ###
-GET {{url}}/movies/search
+GET {{url}}/movies/search?text=Den eneste ene
 Authorization: Bearer {{token}}
-Content-Type: "application/json"
-
-{
-    "text": "den eneste ene"
-}
 
 ###
 GET {{url}}/movies/recommendations

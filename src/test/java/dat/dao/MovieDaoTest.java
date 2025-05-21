@@ -2,6 +2,7 @@ package dat.dao;
 
 import java.util.List;
 
+import dat.dto.FrontendMovieOverviewDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import dat.config.HibernateConfig;
-import dat.dto.FrontendMovieDto;
 
 
 public class MovieDaoTest {
@@ -31,7 +31,7 @@ public class MovieDaoTest {
     @Test
     void searchMoviesOpen() {
 
-        List<FrontendMovieDto> movies = movieDao.searchMoviesOpen("nat");
+        List<FrontendMovieOverviewDto> movies = movieDao.searchMoviesOpen("nat");
         assertEquals(1, movies.size());
         assertEquals("Midt Om Natten", movies.get(0).title());
 

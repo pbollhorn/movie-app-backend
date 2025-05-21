@@ -3,13 +3,13 @@ package dat.controllers;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import dat.dto.FrontendMovieOverviewDto;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dat.dao.MovieDao;
-import dat.dto.FrontendMovieDto;
 import dat.dto.FrontendMovieDetailsDto;
 
 public class MovieController {
@@ -27,20 +27,20 @@ public class MovieController {
 
     public void searchMoviesOpen(Context ctx) {
         String text = ctx.queryParam("text");
-        List<FrontendMovieDto> movies = movieDao.searchMoviesOpen(text);
+        List<FrontendMovieOverviewDto> movies = movieDao.searchMoviesOpen(text);
         ctx.json(movies);
     }
 
     public void searchMovies(Context ctx) {
         int accountId = securityController.getAccountIdFromToken(ctx);
         String text = ctx.queryParam("text");
-        List<FrontendMovieDto> movies = movieDao.searchMovies(text, accountId);
+        List<FrontendMovieOverviewDto> movies = movieDao.searchMovies(text, accountId);
         ctx.json(movies);
     }
 
     public void getAllMoviesWithLikes(Context ctx) {
         int accountId = securityController.getAccountIdFromToken(ctx);
-        List<FrontendMovieDto> movies = movieDao.getAllMoviesWithLikes(accountId);
+        List<FrontendMovieOverviewDto> movies = movieDao.getAllMoviesWithLikes(accountId);
         ctx.json(movies);
     }
 
@@ -65,7 +65,7 @@ public class MovieController {
 
     public void getMovieRecommendations(Context ctx) {
         int accountId = securityController.getAccountIdFromToken(ctx);
-        List<FrontendMovieDto> movies = movieDao.getMovieRecommendations(accountId, MOVIE_RECCOMENDATIONS_LIMIT);
+        List<FrontendMovieOverviewDto> movies = movieDao.getMovieRecommendations(accountId, MOVIE_RECCOMENDATIONS_LIMIT);
         ctx.json(movies);
     }
 
