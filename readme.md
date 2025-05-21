@@ -27,15 +27,16 @@ URL for API'en er: https://movie.jcoder.dk/api
 |--------|-----------------------------------|--------------------------------------------|-----------------------------------------|--------|
 | POST   | /auth/register                    | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
 | POST   | /auth/login                       | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
-| GET    | /movies                           | (empty)                                    | `[movie,movie,...]`                     | USER   |
+| GET    | /movies                           | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
+| GET    | /movies/(id)                      | (empty)                                    | movieDetails                            | ANYONE | 
 | PUT    | /movies/(id)                      | `{"likes": Boolean}`                       | (empty)                                 | USER   |
 | DELETE | /movies/(id)                      | (empty)                                    | (empty)                                 | USER   |
-| GET    | /movies/recommendations           | (empty)                                    | `[movie,movie,...]`                     | USER   |
-| GET    | /movies/search?text=(String)      | (empty)                                    | `[movie,movie,...]`                     | USER   |
-| GET    | /movies/search-open?text=(String) | (empty)                                    | `[movie,movie,...]`                     | ANYONE |
+| GET    | /movies/recommendations           | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
+| GET    | /movies/search?text=(String)      | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
+| GET    | /movies/search-open?text=(String) | (empty)                                    | `[movieOverview,movieOverview,...]`     | ANYONE |
 
 ```
-movie =
+movieOverview =
 {
     "id": Number (samme id som på TMDB),
     "title": String,
@@ -44,6 +45,17 @@ movie =
     "rating": Number (fra 0.0 til 10.0, eller NULL hvis filmen har mindre end 10 stemmer),
     "posterPath": String,
     "likes": Boolean
+}
+
+movieDetails =
+{
+    "id": Number (samme id som på TMDB),
+    "title": String,
+    "originalTitle": String,
+    "releaseDate": [Number,Number,Number] ([YYYY,MM,DD]),
+    "rating": Number (fra 0.0 til 10.0, eller NULL hvis filmen har mindre end 10 stemmer),
+    "backdropPath": String,
+    "overview": String
 }
 
 "likes" er:
