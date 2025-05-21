@@ -33,6 +33,7 @@ public class Routes {
             get("/search", movieController::searchMovies, Roles.USER);
             get("/recommendations", movieController::getMovieRecommendations, Roles.USER);
             get("/", movieController::getAllMoviesWithLikes, Roles.USER);
+            get("/{id}", movieController::getMovieDetails, Roles.ANYONE);
             put("/{id}", movieController::updateOrCreateMovieLike, Roles.USER);
             delete("/{id}", movieController::deleteMovieLike, Roles.USER);
         };

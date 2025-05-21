@@ -2,6 +2,7 @@ package dat.dao;
 
 import java.util.List;
 
+import dat.dto.FrontendMovieDetailsDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
@@ -75,6 +76,22 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             TypedQuery<FrontendMovieDto> query = em.createQuery(jpql, FrontendMovieDto.class);
             query.setParameter("accountId", accountId);
             return query.getResultList();
+        }
+
+    }
+
+
+    public FrontendMovieDetailsDto getMovieDetails(int movieId) {
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+            String jpql = """
+                    SELECT NEW dat.dto.FrontendMovieDetailsDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.backdropPath, m.overview)
+                    FROM Movie m WHERE m.id=:movieId""";
+
+            TypedQuery<FrontendMovieDetailsDto> query = em.createQuery(jpql, FrontendMovieDetailsDto.class);
+            query.setParameter("movieId", movieId);
+            return query.getSingleResult();
         }
 
     }

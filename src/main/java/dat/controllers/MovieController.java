@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import dat.dao.MovieDao;
 import dat.dto.FrontendMovieDto;
+import dat.dto.FrontendMovieDetailsDto;
 
 public class MovieController {
 
@@ -41,6 +42,12 @@ public class MovieController {
         int accountId = securityController.getAccountIdFromToken(ctx);
         List<FrontendMovieDto> movies = movieDao.getAllMoviesWithLikes(accountId);
         ctx.json(movies);
+    }
+
+    public void getMovieDetails(Context ctx) {
+        int movieId = Integer.parseInt(ctx.pathParam("id"));
+        FrontendMovieDetailsDto movieDetails = movieDao.getMovieDetails(movieId);
+        ctx.json(movieDetails);
     }
 
     public void updateOrCreateMovieLike(Context ctx) {

@@ -18,6 +18,9 @@ GET {{url}}/movies
 Authorization: Bearer {{token}}
 
 ###
+GET {{url}}/movies/18908
+
+###
 PUT {{url}}/movies/18908
 Authorization: Bearer {{token}}
 Content-Type: "application/json"
