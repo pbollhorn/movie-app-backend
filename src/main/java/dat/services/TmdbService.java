@@ -51,7 +51,7 @@ public class TmdbService {
 
             long startTime = System.currentTimeMillis();
 
-            String url = "https://api.themoviedb.org/3/discover/movie?language=da&with_original_language=da&include_adult=true&include_video=false&primary_release_date.gte=" + year + "-01-01&primary_release_date.lte=" + year + "-12-31&page=" + page + "&api_key=" + ApiKey;
+            String url = "https://api.themoviedb.org/3/discover/movie?with_original_language=da&include_adult=false&include_video=false&primary_release_date.gte=" + year + "-01-01&primary_release_date.lte=" + year + "-12-31&page=" + page + "&api_key=" + ApiKey;
             String json = new DataAPIReader().getDataFromClient(url);
 
             MoviesResponseDto response;

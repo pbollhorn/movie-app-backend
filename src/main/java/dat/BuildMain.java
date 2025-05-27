@@ -36,7 +36,8 @@ public class BuildMain {
     public static void main(String[] args) {
 
         // Uses a fixed size thread pool. CachedThreadPool was tried, but was too fast for the database access
-        ExecutorService executor = Executors.newFixedThreadPool(3);
+//        ExecutorService executor = Executors.newFixedThreadPool(3);
+        ExecutorService executor = Executors.newFixedThreadPool(1);
 
         long startTime = System.currentTimeMillis();
 
