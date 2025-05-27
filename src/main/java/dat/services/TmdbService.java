@@ -2,6 +2,7 @@ package dat.services;
 
 import java.util.*;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,7 @@ import dat.dto.GenreDto;
 import dat.dto.CreditDto;
 import dat.utils.DataAPIReader;
 import dat.utils.PropertyReader;
+import dat.enums.Gender;
 
 public class TmdbService {
 
@@ -84,7 +86,7 @@ public class TmdbService {
     }
 
 
-    public static Set<CreditDto> getCreditsForMovie(int movieId) {
+    public static List<CreditDto> getCreditsForMovie(int movieId) {
 
         String url = "https://api.themoviedb.org/3/movie/" + movieId + "/credits?api_key=" + ApiKey;
         String json = new DataAPIReader().getDataFromClient(url);
@@ -101,21 +103,33 @@ public class TmdbService {
             return null;
         }
 
-        Set<CreditDto> credits = new HashSet<>();
-
-        for (CreditDto c : response.cast) {
-            credits.add(new CreditDto(c.personId(), c.name(), c.gender(), c.popularity(), "Actor", c.character()));
+        List<CreditDto> credits = new LinkedList<>();
+        int rankInMovie = 0;
+        for (TmdbCreditDto c : response.cast) {
+            credits.add(new CreditDto(c.personId(), c.name(), c.gender(), "Actor", c.character(), rankInMovie));
+            rankInMovie++;
         }
-
-        credits.addAll(response.crew);
+        for (TmdbCreditDto c : response.crew) {
+            credits.add(new CreditDto(c.personId(), c.name(), c.gender(), c.job(), null, rankInMovie));
+            rankInMovie++;
+        }
 
         return credits;
 
     }
 
+    private record TmdbCreditDto(@JsonProperty("id")
+                                 Integer personId,
+                                 String name,
+                                 Gender gender,
+                                 Double popularity,
+                                 String job,
+                                 String character) {
+    }
+
     private record CreditsResponseDto(
-            Set<CreditDto> cast,
-            Set<CreditDto> crew) {
+            List<TmdbCreditDto> cast,
+            List<TmdbCreditDto> crew) {
     }
 
     private record MoviesResponseDto(Set<TmdbMovieDto> results) {
@@ -123,5 +137,6 @@ public class TmdbService {
 
     private record GenresResponseDto(Set<GenreDto> genres) {
     }
+
 
 }

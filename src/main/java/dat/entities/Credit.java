@@ -22,4 +22,5 @@ public class Credit {
 
     private String job;
     private String character;
+    private Integer rankInMovie;
 }

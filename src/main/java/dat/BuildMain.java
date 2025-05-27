@@ -51,7 +51,8 @@ public class BuildMain {
 
         // Get all danish movies from TMDB and persist them in database
         Set<Movie> movies = new HashSet<>();
-        for (int year = 1897; year <= 2025; year++) {
+        for (int year = 1976; year <= 1976; year++) {
+        //        for (int year = 1897; year <= 2025; year++) {
 
             for (TmdbMovieDto m : TmdbService.getDanishMoviesFromYear(year, DELAY_MILLISECONDS)) {
 
@@ -116,7 +117,7 @@ public class BuildMain {
                 // This creates person in database if it does not already exist
                 Person person = personDao.update(new Person(c));
 
-                movie.addCredit(person, c.job(), c.character());
+                movie.addCredit(person, c.job(), c.character(), c.rankInMovie());
 
             }
 

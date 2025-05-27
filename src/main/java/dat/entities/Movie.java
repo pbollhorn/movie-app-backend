@@ -69,8 +69,8 @@ public class Movie {
     }
 
 
-    public void addCredit(Person person, String job, String character) {
-        credits.add(new Credit(null, this, person, job, character));
+    public void addCredit(Person person, String job, String character, Integer rankInMovie) {
+        credits.add(new Credit(null, this, person, job, character, rankInMovie));
     }
 
 }
