@@ -29,16 +29,17 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         return instance;
     }
 
-    public List<FrontendMovieOverviewDto> searchMoviesOpen(String text) {
+    public List<FrontendMovieOverviewDto> searchMoviesOpen(String text, int limit) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
                     SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.posterPath)
-                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title""";
+                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit""";
 
             TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             query.setParameter("title", "%" + text.toLowerCase() + "%");
+            query.setParameter("limit", limit);
             return query.getResultList();
 
         }
@@ -46,18 +47,19 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
-    public List<FrontendMovieOverviewDto> searchMovies(String text, int accountId) {
+    public List<FrontendMovieOverviewDto> searchMovies(String text, int accountId, int limit) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
                     SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.posterPath,
                     (SELECT a.likes FROM AccountMovieLikes a WHERE a.movie.id=m.id AND a.account.id=:accountId))
-                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title""";
+                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit""";
 
             TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             query.setParameter("title", "%" + text.toLowerCase() + "%");
             query.setParameter("accountId", accountId);
+            query.setParameter("limit", limit);
             return query.getResultList();
 
         }

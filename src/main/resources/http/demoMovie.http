@@ -1,4 +1,4 @@
-GET {{url}}/movies/search-open?text=olsen
+GET {{url}}/movies/search-open?text=e
 
 ###
 GET {{url}}/movies/search?text=Den eneste ene
