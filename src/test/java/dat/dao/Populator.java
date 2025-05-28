@@ -1,12 +1,15 @@
 package dat.dao;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
+
+import jakarta.persistence.EntityManagerFactory;
 
 import dat.dto.TmdbMovieDto;
 import dat.entities.Genre;
 import dat.entities.Movie;
-import jakarta.persistence.EntityManagerFactory;
+
 
 public class Populator {
 
@@ -41,14 +44,14 @@ public class Populator {
         TmdbMovieDto m1 = new TmdbMovieDto(23588, "Baby Doom", "Baby Doom", false,
                 "da", 5.7, 6, LocalDate.of(1998, 3, 20),
                 null, "/sf3AHsBHmyEcRxCA3pU7ggA5csk.jpg",
-                Set.of(35), "Max er en super nørd...");
-        movieDao.create(new Movie(m1, Set.of(COMEDY)));
+                List.of(35), "Max er en super nørd...");
+        movieDao.create(new Movie(m1, List.of(COMEDY)));
 
         TmdbMovieDto m2 = new TmdbMovieDto(33416, "Midt Om Natten", "Midt om natten", false,
                 "da", 6.5, 24, LocalDate.of(1984, 3, 9),
                 "/ljx2Ds6VIiwtCImKJGk4ytAGPpA.jpg", "/739gDLbIA4SgEESTd3toHkftJOu.jpg",
-                Set.of(18, 35), "I 80'ernes Danmark...");
-        movieDao.create(new Movie(m2, Set.of(DRAMA, COMEDY)));
+                List.of(18, 35), "I 80'ernes Danmark...");
+        movieDao.create(new Movie(m2, List.of(DRAMA, COMEDY)));
 
 
 //        try (EntityManager em = emf.createEntityManager()) {
@@ -59,7 +62,6 @@ public class Populator {
 //            em.persist(account1);
 //            em.getTransaction().commit();
 //        }
-
 
 
         return new TmdbMovieDto[]{m1, m2};
