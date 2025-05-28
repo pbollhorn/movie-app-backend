@@ -2,8 +2,6 @@ package dat.dao;
 
 import java.util.List;
 
-import dat.dto.FrontendMovieDetailsDto;
-import dat.dto.FrontendMovieOverviewDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
@@ -12,6 +10,8 @@ import jakarta.persistence.TypedQuery;
 import dat.entities.Account;
 import dat.entities.AccountMovieLikes;
 import dat.entities.Movie;
+import dat.dto.FrontendMovieDetailsDto;
+import dat.dto.FrontendMovieOverviewDto;
 
 
 public class MovieDao extends AbstractDao<Movie, Integer> {
@@ -86,7 +86,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
-                    SELECT NEW dat.dto.FrontendMovieDetailsDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.backdropPath, m.overview)
+                    SELECT NEW dat.dto.FrontendMovieDetailsDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.backdropPath, m.overview)
                     FROM Movie m WHERE m.id=:movieId""";
 
             TypedQuery<FrontendMovieDetailsDto> query = em.createQuery(jpql, FrontendMovieDetailsDto.class);
