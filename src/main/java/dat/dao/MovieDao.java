@@ -34,7 +34,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
-                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath)
+                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.posterPath)
                     FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title""";
 
             TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
@@ -51,7 +51,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
-                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath,
+                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.posterPath,
                     (SELECT a.likes FROM AccountMovieLikes a WHERE a.movie.id=m.id AND a.account.id=:accountId))
                     FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title""";
 
@@ -70,7 +70,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
-                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath, a.likes)
+                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.posterPath, a.likes)
                     FROM AccountMovieLikes a JOIN Movie m ON a.movie.id=m.id WHERE a.account.id=:accountId ORDER BY m.title""";
 
             TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
@@ -176,7 +176,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             // Now finally get the data for all these movieIds
             jpql = """
-                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.releaseDate, m.rating, m.posterPath)
+                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.posterPath)
                     FROM Movie m WHERE m.id IN :movieIds ORDER BY m.rating DESC NULLS LAST""";
             TypedQuery<FrontendMovieOverviewDto> newQuery = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             newQuery.setParameter("movieIds", movieIds);

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public record FrontendMovieOverviewDto(Integer id,
                                        String title,
                                        String originalTitle,
+                                       String originalLanguage,
                                        LocalDate releaseDate,
                                        Double rating,
                                        String posterPath,
@@ -14,10 +15,11 @@ public record FrontendMovieOverviewDto(Integer id,
     public FrontendMovieOverviewDto(Integer id,
                                     String title,
                                     String originalTitle,
+                                    String originalLanguage,
                                     LocalDate releaseDate,
                                     Double rating,
                                     String posterPath) {
-        this(id, title, originalTitle, releaseDate, rating, posterPath, null);
+        this(id, title, originalTitle, originalLanguage, releaseDate, rating, posterPath, null);
     }
 
 }
