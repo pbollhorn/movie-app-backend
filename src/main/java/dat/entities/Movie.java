@@ -2,6 +2,7 @@ package dat.entities;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -37,15 +38,15 @@ public class Movie {
     @Column(length = 1000)
     private String overview;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Genre> genres;
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private Set<MovieGenre> genres = new HashSet<>();
 
     @ToString.Exclude
     @OneToMany(mappedBy = "movie", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<Credit> credits = new HashSet<>();
 
 
-    public Movie(TmdbMovieDto m, Set<Genre> genres) {
+    public Movie(TmdbMovieDto m, List<Genre> genreList) {
         this.id = m.id();
         this.title = m.title();
         this.originalTitle = m.originalTitle();
@@ -57,7 +58,6 @@ public class Movie {
         this.backdropPath = m.backdropPath();
         this.posterPath = m.posterPath();
         this.overview = m.overview();
-        this.genres = genres;
 
         if (m.voteCount() >= MINIMUM_VOTES_FOR_RATING) {
             this.rating = m.voteAverage();
@@ -65,6 +65,11 @@ public class Movie {
             this.rating = null;
         }
 
+        int rankInMovie = 0;
+        for (Genre g : genreList) {
+            genres.add(new MovieGenre(null, this, g, rankInMovie));
+            rankInMovie++;
+        }
 
     }
 

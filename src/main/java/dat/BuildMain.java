@@ -1,11 +1,7 @@
 package dat;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 import jakarta.persistence.EntityManagerFactory;
 
@@ -42,23 +38,20 @@ public class BuildMain {
         long startTime = System.currentTimeMillis();
 
         // Get all genres from TMDB and persist them in database
-        Set<Genre> genres = new HashSet<>();
+        Map<Integer, Genre> genreMap = new HashMap<>();
         for (GenreDto g : TmdbService.getGenres()) {
             Genre genre = genreDao.create(new Genre(g.id(), g.name()));
-            genres.add(genre);
+            genreMap.put(g.id(), genre);
             System.out.println("Got and persisted genre: " + genre);
         }
 
         // Get all danish movies from TMDB and persist them in database
         Set<Movie> movies = new HashSet<>();
-        for (int year = 1976; year <= 1976; year++) {
-        //        for (int year = 1897; year <= 2025; year++) {
+        for (int year = 1897; year <= 2025; year++) {
 
             for (TmdbMovieDto m : TmdbService.getDanishMoviesFromYear(year, DELAY_MILLISECONDS)) {
 
-                Set<Genre> genresForThisMovie = genres.stream()
-                        .filter(g -> m.genreIds().contains(g.getId()))
-                        .collect(Collectors.toUnmodifiableSet());
+                List<Genre> genresForThisMovie = m.genreIds().stream().map(id -> genreMap.get(id)).toList();
 
                 Movie movie = new Movie(m, genresForThisMovie);
                 movie = movieDao.create(movie);

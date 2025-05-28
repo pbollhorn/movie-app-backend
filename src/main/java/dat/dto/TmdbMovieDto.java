@@ -1,7 +1,7 @@
 package dat.dto;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -23,7 +23,7 @@ public record TmdbMovieDto(Integer id,
                            @JsonProperty("poster_path")
                            String posterPath,
                            @JsonProperty("genre_ids")
-                           Set<Integer> genreIds,
+                           List<Integer> genreIds,
                            String overview
 ) {
 }
