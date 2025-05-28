@@ -1,6 +1,7 @@
 package dat.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public record FrontendMovieDetailsDto(Integer id,
                                       String title,
@@ -9,5 +10,6 @@ public record FrontendMovieDetailsDto(Integer id,
                                       LocalDate releaseDate,
                                       Double rating,
                                       String backdropPath,
-                                      String overview) {
+                                      String overview,
+                                      String[] genres) {
 }

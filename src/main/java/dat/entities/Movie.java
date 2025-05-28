@@ -38,6 +38,7 @@ public class Movie {
     @Column(length = 1000)
     private String overview;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<MovieGenre> genres = new HashSet<>();
 

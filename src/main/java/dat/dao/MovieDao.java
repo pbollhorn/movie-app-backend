@@ -1,7 +1,10 @@
 package dat.dao;
 
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
+import dat.entities.MovieGenre;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
@@ -83,17 +86,35 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
+//    public FrontendMovieDetailsDto getMovieDetails(int movieId) {
+//
+//        try (EntityManager em = emf.createEntityManager()) {
+//
+//            String jpql = """
+//                    SELECT NEW dat.dto.FrontendMovieDetailsDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.backdropPath, m.overview, null)
+//                    FROM Movie m WHERE m.id=:movieId""";
+//
+//            TypedQuery<FrontendMovieDetailsDto> query = em.createQuery(jpql, FrontendMovieDetailsDto.class);
+//            query.setParameter("movieId", movieId);
+//            return query.getSingleResult();
+//        }
+//
+//    }
+
     public FrontendMovieDetailsDto getMovieDetails(int movieId) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            String jpql = """
-                    SELECT NEW dat.dto.FrontendMovieDetailsDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.backdropPath, m.overview)
-                    FROM Movie m WHERE m.id=:movieId""";
+            // TODO: Some error handling in case m is null
+            Movie m = em.find(Movie.class, movieId);
 
-            TypedQuery<FrontendMovieDetailsDto> query = em.createQuery(jpql, FrontendMovieDetailsDto.class);
-            query.setParameter("movieId", movieId);
-            return query.getSingleResult();
+            String[] genres = m.getGenres().stream()
+                    .sorted(Comparator.comparingInt(MovieGenre::getRankInMovie))
+                    .map(mg -> mg.getGenre().getName())
+                    .toArray(String[]::new);
+
+            return new FrontendMovieDetailsDto(m.getId(), m.getTitle(), m.getOriginalTitle(), m.getOriginalLanguage(), m.getReleaseDate(), m.getRating(), m.getBackdropPath(), m.getOverview(), genres);
+
         }
 
     }
