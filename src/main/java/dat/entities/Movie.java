@@ -1,6 +1,7 @@
 package dat.entities;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -77,6 +78,14 @@ public class Movie {
 
     public void addCredit(Person person, String job, String character, Integer rankInMovie) {
         credits.add(new Credit(null, this, person, job, character, rankInMovie));
+    }
+
+    public String[] getGenreArray() {
+        String[] genreArray = this.genres.stream()
+                .sorted(Comparator.comparingInt(MovieGenre::getRankInMovie))
+                .map(mg -> mg.getGenre().getName())
+                .toArray(String[]::new);
+        return genreArray;
     }
 
 }

@@ -1,7 +1,7 @@
 GET {{url}}/movies/search-open?text=e
 
 ###
-GET {{url}}/movies/search?text=Den eneste ene
+GET {{url}}/movies/search?text=e
 Authorization: Bearer {{token}}
 
 ###
