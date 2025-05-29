@@ -27,17 +27,17 @@ public record FrontendMovieOverviewDto(Integer id,
                 null);
     }
 
-
-    // Constructor which automatically sets "likes" to null
-    public FrontendMovieOverviewDto(Integer id,
-                                    String title,
-                                    String originalTitle,
-                                    String originalLanguage,
-                                    LocalDate releaseDate,
-                                    Double rating,
-                                    String posterPath,
-                                    String[] genres) {
-        this(id, title, originalTitle, originalLanguage, releaseDate, rating, posterPath, genres, null);
+    // Constructor which constructs from Movie entity and a likes value
+    public FrontendMovieOverviewDto(Movie m, Boolean likes) {
+        this(m.getId(),
+                m.getTitle(),
+                m.getOriginalTitle(),
+                m.getOriginalLanguage(),
+                m.getReleaseDate(),
+                m.getRating(),
+                m.getPosterPath(),
+                m.getGenreArray(),
+                likes);
     }
 
 }

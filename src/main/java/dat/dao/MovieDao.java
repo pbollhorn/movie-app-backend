@@ -33,24 +33,11 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            String jpql = "SELECT m FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit";
-
-            TypedQuery<Movie> query = em.createQuery(jpql, Movie.class);
+            String jpql = "SELECT NEW dat.dto.FrontendMovieOverviewDto(m) FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit";
+            TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             query.setParameter("title", "%" + text.toLowerCase() + "%");
             query.setParameter("limit", limit);
-            List<Movie> movies = query.getResultList();
-
-            return movies.stream().map(m -> new FrontendMovieOverviewDto(m)).toList();
-
-
-//            String jpql = """
-//                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.posterPath)
-//                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit""";
-//
-//            TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
-//            query.setParameter("title", "%" + text.toLowerCase() + "%");
-//            query.setParameter("limit", limit);
-//            return query.getResultList();
+            return query.getResultList();
 
         }
 
@@ -61,32 +48,15 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            String jpql = "SELECT m FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit";
-            TypedQuery<Movie> query = em.createQuery(jpql, Movie.class);
+            String jpql = """
+                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m, (SELECT a.likes FROM AccountMovieLikes a WHERE a.movie.id=m.id AND a.account.id=:accountId))
+                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit""";
+
+            TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             query.setParameter("title", "%" + text.toLowerCase() + "%");
+            query.setParameter("accountId", accountId);
             query.setParameter("limit", limit);
-            List<Movie> movieList = query.getResultList();
-
-//            // TODO: Finish getting the likes and remember to orderthem by movieIds order
-//            jpql = "SELECT a.likes FROM AccountMovieLikes a WHERE a.movie.id IN :movieIds AND a.account.id=:accountId";
-//            TypedQuery<Boolean> newQuery = em.createQuery(jpql, Boolean.class);
-//            newQuery.setParameter("movieIds", movieList);
-//            newQuery.setParameter("accountId", accountId);
-//            List<Boolean> likeList = newQuery.getResultList();
-
-            return movieList.stream().map(m -> new FrontendMovieOverviewDto(m)).toList();
-
-
-//            String jpql = """
-//                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.posterPath,
-//                    (SELECT a.likes FROM AccountMovieLikes a WHERE a.movie.id=m.id AND a.account.id=:accountId))
-//                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit""";
-//
-//            TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
-//            query.setParameter("title", "%" + text.toLowerCase() + "%");
-//            query.setParameter("accountId", accountId);
-//            query.setParameter("limit", limit);
-//            return query.getResultList();
+            return query.getResultList();
 
         }
 
@@ -97,30 +67,13 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            // Get list of id of movies, which the user likes (or dislikes)
-            String jpql = "SELECT a.movie.id FROM AccountMovieLikes a WHERE a.account.id = :accountId";
-            TypedQuery<Integer> query = em.createQuery(jpql, Integer.class);
+            String jpql = """
+                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m, a.likes)
+                    FROM AccountMovieLikes a JOIN Movie m ON a.movie.id=m.id WHERE a.account.id=:accountId ORDER BY m.title""";
+
+            TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             query.setParameter("accountId", accountId);
-            List<Integer> movieIds = query.getResultList();
-
-            // Now finally get the data for all these movieIds
-            jpql = "SELECT m FROM Movie m WHERE m.id IN :movieIds ORDER BY m.title";
-            TypedQuery<Movie> newQuery = em.createQuery(jpql, Movie.class);
-            newQuery.setParameter("movieIds", movieIds);
-            List<Movie> movies = newQuery.getResultList();
-
-            // Convert these movie entities to DTOs
-            return movies.stream().map(m -> new FrontendMovieOverviewDto(m)).toList();
-
-
-
-//            String jpql = """
-//                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.posterPath, a.likes)
-//                    FROM AccountMovieLikes a JOIN Movie m ON a.movie.id=m.id WHERE a.account.id=:accountId ORDER BY m.title""";
-//
-//            TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
-//            query.setParameter("accountId", accountId);
-//            return query.getResultList();
+            return query.getResultList();
         }
 
     }
@@ -217,20 +170,18 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             movieIds = query.getResultList();
 
             // Now finally get the data for all these movieIds
-            jpql = "SELECT m FROM Movie m WHERE m.id IN :movieIds ORDER BY m.rating DESC NULLS LAST";
-            TypedQuery<Movie> newQuery = em.createQuery(jpql, Movie.class);
-            newQuery.setParameter("movieIds", movieIds);
-            List<Movie> movies = newQuery.getResultList();
-
-            // Convert these movie entities to DTOs
-            List<FrontendMovieOverviewDto> recommendations = movies.stream().map(m -> new FrontendMovieOverviewDto(m)).toList();
-
-//            jpql = """
-//                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m.id, m.title, m.originalTitle, m.originalLanguage, m.releaseDate, m.rating, m.posterPath)
-//                    FROM Movie m WHERE m.id IN :movieIds ORDER BY m.rating DESC NULLS LAST""";
-//            TypedQuery<FrontendMovieOverviewDto> newQuery = em.createQuery(jpql, FrontendMovieOverviewDto.class);
+//            jpql = "SELECT m FROM Movie m WHERE m.id IN :movieIds ORDER BY m.rating DESC NULLS LAST";
+//            TypedQuery<Movie> newQuery = em.createQuery(jpql, Movie.class);
 //            newQuery.setParameter("movieIds", movieIds);
-//            List<FrontendMovieOverviewDto> recommendations = newQuery.getResultList();
+//            List<Movie> movies = newQuery.getResultList();
+//
+//            // Convert these movie entities to DTOs
+//            List<FrontendMovieOverviewDto> recommendations = movies.stream().map(m -> new FrontendMovieOverviewDto(m)).toList();
+
+            jpql = "SELECT NEW dat.dto.FrontendMovieOverviewDto(m) FROM Movie m WHERE m.id IN :movieIds ORDER BY m.rating DESC NULLS LAST";
+            TypedQuery<FrontendMovieOverviewDto> newQuery = em.createQuery(jpql, FrontendMovieOverviewDto.class);
+            newQuery.setParameter("movieIds", movieIds);
+            List<FrontendMovieOverviewDto> recommendations = newQuery.getResultList();
 
             return recommendations;
 
