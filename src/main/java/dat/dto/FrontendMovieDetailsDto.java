@@ -1,6 +1,7 @@
 package dat.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import dat.entities.Movie;
 
@@ -12,11 +13,12 @@ public record FrontendMovieDetailsDto(Integer id,
                                       Double rating,
                                       String backdropPath,
                                       String overview,
-                                      String[] genres) {
+                                      String[] genres,
+                                      List<FrontendPersonDto> persons) {
 
 
     // Constructor which constructs from Movie entity
-    public FrontendMovieDetailsDto(Movie m) {
+    public FrontendMovieDetailsDto(Movie m, List<FrontendPersonDto> persons) {
         this(m.getId(),
                 m.getTitle(),
                 m.getOriginalTitle(),
@@ -25,7 +27,8 @@ public record FrontendMovieDetailsDto(Integer id,
                 m.getRating(),
                 m.getBackdropPath(),
                 m.getOverview(),
-                m.getGenresAsStringArray());
+                m.getGenresAsStringArray(),
+                List.copyOf(persons)); // TODO: This should create an unmodifiable list
     }
 
 }

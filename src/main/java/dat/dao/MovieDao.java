@@ -2,6 +2,7 @@ package dat.dao;
 
 import java.util.List;
 
+import dat.dto.FrontendPersonDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
@@ -82,10 +83,19 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            // TODO: Some error handling in case m is null
+            // Find Movie entity, TODO: Some error handling in case m is null
             Movie m = em.find(Movie.class, movieId);
 
-            return new FrontendMovieDetailsDto(m);
+            // Find persons list
+            String jpql = """
+                    SELECT NEW dat.dto.FrontendPersonDto(p.id, p.name, c.job, c.character)
+                    FROM Person p JOIN Credit c ON c.person.id=p.id WHERE c.movie.id=:movieId ORDER BY c.rankInMovie""";
+
+            TypedQuery<FrontendPersonDto> query = em.createQuery(jpql, FrontendPersonDto.class);
+            query.setParameter("movieId", movieId);
+            List<FrontendPersonDto> persons = query.getResultList();
+
+            return new FrontendMovieDetailsDto(m, persons);
 
         }
 
@@ -168,15 +178,6 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             query.setParameter("accountId", accountId);
             query.setParameter("limit", limit);
             movieIds = query.getResultList();
-
-            // Now finally get the data for all these movieIds
-//            jpql = "SELECT m FROM Movie m WHERE m.id IN :movieIds ORDER BY m.rating DESC NULLS LAST";
-//            TypedQuery<Movie> newQuery = em.createQuery(jpql, Movie.class);
-//            newQuery.setParameter("movieIds", movieIds);
-//            List<Movie> movies = newQuery.getResultList();
-//
-//            // Convert these movie entities to DTOs
-//            List<FrontendMovieOverviewDto> recommendations = movies.stream().map(m -> new FrontendMovieOverviewDto(m)).toList();
 
             jpql = "SELECT NEW dat.dto.FrontendMovieOverviewDto(m) FROM Movie m WHERE m.id IN :movieIds ORDER BY m.rating DESC NULLS LAST";
             TypedQuery<FrontendMovieOverviewDto> newQuery = em.createQuery(jpql, FrontendMovieOverviewDto.class);
