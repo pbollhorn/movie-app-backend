@@ -23,7 +23,7 @@ public record FrontendMovieOverviewDto(Integer id,
                 m.getReleaseDate(),
                 m.getRating(),
                 m.getPosterPath(),
-                m.getGenreArray(),
+                m.getGenresAsStringArray(),
                 null);
     }
 
@@ -36,7 +36,7 @@ public record FrontendMovieOverviewDto(Integer id,
                 m.getReleaseDate(),
                 m.getRating(),
                 m.getPosterPath(),
-                m.getGenreArray(),
+                m.getGenresAsStringArray(),
                 likes);
     }
 

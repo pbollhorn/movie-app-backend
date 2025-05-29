@@ -41,7 +41,7 @@ public class Movie {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private Set<MovieGenre> genres = new HashSet<>();
+    private Set<MovieGenre> movieGenres = new HashSet<>();
 
     @ToString.Exclude
     @OneToMany(mappedBy = "movie", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
@@ -69,7 +69,7 @@ public class Movie {
 
         int rankInMovie = 0;
         for (Genre g : genreList) {
-            genres.add(new MovieGenre(null, this, g, rankInMovie));
+            movieGenres.add(new MovieGenre(null, this, g, rankInMovie));
             rankInMovie++;
         }
 
@@ -80,8 +80,8 @@ public class Movie {
         credits.add(new Credit(null, this, person, job, character, rankInMovie));
     }
 
-    public String[] getGenreArray() {
-        String[] genreArray = this.genres.stream()
+    public String[] getGenresAsStringArray() {
+        String[] genreArray = this.movieGenres.stream()
                 .sorted(Comparator.comparingInt(MovieGenre::getRankInMovie))
                 .map(mg -> mg.getGenre().getName())
                 .toArray(String[]::new);

@@ -25,7 +25,7 @@ public record FrontendMovieDetailsDto(Integer id,
                 m.getRating(),
                 m.getBackdropPath(),
                 m.getOverview(),
-                m.getGenreArray());
+                m.getGenresAsStringArray());
     }
 
 }
