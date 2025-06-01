@@ -2,7 +2,7 @@ package dat.dao;
 
 import java.util.List;
 
-import dat.dto.FrontendPersonDto;
+import dat.dto.FrontendCreditDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
@@ -88,14 +88,14 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             // Find persons list
             String jpql = """
-                    SELECT NEW dat.dto.FrontendPersonDto(p.id, p.name, c.job, c.character)
+                    SELECT NEW dat.dto.FrontendCreditDto(c.id, p.id, p.name, c.job, c.character)
                     FROM Person p JOIN Credit c ON c.person.id=p.id WHERE c.movie.id=:movieId ORDER BY c.rankInMovie""";
 
-            TypedQuery<FrontendPersonDto> query = em.createQuery(jpql, FrontendPersonDto.class);
+            TypedQuery<FrontendCreditDto> query = em.createQuery(jpql, FrontendCreditDto.class);
             query.setParameter("movieId", movieId);
-            List<FrontendPersonDto> persons = query.getResultList();
+            List<FrontendCreditDto> credits = query.getResultList();
 
-            return new FrontendMovieDetailsDto(m, persons);
+            return new FrontendMovieDetailsDto(m, credits);
 
         }
 

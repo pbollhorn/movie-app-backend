@@ -14,11 +14,11 @@ public record FrontendMovieDetailsDto(Integer id,
                                       String backdropPath,
                                       String overview,
                                       String[] genres,
-                                      List<FrontendPersonDto> persons) {
+                                      List<FrontendCreditDto> credits) {
 
 
-    // Constructor which constructs from Movie entity
-    public FrontendMovieDetailsDto(Movie m, List<FrontendPersonDto> persons) {
+    // Constructor which constructs from Movie entity and list of credits
+    public FrontendMovieDetailsDto(Movie m, List<FrontendCreditDto> credits) {
         this(m.getId(),
                 m.getTitle(),
                 m.getOriginalTitle(),
@@ -28,7 +28,7 @@ public record FrontendMovieDetailsDto(Integer id,
                 m.getBackdropPath(),
                 m.getOverview(),
                 m.getGenresAsStringArray(),
-                List.copyOf(persons)); // TODO: This should create an unmodifiable list
+                List.copyOf(credits)); // TODO: This should create an unmodifiable list
     }
 
 }
