@@ -39,9 +39,9 @@ public class MovieController {
         ctx.json(movies);
     }
 
-    public void getAllMoviesWithLikes(Context ctx) {
+    public void getAllMoviesWithRating(Context ctx) {
         int accountId = securityController.getAccountIdFromToken(ctx);
-        List<FrontendMovieOverviewDto> movies = movieDao.getAllMoviesWithLikes(accountId);
+        List<FrontendMovieOverviewDto> movies = movieDao.getAllMoviesWithRating(accountId);
         ctx.json(movies);
     }
 
@@ -51,17 +51,17 @@ public class MovieController {
         ctx.json(movieDetails);
     }
 
-    public void updateOrCreateMovieLike(Context ctx) {
+    public void updateOrCreateMovieRating(Context ctx) {
         int accountId = securityController.getAccountIdFromToken(ctx);
         int movieId = Integer.parseInt(ctx.pathParam("id"));
         Boolean rating = ctx.bodyAsClass(JsonNode.class).get("rating").asBoolean();
-        movieDao.updateOrCreateMovieLike(accountId, movieId, rating);
+        movieDao.updateOrCreateMovieRating(accountId, movieId, rating);
     }
 
-    public void deleteMovieLike(Context ctx) {
+    public void deleteMovieRating(Context ctx) {
         int accountId = securityController.getAccountIdFromToken(ctx);
         int movieId = Integer.parseInt(ctx.pathParam("id"));
-        movieDao.deleteMovieLike(accountId, movieId);
+        movieDao.deleteMovieRating(accountId, movieId);
     }
 
     public void getMovieRecommendations(Context ctx) {

@@ -35,7 +35,7 @@ public class Account {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-    private Set<AccountMovieLikes> accountMovieLikes;
+    private Set<AccountMovieRating> accountMovieRatings;
 
 
     public Account(String userName, String userPass) {

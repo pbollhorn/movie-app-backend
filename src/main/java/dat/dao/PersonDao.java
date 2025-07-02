@@ -1,10 +1,6 @@
 package dat.dao;
 
-import java.util.List;
-
-import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.TypedQuery;
 
 import dat.entities.Person;
 

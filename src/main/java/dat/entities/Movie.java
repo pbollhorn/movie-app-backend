@@ -17,7 +17,7 @@ import dat.dto.TmdbMovieDto;
 @Entity
 public class Movie {
 
-    private static final int MINIMUM_VOTES_FOR_RATING = 10;
+    private static final int MINIMUM_VOTES_FOR_SCORE = 10;
 
     @Id
     private Integer id;
@@ -30,7 +30,7 @@ public class Movie {
     private String originalLanguage;
     private Double voteAverage;
     private Integer voteCount;
-    private Double rating;
+    private Double score;
     private LocalDate releaseDate;
     private String backdropPath;
     private String posterPath;
@@ -61,10 +61,10 @@ public class Movie {
         this.posterPath = m.posterPath();
         this.overview = m.overview();
 
-        if (m.voteCount() >= MINIMUM_VOTES_FOR_RATING) {
-            this.rating = m.voteAverage();
+        if (m.voteCount() >= MINIMUM_VOTES_FOR_SCORE) {
+            this.score = m.voteAverage();
         } else {
-            this.rating = null;
+            this.score = null;
         }
 
         int rankInMovie = 0;

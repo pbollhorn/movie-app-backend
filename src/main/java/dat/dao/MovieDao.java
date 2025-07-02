@@ -2,15 +2,15 @@ package dat.dao;
 
 import java.util.List;
 
-import dat.dto.FrontendCreditDto;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 
 import dat.entities.Account;
-import dat.entities.AccountMovieLikes;
+import dat.entities.AccountMovieRating;
 import dat.entities.Movie;
+import dat.dto.FrontendCreditDto;
 import dat.dto.FrontendMovieDetailsDto;
 import dat.dto.FrontendMovieOverviewDto;
 
@@ -34,7 +34,9 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            String jpql = "SELECT NEW dat.dto.FrontendMovieOverviewDto(m) FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit";
+            String jpql = """
+                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m) FROM Movie m
+                    WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit""";
             TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             query.setParameter("title", "%" + text.toLowerCase() + "%");
             query.setParameter("limit", limit);
@@ -50,7 +52,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
-                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m, (SELECT a.likes FROM AccountMovieLikes a WHERE a.movie.id=m.id AND a.account.id=:accountId))
+                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m, (SELECT a.rating FROM AccountMovieRating a WHERE a.movie.id=m.id AND a.account.id=:accountId))
                     FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit""";
 
             TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
@@ -64,13 +66,13 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
-    public List<FrontendMovieOverviewDto> getAllMoviesWithLikes(int accountId) {
+    public List<FrontendMovieOverviewDto> getAllMoviesWithRating(int accountId) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
-                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m, a.likes)
-                    FROM AccountMovieLikes a JOIN Movie m ON a.movie.id=m.id WHERE a.account.id=:accountId ORDER BY m.title""";
+                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m, a.rating)
+                    FROM AccountMovieRating a JOIN Movie m ON a.movie.id=m.id WHERE a.account.id=:accountId ORDER BY m.title""";
 
             TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             query.setParameter("accountId", accountId);
@@ -102,25 +104,25 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
-    public void updateOrCreateMovieLike(int accountId, int movieId, boolean likes) {
+    public void updateOrCreateMovieRating(int accountId, int movieId, boolean rating) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
             em.getTransaction().begin();
 
             // First try to update existing rating
-            String jpql = "UPDATE AccountMovieLikes a SET a.likes =:likes WHERE a.account.id=:accountId AND a.movie.id = :movieId";
+            String jpql = "UPDATE AccountMovieRating a SET a.rating =:rating WHERE a.account.id=:accountId AND a.movie.id = :movieId";
             Query query = em.createQuery(jpql);
             query.setParameter("accountId", accountId);
             query.setParameter("movieId", movieId);
-            query.setParameter("likes", likes);
+            query.setParameter("rating", rating);
             int rowsAffected = query.executeUpdate();
 
             // Create new rating, if rating does not already exist
             if (rowsAffected == 0) {
                 Account account = em.find(Account.class, accountId);
                 Movie movie = em.find(Movie.class, movieId);
-                em.persist(new AccountMovieLikes(null, account, movie, likes));
+                em.persist(new AccountMovieRating(null, account, movie, rating));
             }
 
             em.getTransaction().commit();
@@ -130,10 +132,10 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
-    public void deleteMovieLike(int accountId, int movieId) {
+    public void deleteMovieRating(int accountId, int movieId) {
 
         try (EntityManager em = emf.createEntityManager()) {
-            String jpql = "DELETE FROM AccountMovieLikes a WHERE a.account.id = :accountId AND a.movie.id = :movieId";
+            String jpql = "DELETE FROM AccountMovieRating a WHERE a.account.id = :accountId AND a.movie.id = :movieId";
             em.getTransaction().begin();
             Query query = em.createQuery(jpql);
             query.setParameter("accountId", accountId);
@@ -149,8 +151,8 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            // Get list of id of movies, which the user likes
-            String jpql = "SELECT a.movie.id FROM AccountMovieLikes a WHERE a.account.id = :accountId AND likes=TRUE";
+            // Get list of id of movies, which the user have rated positively
+            String jpql = "SELECT a.movie.id FROM AccountMovieRating a WHERE a.account.id = :accountId AND rating=TRUE";
             TypedQuery<Integer> query = em.createQuery(jpql, Integer.class);
             query.setParameter("accountId", accountId);
             List<Integer> movieIds = query.getResultList();
@@ -168,18 +170,18 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             movieIds = query.getResultList();
             movieIds.forEach(System.out::println);
 
-            // Exclude movies already liked or disliked by user. and ORDER BY and LIMIT
+            // Exclude movies already rated by user. and ORDER BY and LIMIT
             jpql = """
                     SELECT m.id FROM Movie m WHERE m.id IN :movieIds AND m.id NOT IN
-                    (SELECT a.movie.id FROM AccountMovieLikes a WHERE a.account.id=:accountId)
-                    ORDER BY m.rating DESC NULLS LAST LIMIT :limit""";
+                    (SELECT a.movie.id FROM AccountMovieRating a WHERE a.account.id=:accountId)
+                    ORDER BY m.score DESC NULLS LAST LIMIT :limit""";
             query = em.createQuery(jpql, Integer.class);
             query.setParameter("movieIds", movieIds);
             query.setParameter("accountId", accountId);
             query.setParameter("limit", limit);
             movieIds = query.getResultList();
 
-            jpql = "SELECT NEW dat.dto.FrontendMovieOverviewDto(m) FROM Movie m WHERE m.id IN :movieIds ORDER BY m.rating DESC NULLS LAST";
+            jpql = "SELECT NEW dat.dto.FrontendMovieOverviewDto(m) FROM Movie m WHERE m.id IN :movieIds ORDER BY m.score DESC NULLS LAST";
             TypedQuery<FrontendMovieOverviewDto> newQuery = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             newQuery.setParameter("movieIds", movieIds);
             List<FrontendMovieOverviewDto> recommendations = newQuery.getResultList();

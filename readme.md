@@ -29,7 +29,7 @@ URL for API'en er: https://movie.jcoder.dk/api
 | POST   | /auth/login                       | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
 | GET    | /movies                           | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
 | GET    | /movies/(id)                      | (empty)                                    | movieDetails                            | ANYONE | 
-| PUT    | /movies/(id)                      | `{"likes": Boolean}`                       | (empty)                                 | USER   |
+| PUT    | /movies/(id)                      | `{"rating": Boolean}`                      | (empty)                                 | USER   |
 | DELETE | /movies/(id)                      | (empty)                                    | (empty)                                 | USER   |
 | GET    | /movies/recommendations           | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
 | GET    | /movies/search?text=(String)      | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
@@ -42,9 +42,9 @@ movieOverview =
     "title": String,
     "originalTitle": String,
     "releaseDate": [Number,Number,Number] ([YYYY,MM,DD]),
-    "rating": Number (fra 0.0 til 10.0, eller NULL hvis filmen har mindre end 10 stemmer),
+    "score": Number (fra 0.0 til 10.0, eller NULL hvis filmen har mindre end 10 stemmer),
     "posterPath": String,
-    "likes": Boolean
+    "rating": Boolean
 }
 
 movieDetails =
@@ -53,12 +53,12 @@ movieDetails =
     "title": String,
     "originalTitle": String,
     "releaseDate": [Number,Number,Number] ([YYYY,MM,DD]),
-    "rating": Number (fra 0.0 til 10.0, eller NULL hvis filmen har mindre end 10 stemmer),
+    "score": Number (fra 0.0 til 10.0, eller NULL hvis filmen har mindre end 10 stemmer),
     "backdropPath": String,
     "overview": String
 }
 
-"likes" er:
+"rating" er:
  - TRUE hvis brugeren kan lide filmen
  - FALSE hvis brugeren ikke kan lide filmen
  - NULL hvis brugeren ikke har udtrykt sin holdning til filmen

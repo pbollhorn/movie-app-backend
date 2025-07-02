@@ -50,7 +50,7 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Account.class);
         configuration.addAnnotatedClass(Roles.class);
 
-        configuration.addAnnotatedClass(AccountMovieLikes.class);
+        configuration.addAnnotatedClass(AccountMovieRating.class);
     }
 
     private static EntityManagerFactory createEMF(boolean forTest, String hbm2ddlAutoProperty) {

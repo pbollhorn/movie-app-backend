@@ -32,10 +32,10 @@ public class Routes {
             get("/search-open", movieController::searchMoviesOpen, Roles.ANYONE);
             get("/search", movieController::searchMovies, Roles.USER);
             get("/recommendations", movieController::getMovieRecommendations, Roles.USER);
-            get("/", movieController::getAllMoviesWithLikes, Roles.USER);
+            get("/", movieController::getAllMoviesWithRating, Roles.USER);
             get("/{id}", movieController::getMovieDetails, Roles.ANYONE);
-            put("/{id}", movieController::updateOrCreateMovieLike, Roles.USER);
-            delete("/{id}", movieController::deleteMovieLike, Roles.USER);
+            put("/{id}", movieController::updateOrCreateMovieRating, Roles.USER);
+            delete("/{id}", movieController::deleteMovieRating, Roles.USER);
         };
     }
 

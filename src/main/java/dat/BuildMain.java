@@ -47,7 +47,7 @@ public class BuildMain {
 
         // Get all danish movies from TMDB and persist them in database
         Set<Movie> movies = new HashSet<>();
-        for (int year = 1897; year <= 2025; year++) {
+        for (int year = 2025; year <= 2025; year++) {
 
             for (TmdbMovieDto m : TmdbService.getDanishMoviesFromYear(year, DELAY_MILLISECONDS)) {
 
