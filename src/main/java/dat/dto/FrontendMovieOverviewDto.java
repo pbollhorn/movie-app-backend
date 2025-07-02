@@ -12,9 +12,9 @@ public record FrontendMovieOverviewDto(Integer id,
                                        Double score,
                                        String posterPath,
                                        String[] genres,
-                                       Boolean likes) {
+                                       Boolean rating) {
 
-    // Constructor which constructs from Movie entity and automatically sets "likes" to null
+    // Constructor which constructs from Movie entity and automatically sets "rating" to null
     public FrontendMovieOverviewDto(Movie m) {
         this(m.getId(),
                 m.getTitle(),
@@ -27,8 +27,8 @@ public record FrontendMovieOverviewDto(Integer id,
                 null);
     }
 
-    // Constructor which constructs from Movie entity and a likes value
-    public FrontendMovieOverviewDto(Movie m, Boolean likes) {
+    // Constructor which constructs from Movie entity and a rating value
+    public FrontendMovieOverviewDto(Movie m, Boolean rating) {
         this(m.getId(),
                 m.getTitle(),
                 m.getOriginalTitle(),
@@ -37,7 +37,7 @@ public record FrontendMovieOverviewDto(Integer id,
                 m.getRating(),
                 m.getPosterPath(),
                 m.getGenresAsStringArray(),
-                likes);
+                rating);
     }
 
 }
