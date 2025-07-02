@@ -9,7 +9,7 @@ public record FrontendMovieOverviewDto(Integer id,
                                        String originalTitle,
                                        String originalLanguage,
                                        LocalDate releaseDate,
-                                       Double rating,
+                                       Double score,
                                        String posterPath,
                                        String[] genres,
                                        Boolean likes) {
