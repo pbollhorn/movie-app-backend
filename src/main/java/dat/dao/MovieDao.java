@@ -36,7 +36,8 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             String jpql = """
                     SELECT NEW dat.dto.FrontendMovieOverviewDto(m) FROM Movie m
-                    WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit""";
+                    WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title
+                    ORDER BY m.title LIMIT :limit""";
             TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             query.setParameter("title", "%" + text.toLowerCase() + "%");
             query.setParameter("limit", limit);
@@ -52,8 +53,10 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
-                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m, (SELECT a.rating FROM AccountMovieRating a WHERE a.movie.id=m.id AND a.account.id=:accountId))
-                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title ORDER BY m.title LIMIT :limit""";
+                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m,
+                    (SELECT a.rating FROM AccountMovieRating a WHERE a.movie.id=m.id AND a.account.id=:accountId))
+                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title
+                    ORDER BY m.title LIMIT :limit""";
 
             TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             query.setParameter("title", "%" + text.toLowerCase() + "%");
@@ -72,7 +75,8 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             String jpql = """
                     SELECT NEW dat.dto.FrontendMovieOverviewDto(m, a.rating)
-                    FROM AccountMovieRating a JOIN Movie m ON a.movie.id=m.id WHERE a.account.id=:accountId ORDER BY m.title""";
+                    FROM AccountMovieRating a JOIN Movie m ON a.movie.id=m.id WHERE a.account.id=:accountId
+                    ORDER BY m.title""";
 
             TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             query.setParameter("accountId", accountId);
@@ -91,7 +95,8 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             // Find persons list
             String jpql = """
                     SELECT NEW dat.dto.FrontendCreditDto(c.id, p.id, p.name, c.job, c.character)
-                    FROM Person p JOIN Credit c ON c.person.id=p.id WHERE c.movie.id=:movieId ORDER BY c.rankInMovie""";
+                    FROM Person p JOIN Credit c ON c.person.id=p.id WHERE c.movie.id=:movieId
+                    ORDER BY c.rankInMovie""";
 
             TypedQuery<FrontendCreditDto> query = em.createQuery(jpql, FrontendCreditDto.class);
             query.setParameter("movieId", movieId);
@@ -157,7 +162,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             query.setParameter("accountId", accountId);
             List<Integer> movieIds = query.getResultList();
 
-            // Get list of director ids which have made movies, which the user likes
+            // Get list of director ids which have made movies, which the user have rated positively
             jpql = "SELECT p.id FROM Person p JOIN Credit c ON c.person.id=p.id WHERE c.job='Director' AND c.movie.id IN :movieIds";
             query = em.createQuery(jpql, Integer.class);
             query.setParameter("movieIds", movieIds);
