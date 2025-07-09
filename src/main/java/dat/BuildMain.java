@@ -45,21 +45,42 @@ public class BuildMain {
             System.out.println("Got and persisted genre: " + genre);
         }
 
-        // Get all danish movies from TMDB and persist them in database
+        // new code (begin)
+
+        Set<Integer> movieIds = TmdbService.getMovieIds(DELAY_MILLISECONDS);
+        System.out.println(movieIds);
+
         Set<Movie> movies = new HashSet<>();
-        for (int year = 1897; year <= 2025; year++) {
+        for (int movieId : movieIds) {
 
-            for (TmdbMovieDto m : TmdbService.getDanishMoviesFromYear(year, DELAY_MILLISECONDS)) {
-
-                List<Genre> genresForThisMovie = m.genreIds().stream().map(id -> genreMap.get(id)).toList();
-
-                Movie movie = new Movie(m, genresForThisMovie);
-                movie = movieDao.create(movie);
-                movies.add(movie);
-                System.out.println("Got and persisted movie: " + movie);
-            }
-
+            TmdbMovieDto movieDto = TmdbService.getMovieDetails(movieId);
+            List<Genre> genresForThisMovie = new ArrayList<Genre>();
+//            List<Genre> genresForThisMovie = movieDto.genreIds().stream().map(id -> genreMap.get(id)).toList();
+            Movie movie = new Movie(movieDto, genresForThisMovie);
+            movie = movieDao.create(movie);
+            movies.add(movie);
+            System.out.println("Got and persisted movie: " + movie);
         }
+
+
+        // new code (end)
+
+
+//        // Get all danish movies from TMDB and persist them in database
+//        Set<Movie> movies = new HashSet<>();
+//        for (int year = 1897; year <= 2025; year++) {
+//
+//            for (TmdbMovieDto m : TmdbService.getDanishMoviesFromYear(year, DELAY_MILLISECONDS)) {
+//
+//                List<Genre> genresForThisMovie = m.genreIds().stream().map(id -> genreMap.get(id)).toList();
+//
+//                Movie movie = new Movie(m, genresForThisMovie);
+//                movie = movieDao.create(movie);
+//                movies.add(movie);
+//                System.out.println("Got and persisted movie: " + movie);
+//            }
+//
+//        }
 
 
         // Loop through movies and get their credits from TMDB and persists them in database
