@@ -22,8 +22,7 @@ public record TmdbMovieDto(Integer id,
                            String backdropPath,
                            @JsonProperty("poster_path")
                            String posterPath,
-                           @JsonProperty("genre_ids")
-                           List<Integer> genreIds,
+                           List<GenreDto> genres,
                            String overview
 ) {
 }

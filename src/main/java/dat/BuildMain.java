@@ -48,14 +48,12 @@ public class BuildMain {
         // new code (begin)
 
         Set<Integer> movieIds = TmdbService.getMovieIds(DELAY_MILLISECONDS);
-        System.out.println(movieIds);
 
         Set<Movie> movies = new HashSet<>();
         for (int movieId : movieIds) {
 
             TmdbMovieDto movieDto = TmdbService.getMovieDetails(movieId);
-            List<Genre> genresForThisMovie = new ArrayList<Genre>();
-//            List<Genre> genresForThisMovie = movieDto.genreIds().stream().map(id -> genreMap.get(id)).toList();
+            List<Genre> genresForThisMovie = movieDto.genres().stream().map(g -> genreMap.get(g.id())).toList();
             Movie movie = new Movie(movieDto, genresForThisMovie);
             movie = movieDao.create(movie);
             movies.add(movie);

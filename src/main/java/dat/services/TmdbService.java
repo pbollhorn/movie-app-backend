@@ -50,7 +50,7 @@ public class TmdbService {
         objectMapper.registerModule(new JavaTimeModule());
 
 
-        for (int year = 2024; year <= 2025; year++) {
+        for (int year = 1900; year <= 2025; year++) {
 
             for (int page = 1; ; page++) {
 

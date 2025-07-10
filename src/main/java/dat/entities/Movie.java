@@ -48,7 +48,7 @@ public class Movie {
     private Set<Credit> credits = new HashSet<>();
 
 
-    public Movie(TmdbMovieDto m, List<Genre> genreList) {
+    public Movie(TmdbMovieDto m, List<Genre> genresForThisMovie) {
         this.id = m.id();
         this.title = m.title();
         this.originalTitle = m.originalTitle();
@@ -68,7 +68,7 @@ public class Movie {
         }
 
         int rankInMovie = 0;
-        for (Genre g : genreList) {
+        for (Genre g : genresForThisMovie) {
             movieGenres.add(new MovieGenre(null, this, g, rankInMovie));
             rankInMovie++;
         }
