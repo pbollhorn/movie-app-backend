@@ -7,14 +7,18 @@ import java.net.http.HttpResponse;
 
 import dat.exceptions.ApiException;
 
-public class DataAPIReader {
+public class TmdbApiReader {
 
-    public String getDataFromClient(String url) {
+    private static final HttpClient client = HttpClient.newHttpClient();
+    private static final String TmdbApiReadAccessToken = PropertyReader.getPropertyValue("TMDB_API_READ_ACCESS_TOKEN", "config.properties");
+
+    public String getDataFromTmdb(String url) {
         try {
-            HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI(url))
                     .GET()
+                    .uri(new URI(url))
+                    .header("Authorization", "Bearer " + TmdbApiReadAccessToken)
+                    .header("Accept", "application/json")
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());

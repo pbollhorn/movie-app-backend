@@ -53,6 +53,7 @@ public class BuildMain {
         for (int movieId : movieIds) {
 
             TmdbMovieDto movieDto = TmdbService.getMovieDetails(movieId);
+            System.out.println(movieDto);
             List<Genre> genresForThisMovie = movieDto.genres().stream().map(g -> genreMap.get(g.id())).toList();
             Movie movie = new Movie(movieDto, genresForThisMovie);
             movie = movieDao.create(movie);
@@ -81,29 +82,29 @@ public class BuildMain {
 //        }
 
 
-        // Loop through movies and get their credits from TMDB and persists them in database
-        // This is done in parallel using threads
-        List<Future> futures = new LinkedList<>();
-        for (Movie movie : movies) {
-
-            Runnable task = new GetAndPersistCreditsForMovie(movie);
-            Future future = executor.submit(task);
-            futures.add(future);
-
-            try {
-                Thread.sleep(DELAY_MILLISECONDS);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-        }
-        for (Future future : futures) {
-            try {
-                future.get(); // blocking call, waits for task to finish
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+//        // Loop through movies and get their credits from TMDB and persists them in database
+//        // This is done in parallel using threads
+//        List<Future> futures = new LinkedList<>();
+//        for (Movie movie : movies) {
+//
+//            Runnable task = new GetAndPersistCreditsForMovie(movie);
+//            Future future = executor.submit(task);
+//            futures.add(future);
+//
+//            try {
+//                Thread.sleep(DELAY_MILLISECONDS);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//        for (Future future : futures) {
+//            try {
+//                future.get(); // blocking call, waits for task to finish
+//            } catch (ExecutionException | InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         System.out.println("Milliseconds it took: " + (System.currentTimeMillis() - startTime));
 
@@ -113,31 +114,31 @@ public class BuildMain {
     }
 
 
-    private static class GetAndPersistCreditsForMovie implements Runnable {
-
-        private Movie movie;
-
-        GetAndPersistCreditsForMovie(Movie movie) {
-            this.movie = movie;
-        }
-
-        @Override
-        public void run() {
-
-            for (CreditDto c : TmdbService.getCreditsForMovie(movie.getId())) {
-
-                // This creates person in database if it does not already exist
-                Person person = personDao.update(new Person(c));
-
-                movie.addCredit(person, c.job(), c.character(), c.rankInMovie());
-
-            }
-
-            movieDao.update(movie);
-            System.out.println("Got and persisted credits for movie: " + movie);
-
-        }
-
-    }
+//    private static class GetAndPersistCreditsForMovie implements Runnable {
+//
+//        private Movie movie;
+//
+//        GetAndPersistCreditsForMovie(Movie movie) {
+//            this.movie = movie;
+//        }
+//
+//        @Override
+//        public void run() {
+//
+//            for (CreditDto c : TmdbService.getCreditsForMovie(movie.getId())) {
+//
+//                // This creates person in database if it does not already exist
+//                Person person = personDao.update(new Person(c));
+//
+//                movie.addCredit(person, c.job(), c.character(), c.rankInMovie());
+//
+//            }
+//
+//            movieDao.update(movie);
+//            System.out.println("Got and persisted credits for movie: " + movie);
+//
+//        }
+//
+//    }
 
 }
