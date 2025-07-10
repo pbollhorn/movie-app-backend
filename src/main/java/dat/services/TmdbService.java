@@ -19,14 +19,20 @@ import dat.enums.Gender;
 public class TmdbService {
 
     private static final String ApiKey = PropertyReader.getPropertyValue("TMDB_API_KEY", "config.properties");
+    private static final ObjectMapper objectMapper = configureObjectMapper();
+
+    private static ObjectMapper configureObjectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.registerModule(new JavaTimeModule());
+        return objectMapper;
+    }
+
 
     public static Set<GenreDto> getGenres() {
 
         String url = "https://api.themoviedb.org/3/genre/movie/list?api_key=" + ApiKey;
         String json = new DataAPIReader().getDataFromClient(url);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         GenresResponseDto response;
 
@@ -45,11 +51,6 @@ public class TmdbService {
 
         Set<Integer> movieIds = new HashSet<>();
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.registerModule(new JavaTimeModule());
-
-
         for (int year = 1900; year <= 2025; year++) {
 
             for (int page = 1; ; page++) {
@@ -59,8 +60,8 @@ public class TmdbService {
                 String json = null;
                 try {
                     String url = "https://api.themoviedb.org/3/discover/movie?vote_count.gte=1000&" +
-                            "include_adult=false&include_video=false&primary_release_year=" +
-                            year + "&page=" + page + "&api_key=" + ApiKey;
+                            "include_adult=false&include_video=false&primary_release_year=" + year +
+                            "&page=" + page + "&api_key=" + ApiKey;
                     json = new DataAPIReader().getDataFromClient(url);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -98,12 +99,9 @@ public class TmdbService {
 
     public static TmdbMovieDto getMovieDetails(int movieId) {
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.registerModule(new JavaTimeModule());
-
         String json = null;
         try {
+//            String url = "https://api.themoviedb.org/3/movie/" + movieId + "?append_to_response=credits&api_key=" + ApiKey;
             String url = "https://api.themoviedb.org/3/movie/" + movieId + "?api_key=" + ApiKey;
             json = new DataAPIReader().getDataFromClient(url);
         } catch (Exception e) {
@@ -127,10 +125,6 @@ public class TmdbService {
     public static Set<TmdbMovieDto> getDanishMoviesFromYear(int year, long delayMilliseconds) {
 
         Set<TmdbMovieDto> movies = new HashSet<>();
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        objectMapper.registerModule(new JavaTimeModule());
 
         for (int page = 1; ; page++) {
 
@@ -181,9 +175,6 @@ public class TmdbService {
 
         String url = "https://api.themoviedb.org/3/movie/" + movieId + "/credits?api_key=" + ApiKey;
         String json = new DataAPIReader().getDataFromClient(url);
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         CreditsResponseDto response;
 
