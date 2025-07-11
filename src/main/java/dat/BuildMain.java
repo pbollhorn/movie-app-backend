@@ -2,7 +2,6 @@ package dat;
 
 import java.util.*;
 
-import dat.dto.TmdbCreditDto;
 import jakarta.persistence.EntityManagerFactory;
 
 import dat.config.HibernateConfig;
@@ -10,6 +9,7 @@ import dat.dao.GenreDao;
 import dat.dao.MovieDao;
 import dat.dao.PersonDao;
 import dat.dto.GenreDto;
+import dat.dto.TmdbCreditDto;
 import dat.dto.TmdbMovieDto;
 import dat.entities.Genre;
 import dat.entities.Movie;
@@ -39,8 +39,6 @@ public class BuildMain {
             genreMap.put(g.id(), genre);
             System.out.println("Got and persisted genre: " + genre);
         }
-
-        // new code (begin)
 
         Set<Integer> movieIds = TmdbService.getMovieIds(DELAY_MILLISECONDS);
 
@@ -72,83 +70,10 @@ public class BuildMain {
             System.out.println("Got and persisted movie: " + movie);
         }
 
-
-        // new code (end)
-
-
-//        // Get all danish movies from TMDB and persist them in database
-//        Set<Movie> movies = new HashSet<>();
-//        for (int year = 1897; year <= 2025; year++) {
-//
-//            for (TmdbMovieDto m : TmdbService.getDanishMoviesFromYear(year, DELAY_MILLISECONDS)) {
-//
-//                List<Genre> genresForThisMovie = m.genreIds().stream().map(id -> genreMap.get(id)).toList();
-//
-//                Movie movie = new Movie(m, genresForThisMovie);
-//                movie = movieDao.create(movie);
-//                movies.add(movie);
-//                System.out.println("Got and persisted movie: " + movie);
-//            }
-//
-//        }
-
-
-//        // Loop through movies and get their credits from TMDB and persists them in database
-//        // This is done in parallel using threads
-//        List<Future> futures = new LinkedList<>();
-//        for (Movie movie : movies) {
-//
-//            Runnable task = new GetAndPersistCreditsForMovie(movie);
-//            Future future = executor.submit(task);
-//            futures.add(future);
-//
-//            try {
-//                Thread.sleep(DELAY_MILLISECONDS);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//
-//        }
-//        for (Future future : futures) {
-//            try {
-//                future.get(); // blocking call, waits for task to finish
-//            } catch (ExecutionException | InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-
         System.out.println("Milliseconds it took: " + (System.currentTimeMillis() - startTime));
 
         emf.close();
 
     }
-
-
-//    private static class GetAndPersistCreditsForMovie implements Runnable {
-//
-//        private Movie movie;
-//
-//        GetAndPersistCreditsForMovie(Movie movie) {
-//            this.movie = movie;
-//        }
-//
-//        @Override
-//        public void run() {
-//
-//            for (CreditDto c : TmdbService.getCreditsForMovie(movie.getId())) {
-//
-//                // This creates person in database if it does not already exist
-//                Person person = personDao.update(new Person(c));
-//
-//                movie.addCredit(person, c.job(), c.character(), c.rankInMovie());
-//
-//            }
-//
-//            movieDao.update(movie);
-//            System.out.println("Got and persisted credits for movie: " + movie);
-//
-//        }
-//
-//    }
 
 }

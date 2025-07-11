@@ -3,7 +3,6 @@ package dat.dao;
 import java.util.List;
 
 import dat.dto.*;
-import dat.entities.Person;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
@@ -28,22 +27,6 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         }
         return instance;
     }
-
-//    public Movie createMovie(TmdbMovieDto m) {
-//
-//        try (EntityManager em = emf.createEntityManager()) {
-//            em.getTransaction().begin();
-//            em.persist(t);
-//            em.getTransaction().commit();
-//            return t;
-//        } catch (RuntimeException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//
-//
-//    }
-
 
     public List<FrontendMovieOverviewDto> searchMoviesOpen(String text, int limit) {
 
