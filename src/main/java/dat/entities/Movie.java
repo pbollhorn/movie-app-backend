@@ -44,7 +44,7 @@ public class Movie {
     private Set<MovieGenre> movieGenres = new HashSet<>();
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Set<Credit> credits = new HashSet<>();
 
 

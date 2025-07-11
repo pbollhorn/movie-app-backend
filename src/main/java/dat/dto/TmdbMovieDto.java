@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import dat.enums.Gender;
-import dat.services.TmdbService;
 
 public record TmdbMovieDto(Integer id,
                            String title,
@@ -26,21 +24,12 @@ public record TmdbMovieDto(Integer id,
                            String posterPath,
                            List<GenreDto> genres,
                            String overview,
-                           TmdbCreditLists credits
+                           TmdbCreditsLists credits
 ) {
 
-    private record TmdbCreditLists(
+    public record TmdbCreditsLists(
             List<TmdbCreditDto> cast,
             List<TmdbCreditDto> crew) {
-    }
-
-    private record TmdbCreditDto(@JsonProperty("id")
-                                 Integer personId,
-                                 String name,
-                                 Gender gender,
-                                 Double popularity,
-                                 String job,
-                                 String character) {
     }
 
 }

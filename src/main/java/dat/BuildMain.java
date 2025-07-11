@@ -1,15 +1,14 @@
 package dat;
 
 import java.util.*;
-import java.util.concurrent.*;
 
+import dat.dto.TmdbCreditDto;
 import jakarta.persistence.EntityManagerFactory;
 
 import dat.config.HibernateConfig;
 import dat.dao.GenreDao;
 import dat.dao.MovieDao;
 import dat.dao.PersonDao;
-import dat.dto.CreditDto;
 import dat.dto.GenreDto;
 import dat.dto.TmdbMovieDto;
 import dat.entities.Genre;
@@ -31,10 +30,6 @@ public class BuildMain {
 
     public static void main(String[] args) {
 
-        // Uses a fixed size thread pool. CachedThreadPool was tried, but was too fast for the database access
-        ExecutorService executor = Executors.newFixedThreadPool(3);
-//        ExecutorService executor = Executors.newFixedThreadPool(1);
-
         long startTime = System.currentTimeMillis();
 
         // Get all genres from TMDB and persist them in database
@@ -49,15 +44,31 @@ public class BuildMain {
 
         Set<Integer> movieIds = TmdbService.getMovieIds(DELAY_MILLISECONDS);
 
-        Set<Movie> movies = new HashSet<>();
         for (int movieId : movieIds) {
 
             TmdbMovieDto movieDto = TmdbService.getMovieDetails(movieId);
-            System.out.println(movieDto);
+
             List<Genre> genresForThisMovie = movieDto.genres().stream().map(g -> genreMap.get(g.id())).toList();
             Movie movie = new Movie(movieDto, genresForThisMovie);
+
+            int rankInMovie = 0;
+            for (TmdbCreditDto c : movieDto.credits().cast()) {
+                // This creates the cast member as a person in the database
+                // (or overwrites with same data if already in database)
+                Person person = personDao.update(new Person(c));
+                movie.addCredit(person, "Actor", c.character(), rankInMovie);
+                rankInMovie++;
+            }
+            for (TmdbCreditDto c : movieDto.credits().crew()) {
+                // This creates the crew member as a person in the database
+                // (or overwrites with same data if already in database)
+                Person person = personDao.update(new Person(c));
+                movie.addCredit(person, c.job(), null, rankInMovie);
+                rankInMovie++;
+            }
+
             movie = movieDao.create(movie);
-            movies.add(movie);
+
             System.out.println("Got and persisted movie: " + movie);
         }
 
@@ -109,7 +120,6 @@ public class BuildMain {
         System.out.println("Milliseconds it took: " + (System.currentTimeMillis() - startTime));
 
         emf.close();
-        executor.shutdown();
 
     }
 

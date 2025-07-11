@@ -2,10 +2,10 @@ package dat.entities;
 
 import java.util.Set;
 
+import dat.dto.TmdbCreditDto;
 import jakarta.persistence.*;
 import lombok.*;
 
-import dat.dto.CreditDto;
 import dat.enums.Gender;
 
 @ToString
@@ -26,7 +26,7 @@ public class Person {
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private Set<Credit> credits;
 
-    public Person(CreditDto c) {
+    public Person(TmdbCreditDto c) {
         this.id = c.personId();
         this.name = c.name();
         this.gender = c.gender();

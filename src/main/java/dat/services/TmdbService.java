@@ -54,10 +54,11 @@ public class TmdbService {
 
                 String json = null;
                 try {
-                    String url = "https://api.themoviedb.org/3/discover/movie?vote_count.gte=1000&" +
+                    String url = "https://api.themoviedb.org/3/discover/movie?vote_count.gte=10000&" +
                             "include_adult=false&include_video=false&primary_release_year=" + year +
                             "&page=" + page;
                     json = new TmdbApiReader().getDataFromTmdb(url);
+                    System.out.println(json);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
@@ -97,7 +98,6 @@ public class TmdbService {
         String json = null;
         try {
             String url = "https://api.themoviedb.org/3/movie/" + movieId + "?append_to_response=credits";
-//            String url = "https://api.themoviedb.org/3/movie/" + movieId + "?api_key=" + ApiKey;
             json = new TmdbApiReader().getDataFromTmdb(url);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -195,7 +195,7 @@ public class TmdbService {
 //
 //    }
 
-//    private record TmdbCreditDto(@JsonProperty("id")
+    //    private record TmdbCreditDto(@JsonProperty("id")
 //                                 Integer personId,
 //                                 String name,
 //                                 Gender gender,
