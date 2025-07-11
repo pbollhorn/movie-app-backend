@@ -17,8 +17,6 @@ import dat.dto.TmdbMovieDto;
 @Entity
 public class Movie {
 
-    private static final int MINIMUM_VOTES_FOR_SCORE = 10;
-
     @Id
     private Integer id;
 
@@ -60,12 +58,7 @@ public class Movie {
         this.backdropPath = m.backdropPath();
         this.posterPath = m.posterPath();
         this.overview = m.overview();
-
-        if (m.voteCount() >= MINIMUM_VOTES_FOR_SCORE) {
-            this.score = m.voteAverage();
-        } else {
-            this.score = null;
-        }
+        this.score = m.voteAverage();  // TODO: Change name to voteAverage
 
         int rankInMovie = 0;
         for (Genre g : genresForThisMovie) {
