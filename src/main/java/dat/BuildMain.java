@@ -49,8 +49,6 @@ public class BuildMain {
             List<Genre> genresForThisMovie = movieDto.genres().stream().map(g -> genreMap.get(g.id())).toList();
             Movie movie = new Movie(movieDto, genresForThisMovie);
 
-            System.out.println(movieDto.collection());
-
             int rankInMovie = 0;
             for (TmdbCreditDto c : movieDto.credits().cast()) {
                 // This creates the cast member as a person in the database
@@ -67,7 +65,7 @@ public class BuildMain {
                 rankInMovie++;
             }
 
-            movie = movieDao.create(movie);
+            movie = movieDao.update(movie);
 
             System.out.println("Got and persisted movie: " + movie);
         }

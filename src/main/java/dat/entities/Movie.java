@@ -41,14 +41,14 @@ public class Movie {
     private String overview;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private Set<MovieGenre> movieGenres = new HashSet<>();
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Set<Credit> credits = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     private Collection collection;
 
 
@@ -74,6 +74,11 @@ public class Movie {
         for (Genre g : genresForThisMovie) {
             movieGenres.add(new MovieGenre(null, this, g, rankInMovie));
             rankInMovie++;
+        }
+
+        if (m.collection() != null) {
+            this.collection = new Collection(m.collection().id(), m.collection().name());
+
         }
 
     }
