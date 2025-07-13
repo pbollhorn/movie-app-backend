@@ -177,14 +177,14 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             jpql = """
                     SELECT m.id FROM Movie m WHERE m.id IN :movieIds AND m.id NOT IN
                     (SELECT a.movie.id FROM AccountMovieRating a WHERE a.account.id=:accountId)
-                    ORDER BY m.score DESC NULLS LAST LIMIT :limit""";
+                    ORDER BY m.voteAverage DESC NULLS LAST LIMIT :limit""";
             query = em.createQuery(jpql, Integer.class);
             query.setParameter("movieIds", movieIds);
             query.setParameter("accountId", accountId);
             query.setParameter("limit", limit);
             movieIds = query.getResultList();
 
-            jpql = "SELECT NEW dat.dto.FrontendMovieOverviewDto(m) FROM Movie m WHERE m.id IN :movieIds ORDER BY m.score DESC NULLS LAST";
+            jpql = "SELECT NEW dat.dto.FrontendMovieOverviewDto(m) FROM Movie m WHERE m.id IN :movieIds ORDER BY m.voteAverage DESC NULLS LAST";
             TypedQuery<FrontendMovieOverviewDto> newQuery = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             newQuery.setParameter("movieIds", movieIds);
             List<FrontendMovieOverviewDto> recommendations = newQuery.getResultList();

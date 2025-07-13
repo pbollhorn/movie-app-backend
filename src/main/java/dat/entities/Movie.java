@@ -28,7 +28,6 @@ public class Movie {
     private String originalLanguage;
     private Double voteAverage;
     private Integer voteCount;
-    private Double score;
     private LocalDate releaseDate;
     private String backdropPath;
     private String posterPath;
@@ -59,7 +58,7 @@ public class Movie {
         this.backdropPath = m.backdropPath();
         this.posterPath = m.posterPath();
         this.overview = m.overview();
-        this.score = m.voteAverage();  // TODO: Change name to voteAverage
+        this.voteAverage = m.voteAverage();
         this.runtime = m.runtime();
 
         int rankInMovie = 0;
