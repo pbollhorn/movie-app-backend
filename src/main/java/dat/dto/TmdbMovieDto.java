@@ -10,6 +10,7 @@ public record TmdbMovieDto(Integer id,
                            @JsonProperty("original_title")
                            String originalTitle,
                            Boolean adult,
+                           Boolean video,
                            @JsonProperty("original_language")
                            String originalLanguage,
                            @JsonProperty("vote_average")
@@ -25,7 +26,10 @@ public record TmdbMovieDto(Integer id,
                            List<GenreDto> genres,
                            String overview,
                            TmdbCreditsLists credits,
-                           Integer runtime
+                           Integer runtime,
+                           String tagline,
+                           String status
+
 ) {
 
     public record TmdbCreditsLists(

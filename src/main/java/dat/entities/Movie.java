@@ -25,6 +25,7 @@ public class Movie {
 
     private String originalTitle;
     private Boolean adult;
+    private Boolean video;
     private String originalLanguage;
     private Double voteAverage;
     private Integer voteCount;
@@ -32,6 +33,8 @@ public class Movie {
     private String backdropPath;
     private String posterPath;
     private Integer runtime;
+    private String tagline;
+    private String status;
 
     @ToString.Exclude
     @Column(length = 1000)
@@ -51,6 +54,7 @@ public class Movie {
         this.title = m.title();
         this.originalTitle = m.originalTitle();
         this.adult = m.adult();
+        this.video = m.video();
         this.originalLanguage = m.originalLanguage();
         this.voteAverage = m.voteAverage();
         this.voteCount = m.voteCount();
@@ -60,6 +64,8 @@ public class Movie {
         this.overview = m.overview();
         this.voteAverage = m.voteAverage();
         this.runtime = m.runtime();
+        this.tagline = m.tagline();
+        this.status = m.status();
 
         int rankInMovie = 0;
         for (Genre g : genresForThisMovie) {

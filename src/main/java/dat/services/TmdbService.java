@@ -1,6 +1,7 @@
 package dat.services;
 
 import java.util.*;
+import java.time.LocalDate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -14,6 +15,8 @@ import dat.utils.TmdbApiReader;
 
 public class TmdbService {
 
+    private static final int YEAR_OF_FIRST_MOVIE = 1874;
+    private static final int MINIMUM_VOTE_COUNT = 30000;
     private static final ObjectMapper objectMapper = configureObjectMapper();
 
     private static ObjectMapper configureObjectMapper() {
@@ -44,9 +47,11 @@ public class TmdbService {
 
     public static Set<Integer> getMovieIds(long delayMilliseconds) {
 
+        LocalDate today = LocalDate.now();
+
         Set<Integer> movieIds = new HashSet<>();
 
-        for (int year = 1900; year <= 2025; year++) {
+        for (int year = YEAR_OF_FIRST_MOVIE; year <= today.getYear(); year++) {
 
             for (int page = 1; ; page++) {
 
@@ -54,8 +59,10 @@ public class TmdbService {
 
                 String json = null;
                 try {
-                    String url = "https://api.themoviedb.org/3/discover/movie?vote_count.gte=30000&" +
-                            "include_adult=false&include_video=false&primary_release_year=" + year +
+                    String url = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false" +
+                            "&vote_count.gte=" + MINIMUM_VOTE_COUNT +
+                            "&primary_release_date.lte=" + today +
+                            "&primary_release_year=" + year +
                             "&page=" + page;
                     json = new TmdbApiReader().getDataFromTmdb(url);
                     System.out.println(json);
