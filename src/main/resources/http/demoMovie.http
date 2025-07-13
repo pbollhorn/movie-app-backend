@@ -1,4 +1,4 @@
-GET {{url}}/movies/search-open?text=Den eneste ene
+GET {{url}}/movies/search-open?text=Inception
 
 ###
 GET {{url}}/movies/search?text=eneste
@@ -13,7 +13,7 @@ GET {{url}}/movies
 Authorization: Bearer {{token}}
 
 ###
-GET {{url}}/movies/18908
+GET {{url}}/movies/27205
 
 ###
 PUT {{url}}/movies/18908
