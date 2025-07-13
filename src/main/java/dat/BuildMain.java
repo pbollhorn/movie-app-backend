@@ -54,14 +54,14 @@ public class BuildMain {
                 // This creates the cast member as a person in the database
                 // (or overwrites with same data if already in database)
                 Person person = personDao.update(new Person(c));
-                movie.addCredit(person, "Actor", c.character(), rankInMovie);
+                movie.addCredit(c.creditId(), person, "Actor", "Acting", c.character(), rankInMovie);
                 rankInMovie++;
             }
             for (TmdbCreditDto c : movieDto.credits().crew()) {
                 // This creates the crew member as a person in the database
                 // (or overwrites with same data if already in database)
                 Person person = personDao.update(new Person(c));
-                movie.addCredit(person, c.job(), null, rankInMovie);
+                movie.addCredit(c.creditId(), person, c.job(), c.department(), null, rankInMovie);
                 rankInMovie++;
             }
 

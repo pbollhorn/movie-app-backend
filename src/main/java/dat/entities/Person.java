@@ -2,11 +2,11 @@ package dat.entities;
 
 import java.util.Set;
 
-import dat.dto.TmdbCreditDto;
 import jakarta.persistence.*;
 import lombok.*;
 
-import dat.enums.Gender;
+import dat.dto.TmdbCreditDto;
+
 
 @ToString
 @Getter
@@ -19,9 +19,6 @@ public class Person {
     @Column(nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
     @ToString.Exclude
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private Set<Credit> credits;
@@ -29,7 +26,6 @@ public class Person {
     public Person(TmdbCreditDto c) {
         this.id = c.personId();
         this.name = c.name();
-        this.gender = c.gender();
     }
 
 }

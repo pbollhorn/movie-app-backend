@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Credit {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -21,6 +20,7 @@ public class Credit {
     private Person person;
 
     private String job;
+    private String department;
     private String character;
     private Integer rankInMovie;
 }

@@ -70,8 +70,8 @@ public class Movie {
     }
 
 
-    public void addCredit(Person person, String job, String character, Integer rankInMovie) {
-        credits.add(new Credit(null, this, person, job, character, rankInMovie));
+    public void addCredit(String creditId, Person person, String job, String department, String character, Integer rankInMovie) {
+        credits.add(new Credit(creditId, this, person, job, department, character, rankInMovie));
     }
 
     public String[] getGenresAsStringArray() {
