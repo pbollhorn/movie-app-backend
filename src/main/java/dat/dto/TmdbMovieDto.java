@@ -28,13 +28,19 @@ public record TmdbMovieDto(Integer id,
                            TmdbCreditsLists credits,
                            Integer runtime,
                            String tagline,
-                           String status
+                           String status,
+                           @JsonProperty("belongs_to_collection")
+                           TmdbCollection collection
 
 ) {
 
     public record TmdbCreditsLists(
             List<TmdbCreditDto> cast,
             List<TmdbCreditDto> crew) {
+    }
+
+    public record TmdbCollection(Integer id, String name) {
+
     }
 
 }

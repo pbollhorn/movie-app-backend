@@ -48,6 +48,9 @@ public class Movie {
     @OneToMany(mappedBy = "movie", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Set<Credit> credits = new HashSet<>();
 
+    @ManyToOne
+    private Collection collection;
+
 
     public Movie(TmdbMovieDto m, List<Genre> genresForThisMovie) {
         this.id = m.id();
