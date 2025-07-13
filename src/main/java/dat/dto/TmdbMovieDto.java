@@ -24,7 +24,8 @@ public record TmdbMovieDto(Integer id,
                            String posterPath,
                            List<GenreDto> genres,
                            String overview,
-                           TmdbCreditsLists credits
+                           TmdbCreditsLists credits,
+                           Integer runtime
 ) {
 
     public record TmdbCreditsLists(

@@ -54,7 +54,7 @@ public class TmdbService {
 
                 String json = null;
                 try {
-                    String url = "https://api.themoviedb.org/3/discover/movie?vote_count.gte=10000&" +
+                    String url = "https://api.themoviedb.org/3/discover/movie?vote_count.gte=30000&" +
                             "include_adult=false&include_video=false&primary_release_year=" + year +
                             "&page=" + page;
                     json = new TmdbApiReader().getDataFromTmdb(url);

@@ -32,6 +32,7 @@ public class Movie {
     private LocalDate releaseDate;
     private String backdropPath;
     private String posterPath;
+    private Integer runtime;
 
     @ToString.Exclude
     @Column(length = 1000)
@@ -59,6 +60,7 @@ public class Movie {
         this.posterPath = m.posterPath();
         this.overview = m.overview();
         this.score = m.voteAverage();  // TODO: Change name to voteAverage
+        this.runtime = m.runtime();
 
         int rankInMovie = 0;
         for (Genre g : genresForThisMovie) {

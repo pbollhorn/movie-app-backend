@@ -13,6 +13,7 @@ public record FrontendMovieDetailsDto(Integer id,
                                       Double score,
                                       String backdropPath,
                                       String overview,
+                                      Integer runtime,
                                       String[] genres,
                                       List<FrontendCreditDto> credits) {
 
@@ -27,6 +28,7 @@ public record FrontendMovieDetailsDto(Integer id,
                 m.getScore(),
                 m.getBackdropPath(),
                 m.getOverview(),
+                m.getRuntime(),
                 m.getGenresAsStringArray(),
                 List.copyOf(credits)); // TODO: This should create an unmodifiable list
     }
