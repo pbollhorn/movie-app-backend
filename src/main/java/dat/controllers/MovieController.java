@@ -3,7 +3,6 @@ package dat.controllers;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import dat.BuildMain;
 import dat.RefreshMoviesTask;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
