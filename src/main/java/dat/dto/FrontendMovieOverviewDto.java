@@ -11,6 +11,7 @@ public record FrontendMovieOverviewDto(Integer id,
                                        LocalDate releaseDate,
                                        Double score,
                                        String posterPath,
+                                       String[] directors,
                                        String[] genres,
                                        Boolean rating) {
 
@@ -23,6 +24,7 @@ public record FrontendMovieOverviewDto(Integer id,
                 m.getReleaseDate(),
                 m.getVoteAverage(),
                 m.getPosterPath(),
+                m.getDirectorsAsStringArray(),
                 m.getGenresAsStringArray(),
                 null);
     }
@@ -36,6 +38,7 @@ public record FrontendMovieOverviewDto(Integer id,
                 m.getReleaseDate(),
                 m.getVoteAverage(),
                 m.getPosterPath(),
+                m.getDirectorsAsStringArray(),
                 m.getGenresAsStringArray(),
                 rating);
     }

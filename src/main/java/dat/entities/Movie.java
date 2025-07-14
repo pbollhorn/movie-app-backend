@@ -96,4 +96,13 @@ public class Movie {
         return genreArray;
     }
 
+    public String[] getDirectorsAsStringArray() {
+        String[] directorArray = this.credits.stream()
+                .filter(c -> c.getJob().equals("Director"))
+                .sorted(Comparator.comparingInt(Credit::getRankInMovie))
+                .map(c -> c.getPerson().getName())
+                .toArray(String[]::new);
+        return directorArray;
+    }
+
 }
