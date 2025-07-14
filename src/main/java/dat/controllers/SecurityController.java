@@ -193,9 +193,9 @@ public class SecurityController implements ISecurityController {
                 TOKEN_EXPIRE_TIME = System.getenv("TOKEN_EXPIRE_TIME");
                 SECRET_KEY = System.getenv("SECRET_KEY");
             } else {
-                ISSUER = PropertyReader.getPropertyValue("ISSUER", "config.properties");
-                TOKEN_EXPIRE_TIME = PropertyReader.getPropertyValue("TOKEN_EXPIRE_TIME", "config.properties");
-                SECRET_KEY = PropertyReader.getPropertyValue("SECRET_KEY", "config.properties");
+                ISSUER = PropertyReader.getPropertyValue("ISSUER");
+                TOKEN_EXPIRE_TIME = PropertyReader.getPropertyValue("TOKEN_EXPIRE_TIME");
+                SECRET_KEY = PropertyReader.getPropertyValue("SECRET_KEY");
             }
             return tokenSecurity.createToken(user, ISSUER, TOKEN_EXPIRE_TIME, SECRET_KEY);
         } catch (Exception e) {
@@ -206,7 +206,7 @@ public class SecurityController implements ISecurityController {
 
     private UserDTO verifyToken(String token) {
         boolean IS_DEPLOYED = (System.getenv("DEPLOYED") != null);
-        String SECRET = IS_DEPLOYED ? System.getenv("SECRET_KEY") : PropertyReader.getPropertyValue("SECRET_KEY", "config.properties");
+        String SECRET = IS_DEPLOYED ? System.getenv("SECRET_KEY") : PropertyReader.getPropertyValue("SECRET_KEY");
 
         try {
             if (tokenSecurity.tokenIsValid(token, SECRET) && tokenSecurity.tokenNotExpired(token)) {

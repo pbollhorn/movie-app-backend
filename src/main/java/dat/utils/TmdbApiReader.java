@@ -10,7 +10,7 @@ import dat.exceptions.ApiException;
 public class TmdbApiReader {
 
     private static final HttpClient client = HttpClient.newHttpClient();
-    private static final String TmdbApiReadAccessToken = PropertyReader.getPropertyValue("TMDB_API_READ_ACCESS_TOKEN", "config.properties");
+    private static final String TmdbApiReadAccessToken = PropertyReader.getPropertyValue("TMDB_API_READ_ACCESS_TOKEN");
 
     public String getDataFromTmdb(String url) {
         try {

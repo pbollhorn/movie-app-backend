@@ -9,20 +9,33 @@ import org.slf4j.Logger;
 import dat.exceptions.DaoException;
 
 public class PropertyReader {
+
+    private static final String RESOURCE_NAME = "config.properties";
+    private static final Boolean DEPLOYED = Boolean.parseBoolean(System.getenv("DEPLOYED"));
+
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(PropertyReader.class);
 
-    public static String getPropertyValue(String propName, String resourceName) {
+    public static String getPropertyValue(String propName) {
+
+        if(DEPLOYED) {
+
+            return System.getenv(propName);
+
+        }
+
+
+
         // REMEMBER TO BUILD WITH MAVEN FIRST. Read the property file if not deployed (else read system vars instead)
         // Read from ressources/config.properties or from pom.xml depending on the ressourceName
-        try (InputStream is = PropertyReader.class.getClassLoader().getResourceAsStream(resourceName)) {
-            Properties prop = new Properties();
-            prop.load(is);
+        try (InputStream inputStream = PropertyReader.class.getClassLoader().getResourceAsStream(RESOURCE_NAME)) {
+            Properties props = new Properties();
+            props.load(inputStream);
 
-            String value = prop.getProperty(propName);
+            String value = props.getProperty(propName);
             if (value != null) {
                 return value.trim();  // Trim whitespace
             } else {
-                throw new DaoException(String.format("Property %s not found in %s", propName, resourceName));
+                throw new DaoException(String.format("Property %s not found in %s", propName, RESOURCE_NAME));
             }
         } catch (IOException ex) {
             logger.error(ex.getMessage());
