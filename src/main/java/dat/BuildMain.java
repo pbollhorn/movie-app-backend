@@ -72,8 +72,6 @@ public class BuildMain {
 
         System.out.println("Milliseconds it took: " + (System.currentTimeMillis() - startTime));
 
-        emf.close();
-
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import dat.BuildMain;
+import dat.RefreshMoviesTask;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
@@ -72,7 +73,8 @@ public class MovieController {
     }
 
     public void refreshMovies(Context ctx) {
-        BuildMain.main(new String[]{});
+        Thread thread = new Thread(new RefreshMoviesTask());
+        thread.start();
     }
 
 }
