@@ -1,5 +1,6 @@
 # Non-existing endpoint
 GET {{url}}/auth/test
+
 ###
 POST {{url}}/auth/register
 
@@ -7,6 +8,7 @@ POST {{url}}/auth/register
     "username": "testuser3",
     "password": "password3"
 }
+
 ###
 POST {{url}}/auth/login
 
@@ -20,18 +22,26 @@ POST {{url}}/auth/login
     client.log("Bearer " + response.body.token);
     client.log("Username: " + response.body.username);
 %}
+
 ###
-GET {{url}}/protected/user_demo
-Authorization: Bearer {{token}}
+GET {{url}}/roles-test/anyone
+
 ###
-GET {{url}}/protected/admin_demo
+GET {{url}}/roles-test/user
 Authorization: Bearer {{token}}
+
+###
+GET {{url}}/roles-test/admin
+Authorization: Bearer {{token}}
+
 ###
 GET {{url}}/routes
 Authorization: Bearer {{token}}
+
 ###
 GET {{url}}/auth/verify
 Authorization: Bearer {{token}}
+
 ###
 GET {{url}}/auth/tokenlifespan
 Authorization: Bearer {{token}}

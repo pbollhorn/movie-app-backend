@@ -23,7 +23,7 @@ public class Routes {
         return () -> {
             path("movies", movieRoutes());
             path("auth", authRoutes());
-            path("protected", protectedRoutes());
+            path("roles-test", rolesTestRoutes());
         };
     }
 
@@ -42,19 +42,19 @@ public class Routes {
 
     private EndpointGroup authRoutes() {
         return () -> {
-            get("/test", ctx -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from Open")), Roles.ANYONE);
-            get("/healthcheck", securityController::healthCheck, Roles.ANYONE);
-            post("/login", securityController::login, Roles.ANYONE);
             post("/register", securityController::register, Roles.ANYONE);
+            post("/login", securityController::login, Roles.ANYONE);
             get("/verify", securityController::verify, Roles.ANYONE);
             get("/tokenlifespan", securityController::timeToLive, Roles.ANYONE);
+            get("/healthcheck", securityController::healthCheck, Roles.ANYONE);
         };
     }
 
-    private EndpointGroup protectedRoutes() {
+    private EndpointGroup rolesTestRoutes() {
         return () -> {
-            get("/user_demo", (ctx) -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from USER Protected")), Roles.USER);
-            get("/admin_demo", (ctx) -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from ADMIN Protected")), Roles.ADMIN);
+            get("/anyone", ctx -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from open to ANYONE")), Roles.ANYONE);
+            get("/user", ctx -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from USER protected")), Roles.USER);
+            get("/admin", ctx -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from ADMIN protected")), Roles.ADMIN);
         };
     }
 
