@@ -44,5 +44,9 @@ Content-Type: "application/json"
 
 
 ###
-DELETE {{url}}/api/movies/1078249
+DELETE {{url}}/movies/1078249
+Authorization: Bearer {{token}}
+
+###
+POST {{url}}/movies/refresh
 Authorization: Bearer {{token}}

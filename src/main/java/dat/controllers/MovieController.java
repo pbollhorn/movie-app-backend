@@ -3,6 +3,7 @@ package dat.controllers;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import dat.BuildMain;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
@@ -68,6 +69,10 @@ public class MovieController {
         int accountId = securityController.getAccountIdFromToken(ctx);
         List<FrontendMovieOverviewDto> movies = movieDao.getMovieRecommendations(accountId, MOVIE_LIMIT);
         ctx.json(movies);
+    }
+
+    public void refreshMovies(Context ctx) {
+        BuildMain.main(new String[]{});
     }
 
 }
