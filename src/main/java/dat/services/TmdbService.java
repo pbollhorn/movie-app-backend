@@ -16,7 +16,7 @@ import dat.utils.TmdbApiReader;
 public class TmdbService {
 
     private static final int YEAR_OF_FIRST_MOVIE = 1874;
-    private static final int MINIMUM_VOTE_COUNT = 30000;
+    private static final int MINIMUM_VOTE_COUNT = 1000;
     private static final ObjectMapper objectMapper = configureObjectMapper();
 
     private static ObjectMapper configureObjectMapper() {
@@ -59,7 +59,8 @@ public class TmdbService {
 
                 String json = null;
                 try {
-                    String url = "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false" +
+                    String url = "https://api.themoviedb.org/3/discover/movie?&sort_by=primary_release_date.asc"+
+                            "&include_adult=false&include_video=false" +
                             "&vote_count.gte=" + MINIMUM_VOTE_COUNT +
                             "&primary_release_date.lte=" + today +
                             "&primary_release_year=" + year +
