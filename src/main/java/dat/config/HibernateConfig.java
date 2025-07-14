@@ -41,17 +41,15 @@ public class HibernateConfig {
 
     // TODO: IMPORTANT: Add Entity classes here for them to be registered with Hibernate
     private static void getAnnotationConfiguration(Configuration configuration) {
-        configuration.addAnnotatedClass(Person.class);
-        configuration.addAnnotatedClass(Movie.class);
-        configuration.addAnnotatedClass(Genre.class);
-        configuration.addAnnotatedClass(Credit.class);
-        configuration.addAnnotatedClass(MovieGenre.class);
-        configuration.addAnnotatedClass(Collection.class);
-
         configuration.addAnnotatedClass(Account.class);
-        configuration.addAnnotatedClass(Roles.class);
-
         configuration.addAnnotatedClass(AccountMovieRating.class);
+        configuration.addAnnotatedClass(Collection.class);
+        configuration.addAnnotatedClass(Credit.class);
+        configuration.addAnnotatedClass(Genre.class);
+        configuration.addAnnotatedClass(Movie.class);
+        configuration.addAnnotatedClass(MovieGenre.class);
+        configuration.addAnnotatedClass(Person.class);
+        configuration.addAnnotatedClass(Roles.class); // TODO: Why is this here?
     }
 
     private static EntityManagerFactory createEMF(boolean forTest, String hbm2ddlAutoProperty) {
