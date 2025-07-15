@@ -81,6 +81,23 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
     }
 
+    // TODO: Need to figure out a way for this to work both with and without ratings
+    public List<FrontendMovieOverviewDto> getMoviesInCollection(int collectionId) {
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+            String jpql = """
+                    SELECT NEW dat.dto.FrontendMovieOverviewDto(m) FROM Movie m
+                    WHERE m.collection.id=:collectionId
+                    ORDER BY m.releaseDate""";
+            TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
+            query.setParameter("collectionId", collectionId);
+            return query.getResultList();
+
+        }
+
+    }
+
 
     public List<FrontendMovieOverviewDto> getAllMoviesWithRating(int accountId) {
 
@@ -88,8 +105,8 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             String jpql = """
                     SELECT NEW dat.dto.FrontendMovieOverviewDto(m, a.rating)
-                    FROM AccountMovieRating a JOIN Movie m ON a.movie.id=m.id WHERE a.account.id=:accountId
-                    ORDER BY m.title""";
+                    FROM AccountMovieRating a JOIN Movie m ON a.movie.id = m.id WHERE a.account.id =:accountId
+                    ORDER BY m.title """;
 
             TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
             query.setParameter("accountId", accountId);
@@ -108,8 +125,8 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             // Find persons list
             String jpql = """
                     SELECT NEW dat.dto.FrontendCreditDto(c.id, p.id, p.name, c.job, c.character)
-                    FROM Person p JOIN Credit c ON c.person.id=p.id WHERE c.movie.id=:movieId
-                    ORDER BY c.rankInMovie""";
+                    FROM Person p JOIN Credit c ON c.person.id = p.id WHERE c.movie.id =:movieId
+                    ORDER BY c.rankInMovie """;
 
             TypedQuery<FrontendCreditDto> query = em.createQuery(jpql, FrontendCreditDto.class);
             query.setParameter("movieId", movieId);
@@ -191,8 +208,9 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             // Exclude movies already rated by user. and ORDER BY and LIMIT
             jpql = """
                     SELECT m.id FROM Movie m WHERE m.id IN :movieIds AND m.id NOT IN
-                    (SELECT a.movie.id FROM AccountMovieRating a WHERE a.account.id=:accountId)
-                    ORDER BY m.voteAverage DESC NULLS LAST LIMIT :limit""";
+                            (SELECT a.movie.id FROM AccountMovieRating a WHERE a.account.id =:accountId)
+                    ORDER BY m.voteAverage DESC NULLS LAST LIMIT:
+                    limit """;
             query = em.createQuery(jpql, Integer.class);
             query.setParameter("movieIds", movieIds);
             query.setParameter("accountId", accountId);

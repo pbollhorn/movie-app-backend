@@ -46,6 +46,12 @@ public class MovieController {
         ctx.json(movies);
     }
 
+    public void getMoviesInCollection(Context ctx) {
+        int collectionId = Integer.parseInt(ctx.pathParam("id"));
+        List<FrontendMovieOverviewDto> movies = movieDao.getMoviesInCollection(collectionId);
+        ctx.json(movies);
+    }
+
     public void getAllMoviesWithRating(Context ctx) {
         int accountId = securityController.getAccountIdFromToken(ctx);
         List<FrontendMovieOverviewDto> movies = movieDao.getAllMoviesWithRating(accountId);
