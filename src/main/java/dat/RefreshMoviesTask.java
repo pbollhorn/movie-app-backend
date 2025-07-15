@@ -47,7 +47,11 @@ public class RefreshMoviesTask implements Runnable {
             System.out.println("Got and persisted genre: " + genre);
         }
 
-        Set<Integer> movieIds = TmdbService.getMovieIds(DELAY_MILLISECONDS);
+        // Get all current movieIds in database
+        Set<Integer> movieIds = movieDao.getAllMovieIds();
+
+        // Add new movies from TMDB
+        movieIds.addAll(TmdbService.discoverMovieIds(DELAY_MILLISECONDS));
 
         for (int movieId : movieIds) {
 

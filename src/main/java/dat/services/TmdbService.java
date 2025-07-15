@@ -45,7 +45,7 @@ public class TmdbService {
 
     }
 
-    public static Set<Integer> getMovieIds(long delayMilliseconds) {
+    public static Set<Integer> discoverMovieIds(long delayMilliseconds) {
 
         LocalDate today = LocalDate.now();
 

@@ -1,6 +1,8 @@
 package dat.dao;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import dat.dto.*;
 import jakarta.persistence.EntityManager;
@@ -27,6 +29,19 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         }
         return instance;
     }
+
+    public Set<Integer> getAllMovieIds() {
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+            String jpql = "SELECT m.id FROM Movie m";
+            TypedQuery<Integer> query = em.createQuery(jpql, Integer.class);
+            return new HashSet<Integer>(query.getResultList());
+
+        }
+
+    }
+
 
     public List<FrontendMovieOverviewDto> searchMoviesOpen(String text, int limit) {
 
