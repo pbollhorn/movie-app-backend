@@ -20,7 +20,7 @@ import dat.entities.Person;
 import dat.services.TmdbService;
 
 
-public class RefreshMoviesTask implements Runnable {
+public class UpdateMoviesTask implements Runnable {
 
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("update");
     private static final GenreDao genreDao = GenreDao.getInstance(emf);
