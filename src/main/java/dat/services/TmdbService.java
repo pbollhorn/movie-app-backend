@@ -73,7 +73,6 @@ public class TmdbService {
                             "&primary_release_year=" + year +
                             "&page=" + page;
                     json = getDataFromTmdb(url);
-                    System.out.println(json);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }

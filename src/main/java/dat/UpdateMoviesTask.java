@@ -18,6 +18,8 @@ import dat.entities.Genre;
 import dat.entities.Movie;
 import dat.entities.Person;
 import dat.services.TmdbService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class UpdateMoviesTask implements Runnable {
@@ -32,10 +34,13 @@ public class UpdateMoviesTask implements Runnable {
     private static final int MAX_REQUESTS_PER_SECOND = 40;
     private static final long DELAY_MILLISECONDS = 1000 / MAX_REQUESTS_PER_SECOND;
 
+    private static final Logger logger = LoggerFactory.getLogger(UpdateMoviesTask.class);
 
     @Override
     public void run() {
-        System.out.println("Running the refresh movies task at: " + java.time.LocalDateTime.now());
+
+
+        logger.info("Started UpdateMoviesTask");
 
         long startTime = System.currentTimeMillis();
 
@@ -44,7 +49,6 @@ public class UpdateMoviesTask implements Runnable {
         for (GenreDto g : TmdbService.getGenres()) {
             Genre genre = genreDao.create(new Genre(g.id(), g.name()));
             genreMap.put(g.id(), genre);
-            System.out.println("Got and persisted genre: " + genre);
         }
 
         // Get all current movieIds in database
@@ -77,11 +81,9 @@ public class UpdateMoviesTask implements Runnable {
             }
 
             movie = movieDao.update(movie);
-
-            System.out.println("Got and persisted movie: " + movie);
         }
 
-        System.out.println("Milliseconds it took: " + (System.currentTimeMillis() - startTime));
+        logger.info("Finished UpdateMoviesTask, Milliseconds it took: " + (System.currentTimeMillis() - startTime));
 
     }
 
