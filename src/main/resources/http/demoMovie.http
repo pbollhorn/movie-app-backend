@@ -48,5 +48,9 @@ DELETE {{url}}/movies/1078249
 Authorization: Bearer {{token}}
 
 ###
+GET {{url}}/movies/person/525
+
+
+###
 POST {{url}}/movies/refresh
 Authorization: Bearer {{token}}

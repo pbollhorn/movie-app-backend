@@ -45,7 +45,6 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
     }
 
-
     public List<FrontendMovieOverviewDto> searchMovies(String text, int accountId, int limit) {
 
         try (EntityManager em = emf.createEntityManager()) {
@@ -60,6 +59,22 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             query.setParameter("title", "%" + text.toLowerCase() + "%");
             query.setParameter("accountId", accountId);
             query.setParameter("limit", limit);
+            return query.getResultList();
+
+        }
+
+    }
+
+    // TODO: Need to figure out a way for this to work both with and without ratings
+    public List<FrontendMovieOverviewDto> getMoviesWithPerson(int personId) {
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+            String jpql = """
+                    SELECT DISTINCT NEW dat.dto.FrontendMovieOverviewDto(m) FROM Movie m JOIN Credit c ON m.id=c.movie.id
+                    WHERE c.person.id=:personId ORDER BY m.releaseDate""";
+            TypedQuery<FrontendMovieOverviewDto> query = em.createQuery(jpql, FrontendMovieOverviewDto.class);
+            query.setParameter("personId", personId);
             return query.getResultList();
 
         }
