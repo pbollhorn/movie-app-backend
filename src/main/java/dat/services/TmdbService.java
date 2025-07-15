@@ -1,5 +1,9 @@
 package dat.services;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.*;
 import java.time.LocalDate;
 
@@ -11,12 +15,15 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import dat.dto.TmdbMovieDto;
 import dat.dto.GenreDto;
-import dat.utils.TmdbApiReader;
+import dat.exceptions.ApiException;
+import dat.utils.PropertyReader;
 
 public class TmdbService {
 
     private static final int YEAR_OF_FIRST_MOVIE = 1874;
     private static final int MINIMUM_VOTE_COUNT = 1000;
+    private static final String TmdbApiReadAccessToken = PropertyReader.getPropertyValue("TMDB_API_READ_ACCESS_TOKEN");
+    private static final HttpClient httpClient = HttpClient.newHttpClient();
     private static final ObjectMapper objectMapper = configureObjectMapper();
 
     private static ObjectMapper configureObjectMapper() {
@@ -30,7 +37,7 @@ public class TmdbService {
     public static Set<GenreDto> getGenres() {
 
         String url = "https://api.themoviedb.org/3/genre/movie/list";
-        String json = new TmdbApiReader().getDataFromTmdb(url);
+        String json = getDataFromTmdb(url);
 
         GenresResponseDto response;
 
@@ -59,13 +66,13 @@ public class TmdbService {
 
                 String json = null;
                 try {
-                    String url = "https://api.themoviedb.org/3/discover/movie?&sort_by=primary_release_date.asc"+
+                    String url = "https://api.themoviedb.org/3/discover/movie?&sort_by=primary_release_date.asc" +
                             "&include_adult=false&include_video=false" +
                             "&vote_count.gte=" + MINIMUM_VOTE_COUNT +
                             "&primary_release_date.lte=" + today +
                             "&primary_release_year=" + year +
                             "&page=" + page;
-                    json = new TmdbApiReader().getDataFromTmdb(url);
+                    json = getDataFromTmdb(url);
                     System.out.println(json);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
@@ -106,7 +113,7 @@ public class TmdbService {
         String json = null;
         try {
             String url = "https://api.themoviedb.org/3/movie/" + movieId + "?append_to_response=credits";
-            json = new TmdbApiReader().getDataFromTmdb(url);
+            json = getDataFromTmdb(url);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -124,9 +131,29 @@ public class TmdbService {
 
     }
 
+    private static String getDataFromTmdb(String url) {
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .GET()
+                    .uri(new URI(url))
+                    .header("Authorization", "Bearer " + TmdbApiReadAccessToken)
+                    .header("Accept", "application/json")
+                    .build();
+
+            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                return response.body();
+            } else {
+                throw new ApiException(response.statusCode(), "GET request failed. Status code: " + response.statusCode());
+                //System.out.println("GET request failed. Status code: " + response.statusCode());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching data from API", e);
+        }
+    }
 
     private record GenresResponseDto(Set<GenreDto> genres) {
     }
-
 
 }
