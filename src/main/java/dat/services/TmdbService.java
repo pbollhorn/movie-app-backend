@@ -64,18 +64,13 @@ public class TmdbService {
 
                 long startTime = System.currentTimeMillis();
 
-                String json = null;
-                try {
-                    String url = "https://api.themoviedb.org/3/discover/movie?&sort_by=primary_release_date.asc" +
-                            "&include_adult=false&include_video=false" +
-                            "&vote_count.gte=" + MINIMUM_VOTE_COUNT +
-                            "&primary_release_date.lte=" + today +
-                            "&primary_release_year=" + year +
-                            "&page=" + page;
-                    json = getDataFromTmdb(url);
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                String url = "https://api.themoviedb.org/3/discover/movie?&sort_by=primary_release_date.asc" +
+                        "&include_adult=false&include_video=false" +
+                        "&vote_count.gte=" + MINIMUM_VOTE_COUNT +
+                        "&primary_release_date.lte=" + today +
+                        "&primary_release_year=" + year +
+                        "&page=" + page;
+                String json = getDataFromTmdb(url);
 
 
                 try {
@@ -109,13 +104,8 @@ public class TmdbService {
 
     public static TmdbMovieDto getMovieDetails(int movieId) {
 
-        String json = null;
-        try {
-            String url = "https://api.themoviedb.org/3/movie/" + movieId + "?append_to_response=credits";
-            json = getDataFromTmdb(url);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        String url = "https://api.themoviedb.org/3/movie/" + movieId + "?append_to_response=credits";
+        String json = getDataFromTmdb(url);
 
         TmdbMovieDto movieDto;
 
@@ -145,7 +135,6 @@ public class TmdbService {
                 return response.body();
             } else {
                 throw new ApiException(response.statusCode(), "GET request failed. Status code: " + response.statusCode());
-                //System.out.println("GET request failed. Status code: " + response.statusCode());
             }
         } catch (Exception e) {
             throw new RuntimeException("Error fetching data from API", e);
