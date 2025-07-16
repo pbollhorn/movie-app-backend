@@ -15,7 +15,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
-import dat.dto.TmdbGenreDto;
 import dat.dto.TmdbMovieDto;
 import dat.exceptions.ApiException;
 import dat.utils.PropertyReader;
@@ -23,7 +22,7 @@ import dat.utils.PropertyReader;
 public class TmdbService {
 
     private static final int YEAR_OF_FIRST_MOVIE = 1874;
-    private static final int MINIMUM_VOTE_COUNT = 1000;
+    private static final int MINIMUM_VOTE_COUNT = 10000;
 
     // TMDB says that approx. 50 requests per second are allowed: https://developer.themoviedb.org/docs/rate-limiting
     // To be on the safe side, this code limits to 40 requests per second
@@ -40,25 +39,6 @@ public class TmdbService {
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.registerModule(new JavaTimeModule());
         return objectMapper;
-    }
-
-
-    public static Set<TmdbGenreDto> getGenres() {
-
-        String url = "https://api.themoviedb.org/3/genre/movie/list";
-        String json = getDataFromTmdb(url);
-
-        GenresResponseDto response;
-
-        try {
-            response = objectMapper.readValue(json, GenresResponseDto.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return response.genres;
-
     }
 
     public static Set<Integer> discoverMovieIds() {
@@ -148,9 +128,6 @@ public class TmdbService {
         } catch (URISyntaxException | InterruptedException | IOException e) {
             throw new ApiException(0, "Encountered problem with the request to TMDB", e);
         }
-    }
-
-    private record GenresResponseDto(Set<TmdbGenreDto> genres) {
     }
 
 }

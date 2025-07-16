@@ -54,5 +54,5 @@ GET {{url}}/movies/person/525
 GET {{url}}/movies/collection/10
 
 ###
-POST {{url}}/movies/refresh
+POST {{url}}/movies/update
 Authorization: Bearer {{token}}

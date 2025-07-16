@@ -1,12 +1,10 @@
 package dat;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import dat.dto.TmdbGenreDto;
 import jakarta.persistence.EntityManagerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import dat.config.HibernateConfig;
 import dat.dao.GenreDao;
@@ -14,13 +12,12 @@ import dat.dao.MovieDao;
 import dat.dao.PersonDao;
 import dat.dto.TmdbCreditDto;
 import dat.dto.TmdbMovieDto;
+import dat.dto.TmdbGenreDto;
 import dat.entities.Genre;
 import dat.entities.Movie;
 import dat.entities.Person;
 import dat.exceptions.ApiException;
 import dat.services.TmdbService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 
 public class MovieUpdateTask implements Runnable {
@@ -39,13 +36,6 @@ public class MovieUpdateTask implements Runnable {
         long startTime = System.currentTimeMillis();
 
         try {
-
-//            // Get all genres from TMDB and persist them in database
-//            Map<Integer, Genre> genreMap = new HashMap<>();
-//            for (TmdbGenreDto g : TmdbService.getGenres()) {
-//                Genre genre = genreDao.create(new Genre(g.id(), g.name()));
-//                genreMap.put(g.id(), genre);
-//            }
 
             // Get all movieIds currently in database
             Set<Integer> movieIds = movieDao.getAllMovieIds();
@@ -66,10 +56,6 @@ public class MovieUpdateTask implements Runnable {
                     Genre genre = genreDao.update(new Genre(g));
                     movie.addGenre(genre, rankInMovie);
                 }
-
-
-//                List<Genre> genresForThisMovie = movieDto.genres().stream().map(g -> genreMap.get(g.id())).toList();
-
 
                 rankInMovie = 0;
                 for (TmdbCreditDto c : movieDto.credits().cast()) {
