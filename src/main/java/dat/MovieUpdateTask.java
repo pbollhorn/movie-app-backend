@@ -30,11 +30,6 @@ public class MovieUpdateTask implements Runnable {
     private static final MovieDao movieDao = MovieDao.getInstance(emf);
     private static final PersonDao personDao = PersonDao.getInstance(emf);
 
-    // TMDB says that approx. 50 requests per second are allowed: https://developer.themoviedb.org/docs/rate-limiting
-    // To be on the safe side, this program limits to 40 requests per second
-    private static final int MAX_REQUESTS_PER_SECOND = 40;
-    private static final long DELAY_MILLISECONDS = 1000 / MAX_REQUESTS_PER_SECOND;
-
     private static final Logger logger = LoggerFactory.getLogger(MovieUpdateTask.class);
 
     @Override
@@ -56,7 +51,7 @@ public class MovieUpdateTask implements Runnable {
             Set<Integer> movieIds = movieDao.getAllMovieIds();
 
             // Add new movies from TMDB
-            movieIds.addAll(TmdbService.discoverMovieIds(DELAY_MILLISECONDS));
+            movieIds.addAll(TmdbService.discoverMovieIds());
 
             for (int movieId : movieIds) {
 

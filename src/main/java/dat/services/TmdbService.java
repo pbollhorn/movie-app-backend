@@ -24,6 +24,13 @@ public class TmdbService {
 
     private static final int YEAR_OF_FIRST_MOVIE = 1874;
     private static final int MINIMUM_VOTE_COUNT = 1000;
+
+    // TMDB says that approx. 50 requests per second are allowed: https://developer.themoviedb.org/docs/rate-limiting
+    // To be on the safe side, this code limits to 40 requests per second
+    // This rate-limiting also allows the backend to focus on serving request from frontend
+    private static final int MAX_REQUESTS_PER_SECOND = 40;
+    private static final long DELAY_MILLISECONDS = 1000 / MAX_REQUESTS_PER_SECOND;
+
     private static final String TmdbApiReadAccessToken = PropertyReader.getPropertyValue("TMDB_API_READ_ACCESS_TOKEN");
     private static final HttpClient httpClient = HttpClient.newHttpClient();
     private static final ObjectMapper objectMapper = configureObjectMapper();
@@ -54,7 +61,7 @@ public class TmdbService {
 
     }
 
-    public static Set<Integer> discoverMovieIds(long delayMilliseconds) {
+    public static Set<Integer> discoverMovieIds() {
 
         LocalDate today = LocalDate.now();
 
@@ -63,8 +70,6 @@ public class TmdbService {
         for (int year = YEAR_OF_FIRST_MOVIE; year <= today.getYear(); year++) {
 
             for (int page = 1; ; page++) {
-
-                long startTime = System.currentTimeMillis();
 
                 String url = "https://api.themoviedb.org/3/discover/movie?&sort_by=primary_release_date.asc" +
                         "&include_adult=false&include_video=false" +
@@ -78,14 +83,6 @@ public class TmdbService {
                 try {
                     JsonNode results = objectMapper.readTree(json).path("results");
                     results.forEach(node -> movieIds.add(node.path("id").asInt()));
-
-                    long timeSpent = System.currentTimeMillis() - startTime;
-                    long timeToSleep = Math.max(delayMilliseconds - timeSpent, 0);
-                    try {
-                        Thread.sleep(timeToSleep);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
 
                     if (results.size() < 20) {
                         break;
@@ -123,6 +120,9 @@ public class TmdbService {
     }
 
     private static String getDataFromTmdb(String url) {
+
+        long startTime = System.currentTimeMillis();
+
         try {
             HttpRequest request = HttpRequest.newBuilder()
                     .GET()
@@ -132,6 +132,13 @@ public class TmdbService {
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+            long timeSpent = System.currentTimeMillis() - startTime;
+            long timeToSleep = Math.max(DELAY_MILLISECONDS - timeSpent, 0);
+            try {
+                Thread.sleep(timeToSleep);
+            } catch (InterruptedException e) {
+            }
 
             if (response.statusCode() == 200) {
                 return response.body();
