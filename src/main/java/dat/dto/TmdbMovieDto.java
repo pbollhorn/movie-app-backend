@@ -23,7 +23,7 @@ public record TmdbMovieDto(Integer id,
                            String backdropPath,
                            @JsonProperty("poster_path")
                            String posterPath,
-                           List<GenreDto> genres,
+                           List<TmdbGenreDto> genres,
                            String overview,
                            TmdbCreditsLists credits,
                            Integer runtime,

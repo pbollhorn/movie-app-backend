@@ -8,7 +8,7 @@
 //import static org.junit.jupiter.api.Assertions.assertEquals;
 //
 //import dat.dto.CreditDto;
-//import dat.dto.GenreDto;
+//import dat.dto.TmdbGenreDto;
 //import dat.dto.TmdbMovieDto;
 //import dat.enums.Gender;
 //
@@ -20,9 +20,9 @@
 //    @Test
 //    void getGenres() {
 //
-//        Set<GenreDto> genreDtos = TmdbService.getGenres();
+//        Set<TmdbGenreDto> genreDtos = TmdbService.getGenres();
 //
-//        GenreDto genreDto = genreDtos.stream()
+//        TmdbGenreDto genreDto = genreDtos.stream()
 //                .filter(g -> g.id() == 99)
 //                .findFirst()
 //                .orElse(null);

@@ -15,8 +15,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import dat.dto.TmdbGenreDto;
 import dat.dto.TmdbMovieDto;
-import dat.dto.GenreDto;
 import dat.exceptions.ApiException;
 import dat.utils.PropertyReader;
 
@@ -27,7 +27,7 @@ public class TmdbService {
 
     // TMDB says that approx. 50 requests per second are allowed: https://developer.themoviedb.org/docs/rate-limiting
     // To be on the safe side, this code limits to 40 requests per second
-    // This rate-limiting also allows the backend to focus on serving request from frontend
+    // This rate-limiting also allows the backend to focus on serving requests from frontend
     private static final int MAX_REQUESTS_PER_SECOND = 40;
     private static final long DELAY_MILLISECONDS = 1000 / MAX_REQUESTS_PER_SECOND;
 
@@ -43,7 +43,7 @@ public class TmdbService {
     }
 
 
-    public static Set<GenreDto> getGenres() {
+    public static Set<TmdbGenreDto> getGenres() {
 
         String url = "https://api.themoviedb.org/3/genre/movie/list";
         String json = getDataFromTmdb(url);
@@ -150,7 +150,7 @@ public class TmdbService {
         }
     }
 
-    private record GenresResponseDto(Set<GenreDto> genres) {
+    private record GenresResponseDto(Set<TmdbGenreDto> genres) {
     }
 
 }

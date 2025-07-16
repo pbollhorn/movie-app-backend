@@ -52,7 +52,7 @@ public class Movie {
     private Collection collection;
 
 
-    public Movie(TmdbMovieDto m, List<Genre> genresForThisMovie) {
+    public Movie(TmdbMovieDto m) {
         this.id = m.id();
         this.title = m.title();
         this.originalTitle = m.originalTitle();
@@ -70,17 +70,15 @@ public class Movie {
         this.tagline = m.tagline();
         this.status = m.status();
 
-        int rankInMovie = 0;
-        for (Genre g : genresForThisMovie) {
-            movieGenres.add(new MovieGenre(null, this, g, rankInMovie));
-            rankInMovie++;
-        }
-
         if (m.collection() != null) {
             this.collection = new Collection(m.collection().id(), m.collection().name());
 
         }
 
+    }
+
+    public void addGenre(Genre genre, Integer rankInMovie) {
+        movieGenres.add(new MovieGenre(null, this, genre, rankInMovie));
     }
 
 
