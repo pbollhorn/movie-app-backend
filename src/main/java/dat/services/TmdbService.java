@@ -1,6 +1,8 @@
 package dat.services;
 
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -134,10 +136,10 @@ public class TmdbService {
             if (response.statusCode() == 200) {
                 return response.body();
             } else {
-                throw new ApiException(response.statusCode(), "GET request failed. Status code: " + response.statusCode());
+                throw new ApiException(response.statusCode(), "GET request did not return 200. Status code: " + response.statusCode());
             }
-        } catch (Exception e) {
-            throw new RuntimeException("Error fetching data from API", e);
+        } catch (URISyntaxException | InterruptedException | IOException e) {
+            throw new ApiException(0, "Encountered problem with the request to TMDB", e);
         }
     }
 
