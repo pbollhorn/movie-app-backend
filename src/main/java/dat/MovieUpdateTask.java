@@ -35,49 +35,55 @@ public class MovieUpdateTask implements Runnable {
         logger.info("Started MovieUpdateTask");
         long startTime = System.currentTimeMillis();
 
-        try {
+        // Get all movieIds currently in database
+        Set<Integer> movieIds = movieDao.getAllMovieIds();
 
-            // Get all movieIds currently in database
-            Set<Integer> movieIds = movieDao.getAllMovieIds();
+        // Add new movies from TMDB
+        movieIds.addAll(TmdbService.discoverMovieIds());
 
-            // Add new movies from TMDB
-            movieIds.addAll(TmdbService.discoverMovieIds());
+        for (int movieId : movieIds) {
 
-            for (int movieId : movieIds) {
-
-                TmdbMovieDto movieDto = TmdbService.getMovieDetails(movieId);
-                Movie movie = new Movie(movieDto);
-
-                // TODO: It may seem wasteful to overwrite genres for each movie, but this
-                // allows for TMDB genres to change in the middle of an update without affecting this code
-                // e.g. if TMDB ads a new genre in the middle of one of my updates
-                int rankInMovie = 0;
-                for (TmdbGenreDto g : movieDto.genres()) {
-                    Genre genre = genreDao.update(new Genre(g));
-                    movie.addGenre(genre, rankInMovie);
+            TmdbMovieDto movieDto;
+            try {
+                movieDto = TmdbService.getMovieDetails(movieId);
+            } catch (ApiException e) {
+                logger.error("Caught ApiException: " + e.getCode() + " " + e.getMessage());
+                if (e.getCode() == 429) {
+                    logger.error("Stopping MovieUpdateTask immediately due to code 429");
+                    return;
                 }
-
-                rankInMovie = 0;
-                for (TmdbCreditDto c : movieDto.credits().cast()) {
-                    // This creates the cast member as a person in the database
-                    // (or overwrites with same data if already in database)
-                    Person person = personDao.update(new Person(c));
-                    movie.addCredit(c.creditId(), person, "Actor", "Acting", c.character(), rankInMovie);
-                    rankInMovie++;
-                }
-                for (TmdbCreditDto c : movieDto.credits().crew()) {
-                    // This creates the crew member as a person in the database
-                    // (or overwrites with same data if already in database)
-                    Person person = personDao.update(new Person(c));
-                    movie.addCredit(c.creditId(), person, c.job(), c.department(), null, rankInMovie);
-                    rankInMovie++;
-                }
-
-                movieDao.update(movie);
+                continue;
             }
-        } catch (ApiException e) {
-            logger.error("Stopping MovieUpdateTask immediately due to ApiException: " + e.getCode() + " " + e.getMessage());
-            return;
+
+
+            Movie movie = new Movie(movieDto);
+
+            // TODO: It may seem wasteful to overwrite genres for each movie, but this
+            // allows for TMDB genres to change in the middle of an update without affecting this code
+            // e.g. if TMDB ads a new genre in the middle of one of my updates
+            int rankInMovie = 0;
+            for (TmdbGenreDto g : movieDto.genres()) {
+                Genre genre = genreDao.update(new Genre(g));
+                movie.addGenre(genre, rankInMovie);
+            }
+
+            rankInMovie = 0;
+            for (TmdbCreditDto c : movieDto.credits().cast()) {
+                // This creates the cast member as a person in the database
+                // (or overwrites with same data if already in database)
+                Person person = personDao.update(new Person(c));
+                movie.addCredit(c.creditId(), person, "Actor", "Acting", c.character(), rankInMovie);
+                rankInMovie++;
+            }
+            for (TmdbCreditDto c : movieDto.credits().crew()) {
+                // This creates the crew member as a person in the database
+                // (or overwrites with same data if already in database)
+                Person person = personDao.update(new Person(c));
+                movie.addCredit(c.creditId(), person, c.job(), c.department(), null, rankInMovie);
+                rankInMovie++;
+            }
+
+            movieDao.update(movie);
         }
 
         logger.info("Finished MovieUpdateTask, milliseconds it took: " + (System.currentTimeMillis() - startTime));

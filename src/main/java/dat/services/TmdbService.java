@@ -126,7 +126,7 @@ public class TmdbService {
                 throw new ApiException(response.statusCode(), "GET request did not return 200. Status code: " + response.statusCode());
             }
         } catch (URISyntaxException | InterruptedException | IOException e) {
-            throw new ApiException(0, "Encountered problem with the request to TMDB", e);
+            throw new ApiException(0, "Encountered problem with the GET request to TMDB: " + url, e);
         }
     }
 
