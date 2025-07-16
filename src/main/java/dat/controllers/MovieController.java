@@ -86,7 +86,7 @@ public class MovieController {
     public void updateMovies(Context ctx) {
         Thread thread = new Thread(new MovieUpdateTask());
         thread.start();
-        ctx.json("Started update movie task");
+        ctx.json("Started MovieUpdateTask");
     }
 
 }
