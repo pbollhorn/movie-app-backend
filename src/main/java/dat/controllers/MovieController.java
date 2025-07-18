@@ -3,14 +3,14 @@ package dat.controllers;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import dat.dto.MovieOverviewDto;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dat.dao.MovieDao;
-import dat.dto.FrontendMovieDetailsDto;
-import dat.dto.FrontendMovieOverviewDto;
+import dat.dto.MovieDetailsDto;
 import dat.MovieUpdateTask;
 
 public class MovieController {
@@ -29,38 +29,38 @@ public class MovieController {
 
     public void searchMoviesOpen(Context ctx) {
         String text = ctx.queryParam("text");
-        List<FrontendMovieOverviewDto> movies = movieDao.searchMoviesOpen(text, MOVIE_LIMIT);
+        List<MovieOverviewDto> movies = movieDao.searchMoviesOpen(text, MOVIE_LIMIT);
         ctx.json(movies);
     }
 
     public void searchMovies(Context ctx) {
         int accountId = securityController.getAccountIdFromToken(ctx);
         String text = ctx.queryParam("text");
-        List<FrontendMovieOverviewDto> movies = movieDao.searchMovies(text, accountId, MOVIE_LIMIT);
+        List<MovieOverviewDto> movies = movieDao.searchMovies(text, accountId, MOVIE_LIMIT);
         ctx.json(movies);
     }
 
     public void getMoviesWithPerson(Context ctx) {
         int personId = Integer.parseInt(ctx.pathParam("id"));
-        List<FrontendMovieOverviewDto> movies = movieDao.getMoviesWithPerson(personId);
+        List<MovieOverviewDto> movies = movieDao.getMoviesWithPerson(personId);
         ctx.json(movies);
     }
 
     public void getMoviesInCollection(Context ctx) {
         int collectionId = Integer.parseInt(ctx.pathParam("id"));
-        List<FrontendMovieOverviewDto> movies = movieDao.getMoviesInCollection(collectionId);
+        List<MovieOverviewDto> movies = movieDao.getMoviesInCollection(collectionId);
         ctx.json(movies);
     }
 
     public void getAllMoviesWithRating(Context ctx) {
         int accountId = securityController.getAccountIdFromToken(ctx);
-        List<FrontendMovieOverviewDto> movies = movieDao.getAllMoviesWithRating(accountId);
+        List<MovieOverviewDto> movies = movieDao.getAllMoviesWithRating(accountId);
         ctx.json(movies);
     }
 
     public void getMovieDetails(Context ctx) {
         int movieId = Integer.parseInt(ctx.pathParam("id"));
-        FrontendMovieDetailsDto movieDetails = movieDao.getMovieDetails(movieId);
+        MovieDetailsDto movieDetails = movieDao.getMovieDetails(movieId);
         ctx.json(movieDetails);
     }
 
@@ -79,7 +79,7 @@ public class MovieController {
 
     public void getMovieRecommendations(Context ctx) {
         int accountId = securityController.getAccountIdFromToken(ctx);
-        List<FrontendMovieOverviewDto> movies = movieDao.getMovieRecommendations(accountId, MOVIE_LIMIT);
+        List<MovieOverviewDto> movies = movieDao.getMovieRecommendations(accountId, MOVIE_LIMIT);
         ctx.json(movies);
     }
 

@@ -11,7 +11,7 @@
 //import static org.junit.jupiter.api.Assertions.assertEquals;
 //
 //import dat.config.HibernateConfig;
-//import dat.dto.FrontendMovieOverviewDto;
+//import dat.dto.MovieOverviewDto;
 //
 //public class MovieDaoTest {
 //
@@ -32,7 +32,7 @@
 //    @Test
 //    void searchMoviesOpen() {
 //
-//        List<FrontendMovieOverviewDto> movies = movieDao.searchMoviesOpen("nat", MOVIE_LIMIT);
+//        List<MovieOverviewDto> movies = movieDao.searchMoviesOpen("nat", MOVIE_LIMIT);
 //        assertEquals(1, movies.size());
 //        assertEquals("Midt Om Natten", movies.get(0).title());
 //
