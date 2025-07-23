@@ -77,7 +77,7 @@ public class Movie {
     }
 
     public void addGenre(Genre genre, Integer rankInMovie) {
-        movieGenres.add(new MovieGenre(null, this, genre, rankInMovie));
+        movieGenres.add(new MovieGenre(this, genre, rankInMovie));
     }
 
 

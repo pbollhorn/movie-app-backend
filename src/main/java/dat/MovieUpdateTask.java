@@ -65,6 +65,7 @@ public class MovieUpdateTask implements Runnable {
             for (TmdbGenreDto g : movieDto.genres()) {
                 Genre genre = genreDao.update(new Genre(g));
                 movie.addGenre(genre, rankInMovie);
+                rankInMovie++;
             }
 
             rankInMovie = 0;

@@ -23,6 +23,9 @@ public class Credit {
 
     private String job;
     private String department;
+
+    @Column(length = 1000)
     private String character;
+
     private Integer rankInMovie;
 }

@@ -22,7 +22,7 @@ import dat.utils.PropertyReader;
 public class TmdbService {
 
     private static final int YEAR_OF_FIRST_MOVIE = 1874;
-    private static final int MINIMUM_VOTE_COUNT = 10;
+    private static final int MINIMUM_VOTE_COUNT = 30000; //10;
 
     // TMDB says that approx. 50 requests per second are allowed: https://developer.themoviedb.org/docs/rate-limiting
     // To be on the safe side, this code limits to 40 requests per second
