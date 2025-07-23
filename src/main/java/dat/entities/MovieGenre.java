@@ -27,14 +27,12 @@ public class MovieGenre {
     @Column(nullable = false)
     private Integer rankInMovie;
 
-    @Getter
-    @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @EqualsAndHashCode
     public static class MovieGenreId implements Serializable {
-        private Movie movie;
-        private Genre genre;
+        private Integer movie;
+        private Integer genre;
     }
 
 

@@ -61,6 +61,7 @@ public class MovieUpdateTask implements Runnable {
             // TODO: It may seem wasteful to overwrite genres for each movie, but this
             // allows for TMDB genres to change in the middle of an update without affecting this code
             // e.g. if TMDB ads a new genre in the middle of one of my updates
+            // TODO: Problem: if a movie changes genres, both the old and new will be saved
             int rankInMovie = 0;
             for (TmdbGenreDto g : movieDto.genres()) {
                 Genre genre = genreDao.update(new Genre(g));
