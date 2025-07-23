@@ -9,15 +9,14 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@IdClass(AccountMovieRating.AccountMovieId.class)
-@Table(name = "account_movie_rating")
-public class AccountMovieRating {
+@IdClass(Rating.RatingId.class)
+public class Rating {
 
     // This is the composite primary key
     @NoArgsConstructor
     @AllArgsConstructor
     @EqualsAndHashCode
-    public static class AccountMovieId implements Serializable {
+    public static class RatingId implements Serializable {
         private Integer account;
         private Integer movie;
     }
