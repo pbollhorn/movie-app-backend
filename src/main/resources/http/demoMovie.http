@@ -16,7 +16,7 @@ Authorization: Bearer {{token}}
 GET {{url}}/movies/27205
 
 ###
-PUT {{url}}/movies/18908
+PUT {{url}}/movies/155
 Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
@@ -44,7 +44,7 @@ Content-Type: "application/json"
 
 
 ###
-DELETE {{url}}/movies/1078249
+DELETE {{url}}/movies/155
 Authorization: Bearer {{token}}
 
 ###

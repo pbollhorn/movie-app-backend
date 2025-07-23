@@ -172,7 +172,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             if (rowsAffected == 0) {
                 Account account = em.find(Account.class, accountId);
                 Movie movie = em.find(Movie.class, movieId);
-                em.persist(new AccountMovieRating(null, account, movie, rating));
+                em.persist(new AccountMovieRating(account, movie, rating));
             }
 
             em.getTransaction().commit();
