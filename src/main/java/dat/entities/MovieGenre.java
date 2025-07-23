@@ -27,6 +27,7 @@ public class MovieGenre {
     @Column(nullable = false)
     private Integer rankInMovie;
 
+    // This is the composite primary key
     @NoArgsConstructor
     @AllArgsConstructor
     @EqualsAndHashCode
