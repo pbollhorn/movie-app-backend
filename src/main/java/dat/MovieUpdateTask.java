@@ -69,6 +69,7 @@ public class MovieUpdateTask implements Runnable {
                 rankInMovie++;
             }
 
+            // TODO: Problem if a person is no longer part of a movie, then they will still be there after the update
             rankInMovie = 0;
             for (TmdbCreditDto c : movieDto.credits().cast()) {
                 // This creates the cast member as a person in the database
@@ -85,6 +86,8 @@ public class MovieUpdateTask implements Runnable {
                 rankInMovie++;
             }
 
+            // TODO: Perhaps this update method, should be written as a custom method, that starts by claering
+            // MovieGenre and Credit connected to this Movie in a single transaction
             movieDao.update(movie);
         }
 
