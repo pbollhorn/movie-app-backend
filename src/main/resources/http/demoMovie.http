@@ -1,4 +1,4 @@
-GET {{url}}/movies/search-open?text=Inception
+GET {{url}}/movies/search-open?text=Avengers
 
 ###
 GET {{url}}/movies/search?text=eneste

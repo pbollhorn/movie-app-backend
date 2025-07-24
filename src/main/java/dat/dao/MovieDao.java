@@ -43,18 +43,41 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
+//    public List<MovieOverviewDto> searchMoviesOpen(String text, int limit) {
+//
+//        try (EntityManager em = emf.createEntityManager()) {
+//
+//            String jpql = """
+//                    SELECT NEW dat.dto.MovieOverviewDto(m) FROM Movie m
+//                    WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title
+//                    ORDER BY m.title LIMIT :limit""";
+//            TypedQuery<MovieOverviewDto> query = em.createQuery(jpql, MovieOverviewDto.class);
+//            query.setParameter("title", "%" + text.toLowerCase() + "%");
+//            query.setParameter("limit", limit);
+//            return query.getResultList();
+//
+//        }
+//
+//    }
+
     public List<MovieOverviewDto> searchMoviesOpen(String text, int limit) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            String jpql = """
-                    SELECT NEW dat.dto.MovieOverviewDto(m) FROM Movie m
-                    WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title
-                    ORDER BY m.title LIMIT :limit""";
-            TypedQuery<MovieOverviewDto> query = em.createQuery(jpql, MovieOverviewDto.class);
-            query.setParameter("title", "%" + text.toLowerCase() + "%");
+            String sql = """
+                    SELECT m.id FROM Movie m
+                    WHERE SIMILARITY(m.title, :text) > 0.2
+                    ORDER BY SIMILARITY(m.title, :text) DESC LIMIT :limit""";
+            Query query = em.createNativeQuery(sql, Integer.class);
+            query.setParameter("text", text);
             query.setParameter("limit", limit);
-            return query.getResultList();
+            List<Integer> movieIds = query.getResultList();
+
+            String jpql = """
+                    SELECT NEW dat.dto.MovieOverviewDto(m) FROM Movie m WHERE m.id IN :movieIds""";
+            TypedQuery<MovieOverviewDto> newQuery = em.createQuery(jpql, MovieOverviewDto.class);
+            newQuery.setParameter("movieIds", movieIds);
+            return newQuery.getResultList();
 
         }
 
