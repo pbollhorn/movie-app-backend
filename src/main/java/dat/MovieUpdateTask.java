@@ -61,7 +61,6 @@ public class MovieUpdateTask implements Runnable {
             // TODO: It may seem wasteful to overwrite genres for each movie, but this
             // allows for TMDB genres to change in the middle of an update without affecting this code
             // e.g. if TMDB ads a new genre in the middle of one of my updates
-            // TODO: Problem: if a movie changes genres, both the old and new will be saved
             int rankInMovie = 0;
             for (TmdbGenreDto g : movieDto.genres()) {
                 Genre genre = genreDao.update(new Genre(g));
@@ -69,7 +68,6 @@ public class MovieUpdateTask implements Runnable {
                 rankInMovie++;
             }
 
-            // TODO: Problem if a person is no longer part of a movie, then they will still be there after the update
             rankInMovie = 0;
             for (TmdbCreditDto c : movieDto.credits().cast()) {
                 // This creates the cast member as a person in the database
@@ -86,8 +84,6 @@ public class MovieUpdateTask implements Runnable {
                 rankInMovie++;
             }
 
-            // TODO: Perhaps this update method, should be written as a custom method, that starts by claering
-            // MovieGenre and Credit connected to this Movie in a single transaction
             movieDao.update(movie);
         }
 
