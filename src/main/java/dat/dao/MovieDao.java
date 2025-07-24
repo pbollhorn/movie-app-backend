@@ -60,6 +60,23 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
     }
 
+//    public List<MovieOverviewDto> searchMoviesOpen(String text, int limit) {
+//
+//        try (EntityManager em = emf.createEntityManager()) {
+//
+//            String sql= """
+//                    SELECT * FROM Movie
+//                    WHERE title % :title ORDER BY similarity(title, 'intersteller') DESC
+//                    ORDER BY m.title LIMIT :limit""";
+//            TypedQuery<MovieOverviewDto> query = em.createQuery(jpql, MovieOverviewDto.class);
+//            query.setParameter("title", "%" + text.toLowerCase() + "%");
+//            query.setParameter("limit", limit);
+//            return query.getResultList();
+//
+//        }
+//
+//    }
+
     public List<MovieOverviewDto> searchMovies(String text, int accountId, int limit) {
 
         try (EntityManager em = emf.createEntityManager()) {

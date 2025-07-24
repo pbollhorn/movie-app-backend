@@ -1,6 +1,10 @@
 package dat;
 
+import dat.dto.MovieOverviewDto;
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +41,15 @@ public class Main {
                 .setApiExceptionHandling()
                 .checkSecurityRoles()
                 .startServer(7070);
+
+        try (EntityManager em = emf.createEntityManager()) {
+            String sql = "CREATE EXTENSION IF NOT EXISTS pg_trgm";
+            em.getTransaction().begin();
+            Query query = em.createNativeQuery(sql);
+            query.executeUpdate();
+            em.getTransaction().commit();
+        }
+
     }
 
 }
