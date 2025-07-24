@@ -19,7 +19,6 @@ import dat.entities.Person;
 import dat.exceptions.ApiException;
 import dat.services.TmdbService;
 
-
 public class MovieUpdateTask implements Runnable {
 
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("update");
@@ -73,7 +72,7 @@ public class MovieUpdateTask implements Runnable {
                 // This creates the cast member as a person in the database
                 // (or overwrites with same data if already in database)
                 Person person = personDao.update(new Person(c));
-                movie.addCredit(c.id(), person, "Actor", "Acting", c.character(), rankInMovie);
+                movie.addCredit(c.id(), person, "Cast Member", "Cast", c.character(), rankInMovie);
                 rankInMovie++;
             }
             for (TmdbCreditDto c : movieDto.credits().crew()) {
@@ -85,6 +84,8 @@ public class MovieUpdateTask implements Runnable {
             }
 
             movieDao.update(movie);
+
+            // TODO: After update, unsued MovieGenres and Credits are removed, but there may be roque Genres and Persons
         }
 
         logger.info("Finished MovieUpdateTask, milliseconds it took: " + (System.currentTimeMillis() - startTime));
