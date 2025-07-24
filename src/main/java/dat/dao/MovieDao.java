@@ -3,6 +3,7 @@ package dat.dao;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -77,7 +78,12 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
                     SELECT NEW dat.dto.MovieOverviewDto(m) FROM Movie m WHERE m.id IN :movieIds""";
             TypedQuery<MovieOverviewDto> newQuery = em.createQuery(jpql, MovieOverviewDto.class);
             newQuery.setParameter("movieIds", movieIds);
-            return newQuery.getResultList();
+            List<MovieOverviewDto> movieDtos = newQuery.getResultList();
+
+            // Make sure the movieDtos are in order as movieIds
+            return movieIds.stream()
+                    .map(id -> movieDtos.stream().filter(m -> m.id() == id).toList().get(0))
+                    .toList();
 
         }
 
