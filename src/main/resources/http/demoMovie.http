@@ -13,7 +13,7 @@ GET {{url}}/movies
 Authorization: Bearer {{token}}
 
 ###
-GET {{url}}/movies/27205
+GET {{url}}/movies/155
 
 ###
 PUT {{url}}/movies/155

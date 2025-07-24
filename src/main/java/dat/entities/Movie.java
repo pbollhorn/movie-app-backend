@@ -40,11 +40,11 @@ public class Movie {
     private String overview;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<MovieGenre> movieGenres = new HashSet<>();
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "movie", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Credit> credits = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.MERGE)
