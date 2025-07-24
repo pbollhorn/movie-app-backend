@@ -1,8 +1,6 @@
 package dat.dao;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import jakarta.persistence.EntityManager;
@@ -80,10 +78,14 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             newQuery.setParameter("movieIds", movieIds);
             List<MovieOverviewDto> movieDtos = newQuery.getResultList();
 
-            // Make sure the movieDtos are in order as movieIds
+            // Map from ID to DTO for lookup
+            Map<Integer, MovieOverviewDto> dtoMap = movieDtos.stream()
+                    .collect(Collectors.toMap(dto -> dto.id(), dto -> dto));
+
+            // Rebuild list in correct order
             return movieIds.stream()
-                    .map(id -> movieDtos.stream().filter(m -> m.id() == id).toList().get(0))
-                    .toList();
+                    .map(dtoMap::get)
+                    .collect(Collectors.toList());
 
         }
 
