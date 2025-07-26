@@ -1,4 +1,4 @@
-GET {{url}}/movies/search-open?text=of mie and men
+GET {{url}}/movies/search-open?text=avatar
 
 ###
 GET {{url}}/movies/search?text=eneste
@@ -13,7 +13,7 @@ GET {{url}}/movies
 Authorization: Bearer {{token}}
 
 ###
-GET {{url}}/movies/155
+GET {{url}}/movies/19995
 
 ###
 PUT {{url}}/movies/155
@@ -48,7 +48,7 @@ DELETE {{url}}/movies/155
 Authorization: Bearer {{token}}
 
 ###
-GET {{url}}/movies/person/525
+GET {{url}}/movies/person/488
 
 ###
 GET {{url}}/movies/collection/10
