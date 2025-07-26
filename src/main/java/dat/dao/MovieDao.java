@@ -42,23 +42,6 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
-//    public List<MovieOverviewDto> searchMoviesOpen(String text, int limit) {
-//
-//        try (EntityManager em = emf.createEntityManager()) {
-//
-//            String jpql = """
-//                    SELECT NEW dat.dto.MovieOverviewDto(m) FROM Movie m
-//                    WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title
-//                    ORDER BY m.title LIMIT :limit""";
-//            TypedQuery<MovieOverviewDto> query = em.createQuery(jpql, MovieOverviewDto.class);
-//            query.setParameter("title", "%" + text.toLowerCase() + "%");
-//            query.setParameter("limit", limit);
-//            return query.getResultList();
-//
-//        }
-//
-//    }
-
     public List<MovieOverviewDto> searchMoviesOpen(String text, int limit) {
 
         try (EntityManager em = emf.createEntityManager()) {
@@ -91,22 +74,6 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
     }
 
-//    public List<MovieOverviewDto> searchMoviesOpen(String text, int limit) {
-//
-//        try (EntityManager em = emf.createEntityManager()) {
-//
-//            String sql= """
-//                    SELECT * FROM Movie
-//                    WHERE title % :title ORDER BY similarity(title, 'intersteller') DESC
-//                    ORDER BY m.title LIMIT :limit""";
-//            TypedQuery<MovieOverviewDto> query = em.createQuery(jpql, MovieOverviewDto.class);
-//            query.setParameter("title", "%" + text.toLowerCase() + "%");
-//            query.setParameter("limit", limit);
-//            return query.getResultList();
-//
-//        }
-//
-//    }
 
     public List<MovieOverviewDto> searchMovies(String text, int accountId, int limit) {
 
@@ -187,7 +154,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             // Find persons list
             String jpql = """
-                    SELECT NEW dat.dto.CreditDto(c.id, p.id, p.name, c.job, c.character)
+                    SELECT NEW dat.dto.CreditDto(c.id, p.id, p.name, c.job, c.department, c.character)
                     FROM Person p JOIN Credit c ON c.person.id = p.id WHERE c.movie.id =:movieId
                     ORDER BY c.rankInMovie """;
 
