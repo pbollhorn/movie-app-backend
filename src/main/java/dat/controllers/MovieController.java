@@ -37,8 +37,11 @@ public class MovieController {
     }
 
     public void getMoviesWithPerson(Context ctx) {
+
+        Integer accountId = securityController.getAccountIdFromToken(ctx);
         int personId = Integer.parseInt(ctx.pathParam("id"));
-        List<MovieOverviewDto> movies = movieDao.getMoviesWithPerson(personId);
+
+        List<MovieOverviewDto> movies = movieDao.getMoviesWithPerson(personId, accountId);
         ctx.json(movies);
     }
 

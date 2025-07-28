@@ -33,8 +33,8 @@ public class Routes {
             get("/recommendations", movieController::getMovieRecommendations, Roles.USER);
             get("/", movieController::getAllMoviesWithRating, Roles.USER);
             post("/update", movieController::updateMovies, Roles.USER);  // TODO: Turn into ADMIN endpoint
-            get("/person/{id}", movieController::getMoviesWithPerson, Roles.ANYONE); // TODO: Should also be able to supply ratings
-            get("/collection/{id}", movieController::getMoviesInCollection, Roles.ANYONE); // TODO: Should also be able to supply ratings'
+            get("/person/{id}", movieController::getMoviesWithPerson, Roles.ANYONE);
+            get("/collection/{id}", movieController::getMoviesInCollection, Roles.ANYONE);
             get("/{id}", movieController::getMovieDetails, Roles.ANYONE);
             put("/{id}", movieController::updateOrCreateMovieRating, Roles.USER);
             delete("/{id}", movieController::deleteMovieRating, Roles.USER);

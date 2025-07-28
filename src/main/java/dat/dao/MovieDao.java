@@ -79,15 +79,18 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
     // TODO: Need to figure out a way for this to work both with and without ratings
-    public List<MovieOverviewDto> getMoviesWithPerson(int personId) {
+    public List<MovieOverviewDto> getMoviesWithPerson(int personId, Integer accountId) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
-                    SELECT DISTINCT NEW dat.dto.MovieOverviewDto(m) FROM Movie m JOIN Credit c ON m.id=c.movie.id
+                    SELECT DISTINCT NEW dat.dto.MovieOverviewDto(m,
+                    (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
+                    FROM Movie m JOIN Credit c ON m.id=c.movie.id
                     WHERE c.person.id=:personId ORDER BY m.releaseDate""";
             TypedQuery<MovieOverviewDto> query = em.createQuery(jpql, MovieOverviewDto.class);
             query.setParameter("personId", personId);
+            query.setParameter("accountId", accountId);
             return query.getResultList();
 
         }
