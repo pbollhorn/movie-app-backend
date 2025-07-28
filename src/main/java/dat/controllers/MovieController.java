@@ -27,11 +27,11 @@ public class MovieController {
         this.securityController = securityController;
     }
 
-    public void searchMoviesOpen(Context ctx) {
-        String text = ctx.queryParam("text");
-        List<MovieOverviewDto> movies = movieDao.searchMoviesOpen(text, MOVIE_LIMIT);
-        ctx.json(movies);
-    }
+//    public void searchMoviesOpen(Context ctx) {
+//        String text = ctx.queryParam("text");
+//        List<MovieOverviewDto> movies = movieDao.searchMoviesOpen(text, MOVIE_LIMIT);
+//        ctx.json(movies);
+//    }
 
     public void searchMovies(Context ctx) {
 
