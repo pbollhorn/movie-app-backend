@@ -108,6 +108,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
                     ORDER BY m.releaseDate""";
             TypedQuery<MovieOverviewDto> query = em.createQuery(jpql, MovieOverviewDto.class);
             query.setParameter("collectionId", collectionId);
+            query.setParameter("accountId", accountId);
             return query.getResultList();
 
         }
