@@ -222,7 +222,12 @@ public class SecurityController implements ISecurityController {
 
 
     // TODO: Jeg PETER, har tilføjet denne metode
-    public int getAccountIdFromToken(Context ctx) {
+    public Integer getAccountIdFromToken(Context ctx) {
+        String header = ctx.header("Authorization");
+        if (header == null) {
+            return null;
+        }
+
         UserDTO userDTO = getUserFromToken(ctx);
         return Integer.parseInt(userDTO.getUsername());
     }

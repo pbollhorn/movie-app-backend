@@ -75,7 +75,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
-    public List<MovieOverviewDto> searchMovies(String text, int accountId, int limit) {
+    public List<MovieOverviewDto> searchMovies(String text, Integer accountId, int limit) {
 
         try (EntityManager em = emf.createEntityManager()) {
 

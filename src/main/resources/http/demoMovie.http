@@ -1,7 +1,7 @@
 GET {{url}}/movies/search-open?text=avatar
 
 ###
-GET {{url}}/movies/search?text=eneste
+GET {{url}}/movies/search?text=in
 Authorization: Bearer {{token}}
 
 ###
@@ -16,12 +16,12 @@ Authorization: Bearer {{token}}
 GET {{url}}/movies/19995
 
 ###
-PUT {{url}}/movies/155
+PUT {{url}}/movies/299536
 Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
 {
-    "rating": true
+    "rating": false
 }
 
 ###
