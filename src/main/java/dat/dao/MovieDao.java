@@ -78,27 +78,6 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
     }
 
-
-//    public List<MovieOverviewDto> searchMovies(String text, Integer accountId, int limit) {
-//
-//        try (EntityManager em = emf.createEntityManager()) {
-//
-//            String jpql = """
-//                    SELECT NEW dat.dto.MovieOverviewDto(m,
-//                    (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
-//                    FROM Movie m WHERE LOWER(m.title) LIKE :title OR LOWER(m.originalTitle) LIKE :title
-//                    ORDER BY m.title LIMIT :limit""";
-//
-//            TypedQuery<MovieOverviewDto> query = em.createQuery(jpql, MovieOverviewDto.class);
-//            query.setParameter("title", "%" + text.toLowerCase() + "%");
-//            query.setParameter("accountId", accountId);
-//            query.setParameter("limit", limit);
-//            return query.getResultList();
-//
-//        }
-//
-//    }
-
     // TODO: Need to figure out a way for this to work both with and without ratings
     public List<MovieOverviewDto> getMoviesWithPerson(int personId) {
 

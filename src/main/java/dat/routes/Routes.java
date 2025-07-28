@@ -29,7 +29,6 @@ public class Routes {
 
     private EndpointGroup movieRoutes() {
         return () -> {
-//            get("/search-open", movieController::searchMoviesOpen, Roles.ANYONE);
             get("/search", movieController::searchMovies, Roles.ANYONE);
             get("/recommendations", movieController::getMovieRecommendations, Roles.USER);
             get("/", movieController::getAllMoviesWithRating, Roles.USER);
