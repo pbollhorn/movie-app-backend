@@ -48,7 +48,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             String sql = """
                     SELECT m.id FROM Movie m
-                    WHERE SIMILARITY(m.title, :text) > 0.2
+                    WHERE m.title % :text
                     ORDER BY SIMILARITY(m.title, :text) DESC LIMIT :limit""";
             Query query = em.createNativeQuery(sql, Integer.class);
             query.setParameter("text", text);
