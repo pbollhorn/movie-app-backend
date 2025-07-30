@@ -1,5 +1,6 @@
 package dat;
 
+import dat.utils.PropertyReader;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
@@ -39,10 +40,13 @@ public class Main {
                 .checkSecurityRoles()
                 .startServer(7070);
 
+        String DB_NAME = PropertyReader.getPropertyValue("DB_NAME");
+
         // Create pg_trgm extension and indexes in database, if they do not already exist
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createNativeQuery("CREATE EXTENSION IF NOT EXISTS pg_trgm").executeUpdate();
+            em.createNativeQuery("ALTER DATABASE " + DB_NAME + " SET pg_trgm.similarity_threshold=0.15").executeUpdate();
             em.createNativeQuery("CREATE INDEX IF NOT EXISTS idx_movie_title_trgm ON movie USING gin (title gin_trgm_ops)").executeUpdate();
             em.getTransaction().commit();
         }
