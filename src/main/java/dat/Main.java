@@ -40,13 +40,14 @@ public class Main {
                 .checkSecurityRoles()
                 .startServer(7070);
 
+        // Create pg_trgm extension and indexes in database, if they do not already exist
         try (EntityManager em = emf.createEntityManager()) {
-            String sql = "CREATE EXTENSION IF NOT EXISTS pg_trgm";
             em.getTransaction().begin();
-            Query query = em.createNativeQuery(sql);
-            query.executeUpdate();
+            em.createNativeQuery("CREATE EXTENSION IF NOT EXISTS pg_trgm").executeUpdate();
+            em.createNativeQuery("CREATE INDEX IF NOT EXISTS idx_movie_title_trgm ON movie USING gin (title gin_trgm_ops)").executeUpdate();
             em.getTransaction().commit();
         }
+
 
     }
 

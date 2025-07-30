@@ -1,5 +1,3 @@
-GET {{url}}/movies/search-open?text=avatar
-
 ###
 GET {{url}}/movies/search?text=inception
 Authorization: Bearer {{token}}
