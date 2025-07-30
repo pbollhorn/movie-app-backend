@@ -21,7 +21,7 @@ import dat.services.TmdbService;
 
 public class MovieUpdateTask implements Runnable {
 
-    private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory("update");
+    private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
     private static final GenreDao genreDao = GenreDao.getInstance(emf);
     private static final MovieDao movieDao = MovieDao.getInstance(emf);
     private static final PersonDao personDao = PersonDao.getInstance(emf);

@@ -25,16 +25,16 @@ public class HibernateConfig {
         return isTest;
     }
 
-    public static EntityManagerFactory getEntityManagerFactory(String hbm2ddlAutoProperty) {
+    public static EntityManagerFactory getEntityManagerFactory() {
         if (emf == null)
-            emf = createEMF(getTest(), hbm2ddlAutoProperty);
+            emf = createEMF(getTest());
         return emf;
     }
 
     public static EntityManagerFactory getEntityManagerFactoryForTest() {
         if (emfTest == null) {
             setTest(true);
-            emfTest = createEMF(getTest(), "create-drop");  // No DB needed for test
+            emfTest = createEMF(getTest());  // No DB needed for test
         }
         return emfTest;
     }
@@ -52,12 +52,12 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Roles.class); // TODO: Why is this here?
     }
 
-    private static EntityManagerFactory createEMF(boolean forTest, String hbm2ddlAutoProperty) {
+    private static EntityManagerFactory createEMF(boolean forTest) {
         try {
             Configuration configuration = new Configuration();
             Properties props = new Properties();
             // Set the properties
-            setBaseProperties(props, hbm2ddlAutoProperty);
+            setBaseProperties(props);
             if (forTest) {
                 props = setTestProperties(props);
             } else if (System.getenv("DEPLOYED") != null) {
@@ -79,9 +79,9 @@ public class HibernateConfig {
         }
     }
 
-    private static Properties setBaseProperties(Properties props, String hbm2ddlAutoProperty) {
+    private static Properties setBaseProperties(Properties props) {
         props.put("hibernate.connection.driver_class", "org.postgresql.Driver");
-        props.put("hibernate.hbm2ddl.auto", hbm2ddlAutoProperty);  // set to "update" when in production
+        props.put("hibernate.hbm2ddl.auto", "update");  // set to "update" when in production
         props.put("hibernate.current_session_context_class", "thread");
         props.put("hibernate.show_sql", "true");  // TODO: Set back to false
         props.put("hibernate.format_sql", "true"); // TODO: Set back to false

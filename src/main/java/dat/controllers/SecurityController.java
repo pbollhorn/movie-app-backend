@@ -41,7 +41,7 @@ public class SecurityController implements ISecurityController {
     private final Logger logger = LoggerFactory.getLogger(SecurityController.class);
 
     public SecurityController() {
-        this.securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory("update"));
+        this.securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory());
     }
 
     public SecurityController(EntityManagerFactory emf) {
