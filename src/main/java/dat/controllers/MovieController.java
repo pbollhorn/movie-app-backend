@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import dat.dto.MovieOverviewDto;
-import dat.dto.PersonMovieListDto;
+import dat.dto.NameMovieListDto;
 import io.javalin.http.Context;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
@@ -42,7 +42,7 @@ public class MovieController {
         Integer accountId = securityController.getAccountIdFromToken(ctx);
         int personId = Integer.parseInt(ctx.pathParam("id"));
 
-        PersonMovieListDto person = movieDao.getMoviesWithPerson(personId, accountId);
+        NameMovieListDto person = movieDao.getMoviesWithPerson(personId, accountId);
         ctx.json(person);
     }
 

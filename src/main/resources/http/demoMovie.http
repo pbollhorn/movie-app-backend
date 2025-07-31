@@ -46,7 +46,7 @@ DELETE {{url}}/movies/488
 Authorization: Bearer {{token}}
 
 ###
-GET {{url}}/movies/person/21315
+GET {{url}}/movies/person/287
 
 ###
 GET {{url}}/movies/collection/10
