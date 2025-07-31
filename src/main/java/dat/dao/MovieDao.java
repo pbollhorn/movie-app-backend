@@ -78,7 +78,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
     }
 
-    public PersonMovieListDto getMoviesWithPerson(int personId, Integer accountId) {
+    public NameMovieListDto getMoviesWithPerson(int personId, Integer accountId) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
@@ -97,7 +97,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             newQuery.setParameter("accountId", accountId);
             List<MovieOverviewDto> movieList = newQuery.getResultList();
 
-            return new PersonMovieListDto(name, movieList);
+            return new NameMovieListDto(name, movieList);
 
         }
 
