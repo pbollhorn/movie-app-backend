@@ -47,7 +47,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
 
             String sql = """
-                    SELECT m.id FROM Movie m
+                    SELECT m.id FROM movie m
                     WHERE m.title % :text
                     ORDER BY SIMILARITY(m.title, :text) DESC LIMIT :limit""";
             Query query = em.createNativeQuery(sql, Integer.class);

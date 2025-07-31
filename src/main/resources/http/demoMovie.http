@@ -1,5 +1,5 @@
 ###
-GET {{url}}/movies/search?text=ewoks
+GET {{url}}/movies/search?text=ave
 Authorization: Bearer {{token}}
 
 ###
