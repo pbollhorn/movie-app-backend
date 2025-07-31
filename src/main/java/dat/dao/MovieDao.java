@@ -78,19 +78,26 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
     }
 
-    public List<MovieOverviewDto> getMoviesWithPerson(int personId, Integer accountId) {
+    public PersonMovieListDto getMoviesWithPerson(int personId, Integer accountId) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            String jpql = """
+            String jpql = "SELECT p.name FROM Person p WHERE p.id = :personId";
+            TypedQuery<String> query = em.createQuery(jpql, String.class);
+            query.setParameter("personId", personId);
+            String name = query.getSingleResult();
+
+            jpql = """
                     SELECT DISTINCT NEW dat.dto.MovieOverviewDto(m,
                     (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
                     FROM Movie m JOIN Credit c ON m.id=c.movie.id
                     WHERE c.person.id=:personId ORDER BY m.releaseDate""";
-            TypedQuery<MovieOverviewDto> query = em.createQuery(jpql, MovieOverviewDto.class);
-            query.setParameter("personId", personId);
-            query.setParameter("accountId", accountId);
-            return query.getResultList();
+            TypedQuery<MovieOverviewDto> newQuery = em.createQuery(jpql, MovieOverviewDto.class);
+            newQuery.setParameter("personId", personId);
+            newQuery.setParameter("accountId", accountId);
+            List<MovieOverviewDto> movieList = newQuery.getResultList();
+
+            return new PersonMovieListDto(name, movieList);
 
         }
 
