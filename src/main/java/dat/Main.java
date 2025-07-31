@@ -49,6 +49,7 @@ public class Main {
             em.createNativeQuery("ALTER DATABASE " + DB_NAME + " SET pg_trgm.similarity_threshold=0.15").executeUpdate();
             em.createNativeQuery("CREATE INDEX IF NOT EXISTS idx_movie_title_trgm ON movie USING gin (title gin_trgm_ops)").executeUpdate();
             em.createNativeQuery("CREATE INDEX IF NOT EXISTS idx_credit_movie_id ON credit(movie_id)").executeUpdate();
+            em.createNativeQuery("CREATE INDEX IF NOT EXISTS idx_credit_person_id ON credit(person_id)").executeUpdate();
             em.getTransaction().commit();
         }
 
