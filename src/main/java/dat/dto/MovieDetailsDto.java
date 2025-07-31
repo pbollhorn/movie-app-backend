@@ -3,7 +3,6 @@ package dat.dto;
 import java.time.LocalDate;
 import java.util.List;
 
-import dat.entities.Collection;
 import dat.entities.Movie;
 
 public record MovieDetailsDto(Integer id,
@@ -11,7 +10,8 @@ public record MovieDetailsDto(Integer id,
                               String originalTitle,
                               String originalLanguage,
                               LocalDate releaseDate,
-                              Double score,
+                              Double voteAverage,
+                              Integer voteCount,
                               String backdropPath,
                               String overview,
                               Integer runtime,
@@ -30,6 +30,7 @@ public record MovieDetailsDto(Integer id,
                 m.getOriginalLanguage(),
                 m.getReleaseDate(),
                 m.getVoteAverage(),
+                m.getVoteCount(),
                 m.getBackdropPath(),
                 m.getOverview(),
                 m.getRuntime(),
