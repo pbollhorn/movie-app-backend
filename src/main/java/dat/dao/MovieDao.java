@@ -47,7 +47,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
 
             String sql = """
-                    SELECT id, title, votecount FROM
+                    SELECT id FROM
                     (
                        (SELECT id, title, votecount FROM movie WHERE :title % title ORDER BY SIMILARITY(:title, title) DESC LIMIT :limit/2)
                        UNION
