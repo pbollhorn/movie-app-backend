@@ -49,9 +49,9 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             String sql = """
                     SELECT id, title, votecount FROM
                     (
-                       (SELECT id FROM movie WHERE :title % title ORDER BY SIMILARITY(:title, title) DESC LIMIT :limit/2)
+                       (SELECT id, title, votecount FROM movie WHERE :title % title ORDER BY SIMILARITY(:title, title) DESC LIMIT :limit/2)
                        UNION
-                       (SELECT id FROM movie WHERE :title <% title ORDER BY WORD_SIMILARITY(:title, title) DESC LIMIT :limit/2)
+                       (SELECT id, title, votecount FROM movie WHERE :title <% title ORDER BY WORD_SIMILARITY(:title, title) DESC LIMIT :limit/2)
                     )
                     ORDER BY SIMILARITY(:title, title)+WORD_SIMILARITY(:title, title) DESC, votecount DESC""";
 
