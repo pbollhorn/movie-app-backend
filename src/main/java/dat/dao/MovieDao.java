@@ -46,24 +46,27 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
         try (EntityManager em = emf.createEntityManager()) {
 
+//            String sql = """
+//                    SELECT id FROM
+//                    (
+//                       (SELECT id, ROW_NUMBER() OVER (ORDER BY SIMILARITY(:title, title) DESC, votecount DESC) FROM movie WHERE :title % title LIMIT :limit)
+//                       UNION
+//                       (SELECT id, ROW_NUMBER() OVER (ORDER BY WORD_SIMILARITY(:title, title) DESC, votecount DESC) FROM movie WHERE :title <% title LIMIT :limit)
+//                    )
+//                    ORDER BY row_number""";
+
             String sql = """
-                    SELECT id FROM
-                    (
-                       (SELECT id, ROW_NUMBER() OVER (ORDER BY SIMILARITY(:title, title) DESC, votecount DESC) FROM movie WHERE :title % title LIMIT :limit)
-                       UNION
-                       (SELECT id, ROW_NUMBER() OVER (ORDER BY WORD_SIMILARITY(:title, title) DESC, votecount DESC) FROM movie WHERE :title <% title LIMIT :limit)
-                    )
-                    ORDER BY row_number""";
+                    SELECT id FROM movie WHERE :title <% title ORDER BY WORD_SIMILARITY(:title, title) DESC, votecount DESC LIMIT :limit""";
 
             Query firstQuery = em.createNativeQuery(sql, Integer.class);
             firstQuery.setParameter("title", title);
-            firstQuery.setParameter("limit", limit/2);
+            firstQuery.setParameter("limit", limit);
             List<Integer> movieIds = firstQuery.getResultList();
 
-            // turn movieIds into unique movieIds
-            movieIds = movieIds.stream()
-                    .distinct()
-                    .collect(Collectors.toList());
+//            // turn movieIds into unique movieIds
+//            movieIds = movieIds.stream()
+//                    .distinct()
+//                    .collect(Collectors.toList());
 
 
             String jpql = """
