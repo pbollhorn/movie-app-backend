@@ -31,9 +31,9 @@ public class MovieController {
     public void searchMovies(Context ctx) {
 
         Integer accountId = securityController.getAccountIdFromToken(ctx);
-        String text = ctx.queryParam("text");
+        String title = ctx.queryParam("title");
 
-        List<MovieOverviewDto> movies = movieDao.searchMovies(text, accountId, MOVIE_LIMIT);
+        List<MovieOverviewDto> movies = movieDao.searchMovies(title, accountId, MOVIE_LIMIT);
         ctx.json(movies);
     }
 

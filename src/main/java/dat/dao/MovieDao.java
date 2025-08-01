@@ -42,17 +42,17 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
     }
 
 
-    public List<MovieOverviewDto> searchMovies(String text, Integer accountId, int limit) {
+    public List<MovieOverviewDto> searchMovies(String title, Integer accountId, int limit) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
             String sql = """
                     SELECT m.id FROM movie m
-                    WHERE m.title % :text
-                    ORDER BY SIMILARITY(m.title, :text) DESC, m.votecount DESC
+                    WHERE :title <% m.title 
+                    ORDER BY WORD_SIMILARITY(:title, m.title) DESC, m.votecount DESC
                     LIMIT :limit""";
             Query query = em.createNativeQuery(sql, Integer.class);
-            query.setParameter("text", text);
+            query.setParameter("title", title);
             query.setParameter("limit", limit);
             List<Integer> movieIds = query.getResultList();
 
