@@ -47,18 +47,23 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
 
             String sql = """
-                    SELECT DISTINCT id, row_number FROM
+                    SELECT id FROM
                     (
-                       (SELECT id, ROW_NUMBER() OVER (ORDER BY SIMILARITY(:title, title) DESC, votecount DESC) FROM movie WHERE :title % title LIMIT :limit/2)
+                       (SELECT id, ROW_NUMBER() OVER (ORDER BY SIMILARITY(:title, title) DESC, votecount DESC) FROM movie WHERE :title % title LIMIT :limit)
                        UNION
-                       (SELECT id, ROW_NUMBER() OVER (ORDER BY WORD_SIMILARITY(:title, title) DESC, votecount DESC) FROM movie WHERE :title <% title LIMIT :limit/2)
+                       (SELECT id, ROW_NUMBER() OVER (ORDER BY WORD_SIMILARITY(:title, title) DESC, votecount DESC) FROM movie WHERE :title <% title LIMIT :limit)
                     )
                     ORDER BY row_number""";
 
             Query firstQuery = em.createNativeQuery(sql, Integer.class);
             firstQuery.setParameter("title", title);
-            firstQuery.setParameter("limit", limit);
+            firstQuery.setParameter("limit", limit/2);
             List<Integer> movieIds = firstQuery.getResultList();
+
+            // turn movieIds into unique movieIds
+            movieIds = movieIds.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
 
 
             String jpql = """
