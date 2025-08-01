@@ -17,7 +17,7 @@ import dat.MovieUpdateTask;
 public class MovieController {
 
     // Max number of movies when searching and getting recommendations
-    private static final int MOVIE_LIMIT = 25;
+    private static final int MOVIE_LIMIT = 50;
 
     private final MovieDao movieDao;
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
