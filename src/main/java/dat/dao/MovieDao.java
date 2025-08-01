@@ -47,24 +47,24 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         try (EntityManager em = emf.createEntityManager()) {
 
             String sql = """
-                    SELECT m.id FROM movie m
-                    WHERE :title <% m.title 
-                    ORDER BY WORD_SIMILARITY(:title, m.title) DESC, m.votecount DESC
-                    LIMIT :limit""";
-            Query query = em.createNativeQuery(sql, Integer.class);
-            query.setParameter("title", title);
-            query.setParameter("limit", limit);
-            List<Integer> movieIds = query.getResultList();
+                    (SELECT id FROM movie WHERE :title % title ORDER BY SIMILARITY(:title, title) DESC LIMIT :limit/2)
+                    UNION
+                    (SELECT id FROM movie WHERE :title <% title ORDER BY WORD_SIMILARITY(:title, title) DESC LIMIT :limit/2)""";
+            Query firstQuery = em.createNativeQuery(sql, Integer.class);
+            firstQuery.setParameter("title", title);
+            firstQuery.setParameter("limit", limit);
+            List<Integer> movieIds = firstQuery.getResultList();
+
 
             String jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m,
                     (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
                     FROM Movie m WHERE m.id IN :movieIds""";
 
-            TypedQuery<MovieOverviewDto> newQuery = em.createQuery(jpql, MovieOverviewDto.class);
-            newQuery.setParameter("accountId", accountId);
-            newQuery.setParameter("movieIds", movieIds);
-            List<MovieOverviewDto> movieDtos = newQuery.getResultList();
+            TypedQuery<MovieOverviewDto> secondQuery = em.createQuery(jpql, MovieOverviewDto.class);
+            secondQuery.setParameter("accountId", accountId);
+            secondQuery.setParameter("movieIds", movieIds);
+            List<MovieOverviewDto> movieDtos = secondQuery.getResultList();
 
             // Map from ID to DTO for lookup
             Map<Integer, MovieOverviewDto> dtoMap = movieDtos.stream()
