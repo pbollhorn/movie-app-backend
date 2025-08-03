@@ -55,7 +55,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             firstQuery.setParameter("title", title);
             firstQuery.setParameter("limit", limit);
             List<Integer> movieIds = firstQuery.getResultList();
-
+            System.out.println(movieIds);
 
             sql = """
                     SELECT id FROM movie
