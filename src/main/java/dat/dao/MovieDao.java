@@ -67,6 +67,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             secondQuery.setParameter("limit", limit);
             secondQuery.setParameter("movieIds", movieIds);
             List<Integer> secondMovieIds = secondQuery.getResultList();
+            System.out.println(secondMovieIds);
             movieIds.addAll(secondMovieIds);
             System.out.println(movieIds);
 
