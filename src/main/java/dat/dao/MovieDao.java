@@ -64,7 +64,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             query = em.createNativeQuery(sql, Integer.class);
             query.setParameter("title", title);
             query.setParameter("movieIds", movieIds.isEmpty() ? List.of(0) : movieIds);
-            query.setParameter("limit", limit-movieIds.size());
+            query.setParameter("limit", limit - movieIds.size());
             movieIds.addAll(query.getResultList());
 
             String jpql = """
