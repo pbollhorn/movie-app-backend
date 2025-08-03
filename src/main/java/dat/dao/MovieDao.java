@@ -67,10 +67,10 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             secondQuery.setParameter("movieIds", movieIds.isEmpty() ? List.of(0) : movieIds);
             movieIds.addAll(secondQuery.getResultList());
 
-            // turn movieIds into unique movieIds
-            movieIds = movieIds.stream()
-                    .distinct()
-                    .collect(Collectors.toList());
+//            // turn movieIds into unique movieIds
+//            movieIds = movieIds.stream()
+//                    .distinct()
+//                    .collect(Collectors.toList());
 
             String jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m,
