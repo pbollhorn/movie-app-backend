@@ -55,21 +55,21 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             firstQuery.setParameter("title", title);
             firstQuery.setParameter("limit", limit);
             List<Integer> movieIds = firstQuery.getResultList();
-            System.out.println(movieIds);
 
             sql = """
                     SELECT id FROM movie
-                    WHERE :title <% title AND id NOT IN (:movieIds)
+                    WHERE :title <% title
                     ORDER BY WORD_SIMILARITY(:title, title) DESC, votecount DESC
                     LIMIT :limit""";
             Query secondQuery = em.createNativeQuery(sql, Integer.class);
             secondQuery.setParameter("title", title);
             secondQuery.setParameter("limit", limit);
-            secondQuery.setParameter("movieIds", movieIds);
-            List<Integer> secondMovieIds = secondQuery.getResultList();
-            System.out.println(secondMovieIds);
-            movieIds.addAll(secondMovieIds);
-            System.out.println(movieIds);
+            movieIds.addAll(secondQuery.getResultList());
+
+            // turn movieIds into unique movieIds
+            movieIds = movieIds.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
 
             String jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m,
