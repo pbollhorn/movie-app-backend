@@ -66,7 +66,9 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
             secondQuery.setParameter("title", title);
             secondQuery.setParameter("limit", limit);
             secondQuery.setParameter("movieIds", movieIds);
-            movieIds.addAll(secondQuery.getResultList());
+            List<Integer> secondMovieIds = secondQuery.getResultList();
+            movieIds.addAll(secondMovieIds);
+            System.out.println(movieIds);
 
             String jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m,

@@ -40,9 +40,8 @@ public class Main {
                 .checkSecurityRoles()
                 .startServer(7070);
 
-        String DB_NAME = PropertyReader.getPropertyValue("DB_NAME");
-
         // Create pg_trgm extension and indexes in database, if they do not already exist
+        String DB_NAME = PropertyReader.getPropertyValue("DB_NAME");
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createNativeQuery("CREATE EXTENSION IF NOT EXISTS pg_trgm").executeUpdate();
