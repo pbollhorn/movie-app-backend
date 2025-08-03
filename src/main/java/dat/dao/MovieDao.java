@@ -46,38 +46,37 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-//            String sql = """
-//                    SELECT id FROM
-//                    (
-//                       (SELECT id, ROW_NUMBER() OVER (ORDER BY SIMILARITY(:title, title) DESC, votecount DESC) FROM movie WHERE :title % title LIMIT :limit)
-//                       UNION
-//                       (SELECT id, ROW_NUMBER() OVER (ORDER BY WORD_SIMILARITY(:title, title) DESC, votecount DESC) FROM movie WHERE :title <% title LIMIT :limit)
-//                    )
-//                    ORDER BY row_number""";
-
             String sql = """
-                    SELECT id FROM movie WHERE :title <% title ORDER BY WORD_SIMILARITY(:title, title) DESC, votecount DESC LIMIT :limit""";
-
+                    SELECT id FROM movie
+                    WHERE :title % title
+                    ORDER BY SIMILARITY(:title, title) DESC, votecount DESC
+                    LIMIT :limit""";
             Query firstQuery = em.createNativeQuery(sql, Integer.class);
             firstQuery.setParameter("title", title);
             firstQuery.setParameter("limit", limit);
             List<Integer> movieIds = firstQuery.getResultList();
 
-//            // turn movieIds into unique movieIds
-//            movieIds = movieIds.stream()
-//                    .distinct()
-//                    .collect(Collectors.toList());
 
+            sql = """
+                    SELECT id FROM movie
+                    WHERE :title <<% title AND id NOT IN (:movieIds)
+                    ORDER BY STRICT_WORD_SIMILARITY(:title, title) DESC, votecount DESC
+                    LIMIT :limit""";
+            Query secondQuery = em.createNativeQuery(sql, Integer.class);
+            secondQuery.setParameter("title", title);
+            secondQuery.setParameter("limit", limit);
+            secondQuery.setParameter("movieIds", movieIds);
+            movieIds.addAll(secondQuery.getResultList());
 
             String jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m,
                     (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
                     FROM Movie m WHERE m.id IN :movieIds""";
 
-            TypedQuery<MovieOverviewDto> secondQuery = em.createQuery(jpql, MovieOverviewDto.class);
-            secondQuery.setParameter("accountId", accountId);
-            secondQuery.setParameter("movieIds", movieIds);
-            List<MovieOverviewDto> movieDtos = secondQuery.getResultList();
+            TypedQuery<MovieOverviewDto> thirdQuery = em.createQuery(jpql, MovieOverviewDto.class);
+            thirdQuery.setParameter("accountId", accountId);
+            thirdQuery.setParameter("movieIds", movieIds);
+            List<MovieOverviewDto> movieDtos = thirdQuery.getResultList();
 
             // Map from ID to DTO for lookup
             Map<Integer, MovieOverviewDto> dtoMap = movieDtos.stream()
