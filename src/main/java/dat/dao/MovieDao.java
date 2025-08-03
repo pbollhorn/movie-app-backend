@@ -58,7 +58,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             sql = """
                     SELECT id FROM movie
-                    WHERE :title <% title NOT IN :movieIds
+                    WHERE :title <% title AND id NOT IN :movieIds
                     ORDER BY WORD_SIMILARITY(:title, title) DESC, votecount DESC
                     LIMIT :limit""";
             Query secondQuery = em.createNativeQuery(sql, Integer.class);
