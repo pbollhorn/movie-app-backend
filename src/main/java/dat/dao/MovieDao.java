@@ -58,13 +58,13 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             sql = """
                     SELECT id FROM movie
-                    WHERE :title <% title AND id NOT IN :movieIds
-                    ORDER BY WORD_SIMILARITY(:title, title) DESC, votecount DESC
+                    WHERE :title <<% title AND id NOT IN :movieIds
+                    ORDER BY STRICT_WORD_SIMILARITY(:title, title) DESC, votecount DESC
                     LIMIT :limit""";
             query = em.createNativeQuery(sql, Integer.class);
             query.setParameter("title", title);
             query.setParameter("movieIds", movieIds.isEmpty() ? List.of(0) : movieIds);
-            query.setParameter("limit", limit);
+            query.setParameter("limit", limit-movieIds.size());
             movieIds.addAll(query.getResultList());
 
             String jpql = """
