@@ -58,12 +58,13 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             sql = """
                     SELECT id FROM movie
-                    WHERE :title <% title
+                    WHERE :title <% title NOT IN :movieIds
                     ORDER BY WORD_SIMILARITY(:title, title) DESC, votecount DESC
                     LIMIT :limit""";
             Query secondQuery = em.createNativeQuery(sql, Integer.class);
             secondQuery.setParameter("title", title);
             secondQuery.setParameter("limit", limit);
+            secondQuery.setParameter("movieIds", movieIds.isEmpty() ? List.of(0) : movieIds);
             movieIds.addAll(secondQuery.getResultList());
 
             // turn movieIds into unique movieIds
