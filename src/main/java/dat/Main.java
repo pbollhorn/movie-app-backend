@@ -40,13 +40,13 @@ public class Main {
                 .checkSecurityRoles()
                 .startServer(7070);
 
-        // Create pg_trgm extension and indexes in database, if they do not already exist
+        // Install pg_trgm extension and create indexes in database, if they do not already exist
         String DB_NAME = PropertyReader.getPropertyValue("DB_NAME");
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
             em.createNativeQuery("CREATE EXTENSION IF NOT EXISTS pg_trgm").executeUpdate();
-            em.createNativeQuery("ALTER DATABASE " + DB_NAME + " SET pg_trgm.similarity_threshold=0.8").executeUpdate();
-            em.createNativeQuery("ALTER DATABASE " + DB_NAME + " SET pg_trgm.word_similarity_threshold=0.15").executeUpdate();
+            em.createNativeQuery("ALTER DATABASE " + DB_NAME + " SET pg_trgm.similarity_threshold=0.8").executeUpdate();  // TODO: Delete this line
+            em.createNativeQuery("ALTER DATABASE " + DB_NAME + " SET pg_trgm.word_similarity_threshold=0.15").executeUpdate(); // TODO: Delete this line
             em.createNativeQuery("ALTER DATABASE " + DB_NAME + " SET pg_trgm.strict_word_similarity_threshold=0.15").executeUpdate();
             em.createNativeQuery("CREATE INDEX IF NOT EXISTS idx_movie_title ON movie (LOWER(title))").executeUpdate();
             em.createNativeQuery("CREATE INDEX IF NOT EXISTS idx_movie_title_trgm ON movie USING gin (title gin_trgm_ops)").executeUpdate();
