@@ -48,7 +48,7 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
 
             String sql = """
                     SELECT id FROM movie
-                    WHERE LOWER(:title) = LOWER(title)
+                    WHERE TRIM(LOWER(:title)) = LOWER(title)
                     ORDER BY votecount DESC
                     LIMIT :limit""";
             Query query = em.createNativeQuery(sql, Integer.class);
