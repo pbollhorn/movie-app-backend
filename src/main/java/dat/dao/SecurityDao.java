@@ -2,6 +2,7 @@ package dat.dao;
 
 import java.util.stream.Collectors;
 
+import dat.config.HibernateConfig;
 import dk.bugelhartmann.UserDTO;
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
@@ -16,11 +17,23 @@ import dat.exceptions.DaoException;
 import dat.exceptions.ValidationException;
 
 public class SecurityDao extends GenericDao {
+
+    private static SecurityDao instance;
+
     private final Logger logger = LoggerFactory.getLogger(SecurityDao.class);
 
-    public SecurityDao(EntityManagerFactory emf) {
-        super(emf);
+    private SecurityDao() {
+        super(HibernateConfig.getEntityManagerFactory());
     }
+
+    public static SecurityDao getInstance() {
+        if (instance == null) {
+            instance = new SecurityDao();
+        }
+        return instance;
+    }
+
+
 
     public UserDTO getVerifiedUser(String username, String password) throws ValidationException, DaoException {
 

@@ -18,13 +18,11 @@ import dk.bugelhartmann.TokenVerificationException;
 import io.javalin.http.*;
 import io.javalin.security.RouteRole;
 import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dat.config.HibernateConfig;
 import dat.dto.ErrorMessage;
 import dat.entities.Account;
 import dat.enums.Roles;
@@ -34,31 +32,31 @@ import dat.exceptions.ValidationException;
 import dat.utils.PropertyReader;
 
 public class SecurityController {
-    private final ObjectMapper objectMapper = new ObjectMapper();
-    private final ITokenSecurity tokenSecurity = new TokenSecurity();
-    private final SecurityDao securityDAO;
-    private final Logger logger = LoggerFactory.getLogger(SecurityController.class);
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final ITokenSecurity tokenSecurity = new TokenSecurity();
+    private static final SecurityDao securityDAO = SecurityDao.getInstance();
+    private static final Logger logger = LoggerFactory.getLogger(SecurityController.class);
 
-    public SecurityController() {
-        this.securityDAO = new SecurityDao(HibernateConfig.getEntityManagerFactory());
-    }
-
-    public SecurityController(EntityManagerFactory emf) {
-        this.securityDAO = new SecurityDao(emf);
-    }
-
-    public SecurityController(SecurityDao securityDAO) {
-        this.securityDAO = securityDAO;
-    }
+//    public SecurityController() {
+//        this.securityDAO = new SecurityDao(HibernateConfig.getEntityManagerFactory());
+//    }
+//
+//    public SecurityController(EntityManagerFactory emf) {
+//        this.securityDAO = new SecurityDao(emf);
+//    }
+//
+//    public SecurityController(SecurityDao securityDAO) {
+//        this.securityDAO = securityDAO;
+//    }
 
     // Health check for the API. Used in deployment
-    public void healthCheck(@NotNull Context ctx) {
+    public static void healthCheck(@NotNull Context ctx) {
         ctx.status(200).json("{\"msg\": \"API is up and running\"}");
     }
 
 
     // to get a token
-    public void login(Context ctx) {
+    public static void login(Context ctx) {
         ObjectNode returnJson = objectMapper.createObjectNode();
         try {
             UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
@@ -76,7 +74,7 @@ public class SecurityController {
     }
 
     // to get a user
-    public void register(Context ctx) {
+    public static void register(Context ctx) {
         ObjectNode returnJson = objectMapper.createObjectNode();
         try {
             UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
@@ -95,7 +93,7 @@ public class SecurityController {
 
 
     // to check if a user has access to a route
-    public void accessHandler(Context ctx) {
+    public static void accessHandler(Context ctx) {
         // This is a preflight request => no need for authentication
         if (ctx.method().toString().equals("OPTIONS")) {
             ctx.status(200);
@@ -124,7 +122,7 @@ public class SecurityController {
 
     }
 
-    private UserDTO getUserFromToken(Context ctx) {
+    private static UserDTO getUserFromToken(Context ctx) {
         String header = ctx.header("Authorization");
         if (header == null) {
             throw new UnauthorizedResponse("Authorization header is missing");
@@ -138,7 +136,7 @@ public class SecurityController {
 
 
     // to verify a token
-    public void verify(Context ctx) {
+    public static void verify(Context ctx) {
 
         ObjectNode returnJson = objectMapper.createObjectNode();
         UserDTO verifiedTokenUser = getUserFromToken(ctx);
@@ -152,7 +150,7 @@ public class SecurityController {
 
 
     // to check how long a token is valid
-    public void timeToLive(Context ctx) {
+    public static void timeToLive(Context ctx) {
 
         ObjectNode returnJson = objectMapper.createObjectNode();
 
@@ -180,12 +178,12 @@ public class SecurityController {
     }
 
 
-    private boolean userHasAllowedRole(UserDTO user, Set<RouteRole> allowedRoles) {
+    private static boolean userHasAllowedRole(UserDTO user, Set<RouteRole> allowedRoles) {
         return user.getRoles().stream()
                 .anyMatch(role -> allowedRoles.contains(Roles.valueOf(role.toUpperCase())));
     }
 
-    private String createToken(UserDTO user) {
+    private static String createToken(UserDTO user) {
         try {
             String ISSUER;
             String TOKEN_EXPIRE_TIME;
@@ -207,7 +205,7 @@ public class SecurityController {
         }
     }
 
-    private UserDTO verifyToken(String token) {
+    private static UserDTO verifyToken(String token) {
         boolean IS_DEPLOYED = (System.getenv("DEPLOYED") != null);
         String SECRET = IS_DEPLOYED ? System.getenv("SECRET_KEY") : PropertyReader.getPropertyValue("SECRET_KEY");
 
@@ -225,7 +223,7 @@ public class SecurityController {
 
 
     // TODO: Jeg PETER, har tilføjet denne metode
-    public Integer getAccountIdFromToken(Context ctx) {
+    public static Integer getAccountIdFromToken(Context ctx) {
         String header = ctx.header("Authorization");
         if (header == null) {
             return null;

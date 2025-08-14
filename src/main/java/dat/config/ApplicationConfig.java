@@ -48,7 +48,7 @@ public class ApplicationConfig {
     }
 
     public ApplicationConfig checkSecurityRoles() {
-        app.beforeMatched(securityController::accessHandler); // authenticate and authorize
+        app.beforeMatched(SecurityController::accessHandler); // authenticate and authorize
         return instance;
     }
 

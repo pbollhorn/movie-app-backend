@@ -1,6 +1,6 @@
 package dat;
 
-import dat.utils.PropertyReader;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
@@ -8,9 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import dat.config.ApplicationConfig;
 import dat.config.HibernateConfig;
-import dat.controllers.MovieController;
-import dat.controllers.SecurityController;
+import dat.utils.PropertyReader;
 import dat.routes.Routes;
+import dat.dao.MovieDao;
+import dat.dao.SecurityDao;
 
 public class Main {
 
@@ -26,15 +27,13 @@ public class Main {
                 ----------------------------------------------------------\n""");
 
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-        SecurityController securityController = new SecurityController(emf);
-        MovieController movieController = new MovieController(emf, securityController);
-
-        Routes routes = new Routes(movieController, securityController);
+        SecurityDao securityDAO = SecurityDao.getInstance();
+        MovieDao movieDAO = MovieDao.getInstance();
 
         ApplicationConfig
                 .getInstance()
                 .initiateServer()
-                .setRoute(routes.getRoutes())
+                .setRoute(Routes.getRoutes())
                 .handleException()
                 .setApiExceptionHandling()
                 .checkSecurityRoles()

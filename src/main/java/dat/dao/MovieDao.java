@@ -3,6 +3,7 @@ package dat.dao;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import dat.config.HibernateConfig;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Query;
@@ -22,9 +23,9 @@ public class MovieDao extends AbstractDao<Movie, Integer> {
         super(Movie.class, emf);
     }
 
-    public static MovieDao getInstance(EntityManagerFactory emf) {
+    public static MovieDao getInstance() {
         if (instance == null) {
-            instance = new MovieDao(emf);
+            instance = new MovieDao(HibernateConfig.getEntityManagerFactory());
         }
         return instance;
     }

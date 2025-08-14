@@ -10,16 +10,10 @@ import dat.controllers.SecurityController;
 import dat.enums.Roles;
 
 public class Routes {
-    private final MovieController movieController;
-    private final SecurityController securityController;
-    private final ObjectMapper jsonMapper = new ObjectMapper();
 
-    public Routes(MovieController movieController, SecurityController securityController) {
-        this.movieController = movieController;
-        this.securityController = securityController;
-    }
+    private static final ObjectMapper jsonMapper = new ObjectMapper();
 
-    public EndpointGroup getRoutes() {
+    public static EndpointGroup getRoutes() {
         return () -> {
             path("movies", movieRoutes());
             path("auth", authRoutes());
@@ -27,32 +21,32 @@ public class Routes {
         };
     }
 
-    private EndpointGroup movieRoutes() {
+    private static EndpointGroup movieRoutes() {
         return () -> {
-            get("/search", movieController::searchMovies, Roles.ANYONE);
-            get("/recommendations", movieController::getMovieRecommendations, Roles.USER);
-            get("/", movieController::getAllMoviesWithRating, Roles.USER);
-            post("/update", movieController::updateMovies, Roles.USER);  // TODO: Turn into ADMIN endpoint
-            get("/person/{id}", movieController::getMoviesWithPerson, Roles.ANYONE);
-            get("/collection/{id}", movieController::getMoviesInCollection, Roles.ANYONE);
-            get("/{id}", movieController::getMovieDetails, Roles.ANYONE);
-            put("/{id}", movieController::updateOrCreateMovieRating, Roles.USER);
-            delete("/{id}", movieController::deleteMovieRating, Roles.USER);
+            get("/search", MovieController::searchMovies, Roles.ANYONE);
+            get("/recommendations", MovieController::getMovieRecommendations, Roles.USER);
+            get("/", MovieController::getAllMoviesWithRating, Roles.USER);
+            post("/update", MovieController::updateMovies, Roles.USER);  // TODO: Turn into ADMIN endpoint
+            get("/person/{id}", MovieController::getMoviesWithPerson, Roles.ANYONE);
+            get("/collection/{id}", MovieController::getMoviesInCollection, Roles.ANYONE);
+            get("/{id}", MovieController::getMovieDetails, Roles.ANYONE);
+            put("/{id}", MovieController::updateOrCreateMovieRating, Roles.USER);
+            delete("/{id}", MovieController::deleteMovieRating, Roles.USER);
         };
     }
 
 
-    private EndpointGroup authRoutes() {
+    private static EndpointGroup authRoutes() {
         return () -> {
-            post("/register", securityController::register, Roles.ANYONE);
-            post("/login", securityController::login, Roles.ANYONE);
-            get("/verify", securityController::verify, Roles.ANYONE);
-            get("/tokenlifespan", securityController::timeToLive, Roles.ANYONE);
-            get("/healthcheck", securityController::healthCheck, Roles.ANYONE);
+            post("/register", SecurityController::register, Roles.ANYONE);
+            post("/login", SecurityController::login, Roles.ANYONE);
+            get("/verify", SecurityController::verify, Roles.ANYONE);
+            get("/tokenlifespan", SecurityController::timeToLive, Roles.ANYONE);
+            get("/healthcheck", SecurityController::healthCheck, Roles.ANYONE);
         };
     }
 
-    private EndpointGroup rolesTestRoutes() {
+    private static EndpointGroup rolesTestRoutes() {
         return () -> {
             get("/anyone", ctx -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from open to ANYONE")), Roles.ANYONE);
             get("/user", ctx -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from USER protected")), Roles.USER);
