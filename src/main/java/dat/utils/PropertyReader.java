@@ -6,8 +6,6 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 
-import dat.exceptions.DaoException;
-
 public class PropertyReader {
 
     private static final String RESOURCE_NAME = "config.properties";
@@ -17,16 +15,17 @@ public class PropertyReader {
 
     public static String getPropertyValue(String propName) {
 
-        if(DEPLOYED) {
+        if (DEPLOYED) {
 
-            return System.getenv(propName);
+            String value = System.getenv(propName);
+            if (value != null) {
+                return value.trim();  // Trim whitespace
+            } else {
+                throw new IllegalArgumentException(String.format("Property %s not found in %s", propName, "environment variables"));
+            }
 
         }
 
-
-
-        // REMEMBER TO BUILD WITH MAVEN FIRST. Read the property file if not deployed (else read system vars instead)
-        // Read from ressources/config.properties or from pom.xml depending on the ressourceName
         try (InputStream inputStream = PropertyReader.class.getClassLoader().getResourceAsStream(RESOURCE_NAME)) {
             Properties props = new Properties();
             props.load(inputStream);
@@ -35,11 +34,10 @@ public class PropertyReader {
             if (value != null) {
                 return value.trim();  // Trim whitespace
             } else {
-                throw new DaoException(String.format("Property %s not found in %s", propName, RESOURCE_NAME));
+                throw new IllegalArgumentException(String.format("Property %s not found in %s", propName, RESOURCE_NAME));
             }
-        } catch (IOException ex) {
-            logger.error(ex.getMessage());
-            throw new DaoException(String.format("Could not read property %s. Did you remember to build the project with MAVEN?", propName));
+        } catch (IOException e) {
+            throw new IllegalStateException(String.format("Error reading property %s from %s$2. Does %s$2 exists?", propName, RESOURCE_NAME));
         }
     }
 }
