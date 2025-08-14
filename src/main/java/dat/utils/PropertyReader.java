@@ -6,6 +6,9 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 
+/**
+ * Reads properties from environment variables if deployed, or file if not deployed
+ */
 public class PropertyReader {
 
     public static final Boolean DEPLOYED = Boolean.parseBoolean(System.getenv("DEPLOYED"));
