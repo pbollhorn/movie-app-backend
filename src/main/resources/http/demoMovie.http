@@ -1,6 +1,6 @@
 ###
-GET {{url}}/movies/search?text=ave
-Authorization: Bearer {{token}}
+GET {{url}}/movies/search?title=inception
+#Authorization: Bearer {{token}}
 
 ###
 GET {{url}}/movies/recommendations
