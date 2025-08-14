@@ -8,9 +8,9 @@ import org.slf4j.Logger;
 
 public class PropertyReader {
 
-    private static final String RESOURCE_NAME = "config.properties";
-    private static final Boolean DEPLOYED = Boolean.parseBoolean(System.getenv("DEPLOYED"));
+    public static final Boolean DEPLOYED = Boolean.parseBoolean(System.getenv("DEPLOYED"));
 
+    private static final String RESOURCE_NAME = "config.properties";
     private static final Logger logger = org.slf4j.LoggerFactory.getLogger(PropertyReader.class);
 
     public static String getPropertyValue(String propName) {
