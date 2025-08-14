@@ -56,14 +56,13 @@ public class HibernateConfig {
         try {
             Configuration configuration = new Configuration();
             Properties props = new Properties();
+
             // Set the properties
             setBaseProperties(props);
             if (forTest) {
                 props = setTestProperties(props);
-            } else if (PropertyReader.DEPLOYED) {
-                setDeployedProperties(props);
             } else {
-                props = setDevProperties(props);
+                props = setDeployedAndDevProperties(props);
             }
             configuration.setProperties(props);
             getAnnotationConfiguration(configuration);
@@ -89,15 +88,26 @@ public class HibernateConfig {
         return props;
     }
 
-    private static Properties setDeployedProperties(Properties props) {
-        String DB_NAME = System.getenv("DB_NAME");
-        props.setProperty("hibernate.connection.url", System.getenv("CONNECTION_STR") + DB_NAME);
-        props.setProperty("hibernate.connection.username", System.getenv("DB_USERNAME"));
-        props.setProperty("hibernate.connection.password", System.getenv("DB_PASSWORD"));
-        return props;
-    }
+//    private static Properties setDeployedProperties(Properties props) {
+//        String DB_NAME = System.getenv("DB_NAME");
+//        props.setProperty("hibernate.connection.url", System.getenv("CONNECTION_STR") + DB_NAME);
+//        props.setProperty("hibernate.connection.username", System.getenv("DB_USERNAME"));
+//        props.setProperty("hibernate.connection.password", System.getenv("DB_PASSWORD"));
+//        return props;
+//    }
 
-    private static Properties setDevProperties(Properties props) {
+//    private static Properties setDevProperties(Properties props) {
+//        String DB_NAME = PropertyReader.getPropertyValue("DB_NAME");
+//        String CONNECTION_STR = PropertyReader.getPropertyValue("CONNECTION_STR");
+//        String DB_USERNAME = PropertyReader.getPropertyValue("DB_USERNAME");
+//        String DB_PASSWORD = PropertyReader.getPropertyValue("DB_PASSWORD");
+//        props.put("hibernate.connection.url", CONNECTION_STR + DB_NAME);
+//        props.put("hibernate.connection.username", DB_USERNAME);
+//        props.put("hibernate.connection.password", DB_PASSWORD);
+//        return props;
+//    }
+
+    private static Properties setDeployedAndDevProperties(Properties props) {
         String DB_NAME = PropertyReader.getPropertyValue("DB_NAME");
         String CONNECTION_STR = PropertyReader.getPropertyValue("CONNECTION_STR");
         String DB_USERNAME = PropertyReader.getPropertyValue("DB_USERNAME");
