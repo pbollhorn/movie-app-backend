@@ -25,7 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dat.config.HibernateConfig;
-import dat.dao.ISecurityDAO;
 import dat.dto.ErrorMessage;
 import dat.entities.Account;
 import dat.enums.Roles;
@@ -37,7 +36,7 @@ import dat.utils.PropertyReader;
 public class SecurityController {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ITokenSecurity tokenSecurity = new TokenSecurity();
-    private final ISecurityDAO securityDAO;
+    private final SecurityDao securityDAO;
     private final Logger logger = LoggerFactory.getLogger(SecurityController.class);
 
     public SecurityController() {
@@ -48,7 +47,7 @@ public class SecurityController {
         this.securityDAO = new SecurityDao(emf);
     }
 
-    public SecurityController(ISecurityDAO securityDAO) {
+    public SecurityController(SecurityDao securityDAO) {
         this.securityDAO = securityDAO;
     }
 

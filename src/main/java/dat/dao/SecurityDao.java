@@ -15,14 +15,13 @@ import dat.enums.Roles;
 import dat.exceptions.DaoException;
 import dat.exceptions.ValidationException;
 
-public class SecurityDao extends GenericDao implements ISecurityDAO {
+public class SecurityDao extends GenericDao {
     private final Logger logger = LoggerFactory.getLogger(SecurityDao.class);
 
     public SecurityDao(EntityManagerFactory emf) {
         super(emf);
     }
 
-    @Override
     public UserDTO getVerifiedUser(String username, String password) throws ValidationException, DaoException {
 
 //        Account userAccount = super.getById(Account.class, username); //Throws DaoException if user not found
@@ -45,7 +44,6 @@ public class SecurityDao extends GenericDao implements ISecurityDAO {
 
     }
 
-    @Override
     public Account createUser(String username, String password) {
         Account userAccount = new Account(username, password);
         userAccount.addRole(Roles.USER);
@@ -59,7 +57,6 @@ public class SecurityDao extends GenericDao implements ISecurityDAO {
         }
     }
 
-    @Override
     public Account addRoleToUser(String username, Roles role) {
         Account foundUser = super.getById(Account.class, username);
         foundUser.addRole(role);
@@ -73,7 +70,6 @@ public class SecurityDao extends GenericDao implements ISecurityDAO {
         }
     }
 
-    @Override
     public Account removeRoleFromUser(String username, Roles role) {
         Account foundUserAccount = super.getById(Account.class, username);
         foundUserAccount.removeRole(role);
@@ -87,3 +83,14 @@ public class SecurityDao extends GenericDao implements ISecurityDAO {
         }
     }
 }
+
+// ISecurityDAO.java before it was deleted:
+//public interface ISecurityDAO {
+//    UserDTO getVerifiedUser(String username, String password) throws ValidationException;
+//
+//    Account createUser(String username, String password);
+//
+//    Account addRoleToUser(String username, Roles role);
+//
+//    Account removeRoleFromUser(String username, Roles role);
+//}
