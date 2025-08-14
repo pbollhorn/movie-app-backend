@@ -34,7 +34,7 @@ import dat.exceptions.DaoException;
 import dat.exceptions.ValidationException;
 import dat.utils.PropertyReader;
 
-public class SecurityController implements ISecurityController {
+public class SecurityController {
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ITokenSecurity tokenSecurity = new TokenSecurity();
     private final ISecurityDAO securityDAO;
@@ -58,7 +58,7 @@ public class SecurityController implements ISecurityController {
     }
 
 
-    @Override
+    // to get a token
     public void login(Context ctx) {
         ObjectNode returnJson = objectMapper.createObjectNode();
         try {
@@ -76,7 +76,7 @@ public class SecurityController implements ISecurityController {
         }
     }
 
-    @Override
+    // to get a user
     public void register(Context ctx) {
         ObjectNode returnJson = objectMapper.createObjectNode();
         try {
@@ -94,6 +94,8 @@ public class SecurityController implements ISecurityController {
         }
     }
 
+
+    // to check if a user has access to a route
     public void accessHandler(Context ctx) {
         // This is a preflight request => no need for authentication
         if (ctx.method().toString().equals("OPTIONS")) {
@@ -135,7 +137,8 @@ public class SecurityController implements ISecurityController {
         return verifyToken(token);
     }
 
-    @Override
+
+    // to verify a token
     public void verify(Context ctx) {
 
         ObjectNode returnJson = objectMapper.createObjectNode();
@@ -148,7 +151,8 @@ public class SecurityController implements ISecurityController {
 
     }
 
-    @Override
+
+    // to check how long a token is valid
     public void timeToLive(Context ctx) {
 
         ObjectNode returnJson = objectMapper.createObjectNode();

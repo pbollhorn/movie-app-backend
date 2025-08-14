@@ -7,7 +7,6 @@ import io.javalin.http.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dat.controllers.ISecurityController;
 import dat.controllers.SecurityController;
 import dat.dto.ErrorMessage;
 import dat.exceptions.ApiException;
@@ -17,7 +16,7 @@ public class ApplicationConfig {
     private static Javalin app;
     private static JavalinConfig javalinConfig;
     private static final Logger logger = LoggerFactory.getLogger(ApplicationConfig.class);
-    private static final ISecurityController securityController = new SecurityController();
+    private static final SecurityController securityController = new SecurityController();
 
     private ApplicationConfig() {
     }
