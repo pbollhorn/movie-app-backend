@@ -14,29 +14,18 @@ import dat.utils.PropertyReader;
 
 public class HibernateConfig {
     private static EntityManagerFactory emf;
-    private static EntityManagerFactory emfTest;
-    private static Boolean isTest = false;
-
-    public static void setTest(Boolean test) {
-        isTest = test;
-    }
-
-    public static Boolean getTest() {
-        return isTest;
-    }
 
     public static EntityManagerFactory getEntityManagerFactory() {
         if (emf == null)
-            emf = createEMF(getTest());
+            emf = createEMF(false);
         return emf;
     }
 
     public static EntityManagerFactory getEntityManagerFactoryForTest() {
-        if (emfTest == null) {
-            setTest(true);
-            emfTest = createEMF(getTest());  // No DB needed for test
+        if (emf == null) {
+            emf = createEMF(true);
         }
-        return emfTest;
+        return emf;
     }
 
     // TODO: IMPORTANT: Add Entity classes here for them to be registered with Hibernate
