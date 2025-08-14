@@ -11,11 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import dat.exceptions.DaoException;
 
-public class GenericDAO implements CrudDAO {
+public class GenericDao {
     protected final EntityManagerFactory emf;
-    private final Logger logger = LoggerFactory.getLogger(GenericDAO.class);
+    private final Logger logger = LoggerFactory.getLogger(GenericDao.class);
 
-    public GenericDAO(EntityManagerFactory emf) {
+    public GenericDao(EntityManagerFactory emf) {
         this.emf = emf;
     }
 
@@ -58,7 +58,6 @@ public class GenericDAO implements CrudDAO {
         }
     }
 
-    @Override
     public <T> List<T> getAll(Class<T> type) throws DaoException {
         try (EntityManager em = emf.createEntityManager()) {
             List<T> entities = em.createQuery("SELECT t FROM " + type.getSimpleName() + " t", type).getResultList();

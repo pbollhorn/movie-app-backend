@@ -10,6 +10,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import dat.dao.SecurityDao;
 import dk.bugelhartmann.UserDTO;
 import dk.bugelhartmann.ITokenSecurity;
 import dk.bugelhartmann.TokenSecurity;
@@ -25,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import dat.config.HibernateConfig;
 import dat.dao.ISecurityDAO;
-import dat.dao.SecurityDAO;
 import dat.dto.ErrorMessage;
 import dat.entities.Account;
 import dat.enums.Roles;
@@ -41,11 +41,11 @@ public class SecurityController implements ISecurityController {
     private final Logger logger = LoggerFactory.getLogger(SecurityController.class);
 
     public SecurityController() {
-        this.securityDAO = new SecurityDAO(HibernateConfig.getEntityManagerFactory());
+        this.securityDAO = new SecurityDao(HibernateConfig.getEntityManagerFactory());
     }
 
     public SecurityController(EntityManagerFactory emf) {
-        this.securityDAO = new SecurityDAO(emf);
+        this.securityDAO = new SecurityDao(emf);
     }
 
     public SecurityController(ISecurityDAO securityDAO) {

@@ -17,7 +17,7 @@
 ////@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 //class SecurityDAOTest {
 //    private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
-//    private static final SecurityDAO securityDAO = new SecurityDAO(emf);
+//    private static final SecurityDao securityDAO = new SecurityDao(emf);
 //    private Account testUserAccount;
 //
 //    @BeforeEach

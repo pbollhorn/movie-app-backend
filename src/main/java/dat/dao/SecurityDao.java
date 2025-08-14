@@ -15,10 +15,10 @@ import dat.enums.Roles;
 import dat.exceptions.DaoException;
 import dat.exceptions.ValidationException;
 
-public class SecurityDAO extends GenericDAO implements ISecurityDAO {
-    private final Logger logger = LoggerFactory.getLogger(SecurityDAO.class);
+public class SecurityDao extends GenericDao implements ISecurityDAO {
+    private final Logger logger = LoggerFactory.getLogger(SecurityDao.class);
 
-    public SecurityDAO(EntityManagerFactory emf) {
+    public SecurityDao(EntityManagerFactory emf) {
         super(emf);
     }
 
