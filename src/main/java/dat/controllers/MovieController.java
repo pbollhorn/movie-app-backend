@@ -3,17 +3,16 @@ package dat.controllers;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import dat.config.HibernateConfig;
-import dat.dto.MovieOverviewDto;
-import dat.dto.NameMovieListDto;
+
 import io.javalin.http.Context;
-import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dat.dao.MovieDao;
 import dat.dto.MovieDetailsDto;
 import dat.MovieUpdateTask;
+import dat.dto.MovieOverviewDto;
+import dat.dto.NameMovieListDto;
 
 public class MovieController {
 

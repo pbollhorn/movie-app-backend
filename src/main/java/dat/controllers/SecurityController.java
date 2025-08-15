@@ -37,18 +37,6 @@ public class SecurityController {
     private static final SecurityDao securityDAO = SecurityDao.getInstance();
     private static final Logger logger = LoggerFactory.getLogger(SecurityController.class);
 
-//    public SecurityController() {
-//        this.securityDAO = new SecurityDao(HibernateConfig.getEntityManagerFactory());
-//    }
-//
-//    public SecurityController(EntityManagerFactory emf) {
-//        this.securityDAO = new SecurityDao(emf);
-//    }
-//
-//    public SecurityController(SecurityDao securityDAO) {
-//        this.securityDAO = securityDAO;
-//    }
-
     // Health check for the API. Used in deployment
     public static void healthCheck(@NotNull Context ctx) {
         ctx.status(200).json("{\"msg\": \"API is up and running\"}");
