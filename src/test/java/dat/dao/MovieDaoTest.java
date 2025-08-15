@@ -36,7 +36,7 @@ public class MovieDaoTest {
         MovieDetailsDto movieDetailsDto = movieDao.getMovieDetails(23588);
 
         System.out.println(movieDetailsDto);
-        assertEquals("Baby Doom", movieDetailsDto.title());
+        assertEquals("Baby Doom Wrong Title", movieDetailsDto.title());
 
     }
 
