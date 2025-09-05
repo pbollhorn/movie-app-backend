@@ -7,8 +7,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="MovieRecommendationApi" />
         <module name="HotelAPI_part1" />
+        <module name="movie-app-backend" />
       </profile>
     </annotationProcessing>
   </component>
