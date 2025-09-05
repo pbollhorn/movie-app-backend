@@ -1,7 +1,8 @@
 # MovieApp Backend
 
-This repo is the backend for my MovieApp full-stack web application.
-Link to repo for frontend: 
+This repo contains the backend for my MovieApp full-stack web application.
+
+Link to repo for frontend: https://github.com/pbollhorn/movie-app-frontend 
 
 
 
