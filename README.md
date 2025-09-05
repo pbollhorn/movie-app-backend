@@ -1,6 +1,6 @@
-# Movie Recommendation API
+# MovieApp Backend
 
-This repo is the backend for my MovieApp
+This repo is the backend for my MovieApp full-stack web application.
 
 
 
