@@ -211,6 +211,9 @@ public class SecurityController {
 
 
     // TODO: Jeg PETER, har tilføjet denne metode
+    // This method extracts accountId Integer from token in header
+    // If no token in header, then null is returned as accountId
+    // (null as accountId represents a non-logged-in user)
     public static Integer getAccountIdFromToken(Context ctx) {
         String header = ctx.header("Authorization");
         if (header == null) {
