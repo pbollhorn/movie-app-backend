@@ -1,6 +1,9 @@
-###
+### Search without token
 GET {{url}}/movies/search?title=inception
-#Authorization: Bearer {{token}}
+
+### Search with token
+GET {{url}}/movies/search?title=inception
+Authorization: Bearer {{token}}
 
 ###
 GET {{url}}/movies/recommendations

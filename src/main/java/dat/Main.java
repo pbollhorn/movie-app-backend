@@ -1,6 +1,5 @@
 package dat;
 
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
@@ -30,16 +29,9 @@ public class Main {
         SecurityDao securityDAO = SecurityDao.getInstance();
         MovieDao movieDAO = MovieDao.getInstance();
 
-        ApplicationConfig
-                .getInstance()
-                .initiateServer()
-                .setRoute(Routes.getRoutes())
-                .handleException()
-                .setApiExceptionHandling()
-                .checkSecurityRoles()
-                .startServer(7070);
 
-        // Install pg_trgm extension and create indexes in database, if they do not already exist
+        // Install pg_trgm extension if not already installed
+        // Create indexes in database, if not already created
         String DB_NAME = PropertyReader.getPropertyValue("DB_NAME");
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -51,6 +43,16 @@ public class Main {
             em.createNativeQuery("CREATE INDEX IF NOT EXISTS idx_credit_person_id ON credit(person_id)").executeUpdate();
             em.getTransaction().commit();
         }
+
+        // Configure server and start it
+        ApplicationConfig
+                .getInstance()
+                .initiateServer()
+                .setRoute(Routes.getRoutes())
+                .handleException()
+                .setApiExceptionHandling()
+                .checkSecurityRoles()
+                .startServer(7070);
 
 
     }
