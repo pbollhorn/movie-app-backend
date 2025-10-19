@@ -21,7 +21,7 @@ import dat.dto.MovieOverviewDto;
 public class MovieDaoTest {
 
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactoryForTest();
-    private static final MovieDao movieDao = MovieDao.getInstance();
+    private static final MovieDao movieDao = MovieDao.getInstance(emf);
     private static final GenreDao genreDao = GenreDao.getInstance(emf);
 
     // Max number of movies when searching and getting recommendations

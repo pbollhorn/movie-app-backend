@@ -22,6 +22,7 @@ public class PersonDao {
         return instance;
     }
 
+    // Update person (or create it if it does not already exist)
     public Person update(TmdbCreditDto tmdbCreditDto) {
 
         try (EntityManager em = emf.createEntityManager()) {

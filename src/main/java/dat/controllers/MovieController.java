@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import dat.config.HibernateConfig;
 import io.javalin.http.Context;
+import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +21,8 @@ public class MovieController {
     // Max number of movies when searching and getting recommendations
     private static final int MOVIE_LIMIT = 50;
 
-    private static final MovieDao movieDao = MovieDao.getInstance();
+    private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+    private static final MovieDao movieDao = MovieDao.getInstance(emf);
     private static final Logger logger = LoggerFactory.getLogger(MovieController.class);
 
     public static void searchMovies(Context ctx) {

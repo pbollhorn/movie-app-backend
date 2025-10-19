@@ -27,7 +27,7 @@ public class Main {
 
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
         SecurityDao securityDAO = SecurityDao.getInstance();
-        MovieDao movieDAO = MovieDao.getInstance();
+        MovieDao movieDAO = MovieDao.getInstance(emf);
 
 
         // Install pg_trgm extension if not already installed
