@@ -42,18 +42,18 @@ public class Populator {
         genres.forEach(genreDao::create);
 
         // Populate with two movies
-        TmdbMovieDto m1 = new TmdbMovieDto(23588, "Baby Doom", "Baby Doom", false,
-                false, "da", 5.7, 6, LocalDate.of(1998, 3, 20),
-                null, "/sf3AHsBHmyEcRxCA3pU7ggA5csk.jpg",
-                List.of(new TmdbGenreDto(35, "Comedy")), "Max er en super nørd...",
-                null, 81, null, "Released", null);
+        TmdbMovieDto m1 = new TmdbMovieDto(329, "Jurassic Park", "Jurassic Park", false,
+                false, "en", 7.96, 17095, LocalDate.of(1993, 6, 11),
+                "/jzt9HuhIAdH9qp0K2MA1m5V8sgq.jpg", "/63viWuPfYQjRYLSZSZNq7dglJP5.jpg",
+                List.of(new TmdbGenreDto(12, "Adventure"),new TmdbGenreDto(878, "Sci-Fi")), "A wealthy entrepreneur secretly creates...",
+                null, 127, "An adventure 65 million years in the making.", "Released", null);
         movieDao.create(new Movie(m1));
 
-        TmdbMovieDto m2 = new TmdbMovieDto(33416, "Midt Om Natten", "Midt om natten", false,
-                false, "da", 6.5, 24, LocalDate.of(1984, 3, 9),
+        TmdbMovieDto m2 = new TmdbMovieDto(33416, "In the Middle of the Night", "Midt om natten", false,
+                false, "da", 6.538, 26, LocalDate.of(1984, 3, 9),
                 "/ljx2Ds6VIiwtCImKJGk4ytAGPpA.jpg", "/739gDLbIA4SgEESTd3toHkftJOu.jpg",
-                List.of(new TmdbGenreDto(18, "Drama"), new TmdbGenreDto(35, "Comedy")), "I 80'ernes Danmark...",
-                null, 131, null, "Released", null);
+                List.of(new TmdbGenreDto(18, "Drama"), new TmdbGenreDto(35, "Comedy")), "Benny and Arnold are homeless...",
+                null, 131, "", "Released", null);
         movieDao.create(new Movie(m2));
 
 

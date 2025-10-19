@@ -10,6 +10,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import dat.config.HibernateConfig;
@@ -53,9 +55,13 @@ public class MovieDaoTest {
     @Test
     void getAllMovieIds() {
 
+        // Positive tests
         Set<Integer> movieIds = movieDao.getAllMovieIds();
         assertEquals(2, movieIds.size());
+        assertTrue(movieIds.contains(329));
 
+        // Negative test
+        assertFalse(movieIds.contains(333));
     }
 
 
@@ -63,12 +69,16 @@ public class MovieDaoTest {
     void getMovieDetails() {
 
         // Positive test
-        MovieDetailsDto movieDetailsDto = movieDao.getMovieDetails(23588);
-        assertEquals("Baby Doom", movieDetailsDto.title());
+        MovieDetailsDto movieDetailsDto = movieDao.getMovieDetails(329);
+        assertEquals(329, movieDetailsDto.id());
+        assertEquals("Jurassic Park", movieDetailsDto.title());
+        assertEquals("Jurassic Park", movieDetailsDto.originalTitle());
 
         // Another positive test
         movieDetailsDto = movieDao.getMovieDetails(33416);
-        assertEquals("Midt Om Natten", movieDetailsDto.title());
+        assertEquals(33416, movieDetailsDto.id());
+        assertEquals("In the Middle of the Night", movieDetailsDto.title());
+        assertEquals("Midt om natten", movieDetailsDto.originalTitle());
 
 
     }
@@ -90,7 +100,6 @@ public class MovieDaoTest {
 //        movies = movieDao.searchMovies("does not exist in test db",0, MOVIE_LIMIT);
 //        assertEquals(0, movies.size());
 //    }
-
 
 
 }
