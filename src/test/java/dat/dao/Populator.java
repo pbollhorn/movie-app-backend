@@ -41,7 +41,7 @@ public class Populator {
                 THRILLER, CRIME, DOCUMENTARY, SCI_FI, MYSTERY, MUSIC, ROMANCE, FAMILY, WAR, TV_MOVIE);
         genres.forEach(genreDao::create);
 
-        // Populate with two movies
+        // Populate with movie "Jurassic Park"
         TmdbMovieDto m1 = new TmdbMovieDto(329, "Jurassic Park", "Jurassic Park", false,
                 false, "en", 7.96, 17095, LocalDate.of(1993, 6, 11),
                 "/jzt9HuhIAdH9qp0K2MA1m5V8sgq.jpg", "/63viWuPfYQjRYLSZSZNq7dglJP5.jpg",
@@ -49,6 +49,7 @@ public class Populator {
                 null, 127, "An adventure 65 million years in the making.", "Released", null);
         movieDao.create(new Movie(m1));
 
+        // Populate with movie "In the Middle of the Night"
         TmdbMovieDto m2 = new TmdbMovieDto(33416, "In the Middle of the Night", "Midt om natten", false,
                 false, "da", 6.538, 26, LocalDate.of(1984, 3, 9),
                 "/ljx2Ds6VIiwtCImKJGk4ytAGPpA.jpg", "/739gDLbIA4SgEESTd3toHkftJOu.jpg",
