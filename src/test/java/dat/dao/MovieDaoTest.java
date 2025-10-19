@@ -1,5 +1,6 @@
 package dat.dao;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -38,13 +39,10 @@ public class MovieDaoTest {
     void tearDown() {
 
         try (EntityManager em = emf.createEntityManager()) {
-            // Delete everything from tables and reset id's to start with 1
             em.getTransaction().begin();
             em.createNativeQuery("DELETE FROM movie_genre").executeUpdate();
             em.createNativeQuery("DELETE FROM movie").executeUpdate();
             em.createNativeQuery("DELETE FROM genre").executeUpdate();
-//            em.createNativeQuery("ALTER SEQUENCE movie_id_seq RESTART WITH 1").executeUpdate();
-//            em.createNativeQuery("ALTER SEQUENCE hotel_id_seq RESTART WITH 1").executeUpdate();
             em.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,9 +57,10 @@ public class MovieDaoTest {
         Set<Integer> movieIds = movieDao.getAllMovieIds();
         assertEquals(2, movieIds.size());
         assertTrue(movieIds.contains(329));
+        assertTrue(movieIds.contains(33416));
 
         // Negative test
-        assertFalse(movieIds.contains(333));
+        assertFalse(movieIds.contains(9426));
     }
 
 
@@ -73,12 +72,19 @@ public class MovieDaoTest {
         assertEquals(329, movieDetailsDto.id());
         assertEquals("Jurassic Park", movieDetailsDto.title());
         assertEquals("Jurassic Park", movieDetailsDto.originalTitle());
+        assertEquals("en", movieDetailsDto.originalLanguage());
+        assertEquals(LocalDate.of(1993, 6, 11), movieDetailsDto.releaseDate());
 
         // Another positive test
         movieDetailsDto = movieDao.getMovieDetails(33416);
         assertEquals(33416, movieDetailsDto.id());
         assertEquals("In the Middle of the Night", movieDetailsDto.title());
         assertEquals("Midt om natten", movieDetailsDto.originalTitle());
+        assertEquals("da", movieDetailsDto.originalLanguage());
+        assertEquals(LocalDate.of(1984, 3, 9), movieDetailsDto.releaseDate());
+
+        // TODO: Negative test - Look up movieId which does not exists
+//        movieDetailsDto = movieDao.getMovieDetails(9426);
 
 
     }

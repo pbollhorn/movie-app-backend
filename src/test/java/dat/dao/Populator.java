@@ -45,7 +45,7 @@ public class Populator {
         TmdbMovieDto m1 = new TmdbMovieDto(329, "Jurassic Park", "Jurassic Park", false,
                 false, "en", 7.96, 17095, LocalDate.of(1993, 6, 11),
                 "/jzt9HuhIAdH9qp0K2MA1m5V8sgq.jpg", "/63viWuPfYQjRYLSZSZNq7dglJP5.jpg",
-                List.of(new TmdbGenreDto(12, "Adventure"),new TmdbGenreDto(878, "Sci-Fi")), "A wealthy entrepreneur secretly creates...",
+                List.of(new TmdbGenreDto(12, "Adventure"), new TmdbGenreDto(878, "Sci-Fi")), "A wealthy entrepreneur secretly creates...",
                 null, 127, "An adventure 65 million years in the making.", "Released", null);
         movieDao.create(new Movie(m1));
 
@@ -57,18 +57,7 @@ public class Populator {
         movieDao.create(new Movie(m2));
 
 
-//        try (EntityManager em = emf.createEntityManager()) {
-//            em.getTransaction().begin();
-//            // Create test user with user role
-//            Account account1 = new Account("testuser1", "password1");
-//            account1.addRole(Roles.USER);
-//            em.persist(account1);
-//            em.getTransaction().commit();
-//        }
-
-
         return new TmdbMovieDto[]{m1, m2};
-//        return new TmdbMovieDto[]{m1};
 
     }
 
