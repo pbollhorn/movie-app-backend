@@ -26,7 +26,7 @@ public class Populator {
     private static final Genre THRILLER = new Genre(53, "Thriller");
     private static final Genre CRIME = new Genre(80, "Crime");
     private static final Genre DOCUMENTARY = new Genre(99, "Documentary");
-    private static final Genre SCIENCE_FICTION = new Genre(878, "Sci-Fi");
+    private static final Genre SCI_FI = new Genre(878, "Sci-Fi");
     private static final Genre MYSTERY = new Genre(9648, "Mystery");
     private static final Genre MUSIC = new Genre(10402, "Music");
     private static final Genre ROMANCE = new Genre(10749, "Romance");
@@ -38,7 +38,7 @@ public class Populator {
 
         // Populate with all genres
         Set<Genre> genres = Set.of(ADVENTURE, FANTASY, ANIMATION, DRAMA, HORROR, ACTION, COMEDY, HISTORY, WESTERN,
-                THRILLER, CRIME, DOCUMENTARY, SCIENCE_FICTION, MYSTERY, MUSIC, ROMANCE, FAMILY, WAR, TV_MOVIE);
+                THRILLER, CRIME, DOCUMENTARY, SCI_FI, MYSTERY, MUSIC, ROMANCE, FAMILY, WAR, TV_MOVIE);
         genres.forEach(genreDao::create);
 
         // Populate with two movies
