@@ -36,8 +36,10 @@ public class Populator {
     public static TmdbMovieDto[] populate(MovieDao movieDao, GenreDao genreDao, EntityManagerFactory emf) {
 
         // Populate with all genres
-        Set.of(ADVENTURE, FANTASY, ANIMATION, DRAMA, HORROR, ACTION, COMEDY, HISTORY, WESTERN,
-                THRILLER, CRIME, DOCUMENTARY, SCI_FI, MYSTERY, MUSIC, ROMANCE, FAMILY, WAR, TV_MOVIE).forEach(genreDao::update);
+        Set<TmdbGenreDto> tmdbGenreDtos = Set.of(ADVENTURE, FANTASY, ANIMATION, DRAMA, HORROR, ACTION, COMEDY, HISTORY, WESTERN,
+                THRILLER, CRIME, DOCUMENTARY, SCI_FI, MYSTERY, MUSIC, ROMANCE, FAMILY, WAR, TV_MOVIE);
+        tmdbGenreDtos.forEach(genreDao::update);
+
 
         // Populate with movie "Jurassic Park"
         TmdbMovieDto m1 = new TmdbMovieDto(329, "Jurassic Park", "Jurassic Park", false,
