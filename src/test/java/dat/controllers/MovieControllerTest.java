@@ -27,11 +27,11 @@ public class MovieControllerTest {
     }
 
 
-    @Test
-    void updateOrCreateMovieRating() {
-
-
-    }
+//    @Test
+//    void updateOrCreateMovieRating() {
+//
+//
+//    }
 
 
 }
