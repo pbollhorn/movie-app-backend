@@ -47,7 +47,7 @@ public class Populator {
                 "/jzt9HuhIAdH9qp0K2MA1m5V8sgq.jpg", "/63viWuPfYQjRYLSZSZNq7dglJP5.jpg",
                 List.of(ADVENTURE, SCI_FI), "A wealthy entrepreneur secretly creates...",
                 null, 127, "An adventure 65 million years in the making.", "Released", null);
-        movieDao.create(new Movie(m1));
+        movieDao.update(new Movie(m1));
 
         // Populate with movie "In the Middle of the Night"
         TmdbMovieDto m2 = new TmdbMovieDto(33416, "In the Middle of the Night", "Midt om natten", false,
@@ -55,7 +55,7 @@ public class Populator {
                 "/ljx2Ds6VIiwtCImKJGk4ytAGPpA.jpg", "/739gDLbIA4SgEESTd3toHkftJOu.jpg",
                 List.of(DRAMA, COMEDY), "Benny and Arnold are homeless...",
                 null, 131, "", "Released", null);
-        movieDao.create(new Movie(m2));
+        movieDao.update(new Movie(m2));
 
 
         return new TmdbMovieDto[]{m1, m2};
