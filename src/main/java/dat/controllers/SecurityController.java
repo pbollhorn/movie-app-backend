@@ -10,6 +10,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import dat.config.HibernateConfig;
 import dat.dao.SecurityDao;
 import dk.bugelhartmann.UserDTO;
 import dk.bugelhartmann.ITokenSecurity;
@@ -18,6 +19,7 @@ import dk.bugelhartmann.TokenVerificationException;
 import io.javalin.http.*;
 import io.javalin.security.RouteRole;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -34,7 +36,8 @@ import dat.utils.PropertyReader;
 public class SecurityController {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final ITokenSecurity tokenSecurity = new TokenSecurity();
-    private static final SecurityDao securityDAO = SecurityDao.getInstance();
+    private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+    private static final SecurityDao securityDAO = SecurityDao.getInstance(emf);
     private static final Logger logger = LoggerFactory.getLogger(SecurityController.class);
 
     // Health check for the API. Used in deployment

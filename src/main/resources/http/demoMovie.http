@@ -2,7 +2,7 @@
 GET {{url}}/movies/search?title=inception
 
 ### Search with token
-GET {{url}}/movies/search?title=inception
+GET {{url}}/movies/search?title=goblets
 Authorization: Bearer {{token}}
 
 ###

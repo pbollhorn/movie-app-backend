@@ -26,7 +26,7 @@ public class Main {
                 ----------------------------------------------------------\n""");
 
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-        SecurityDao securityDAO = SecurityDao.getInstance();
+        SecurityDao securityDAO = SecurityDao.getInstance(emf);
         MovieDao movieDAO = MovieDao.getInstance(emf);
 
 
