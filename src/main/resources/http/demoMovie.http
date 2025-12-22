@@ -1,5 +1,5 @@
 ### Search without token
-GET {{url}}/movies/search?title=inception
+GET {{url}}/movies/search?title=intercepfin
 
 ### Search with token
 GET {{url}}/movies/search?title=goblets
