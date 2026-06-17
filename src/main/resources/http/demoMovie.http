@@ -6,6 +6,10 @@ GET {{url}}/movies/search?title=goblets
 Authorization: Bearer {{token}}
 
 ###
+GET {{url}}/movies/top-rated
+Authorization: Bearer {{token}}
+
+###
 GET {{url}}/movies/recommendations
 Authorization: Bearer {{token}}
 

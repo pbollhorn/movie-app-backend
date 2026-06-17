@@ -105,6 +105,29 @@ public class MovieDao {
 
     }
 
+
+    public List<MovieOverviewDto> getTopRatedMovies(Integer accountId, int limit) {
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+            String jpql = """
+                    SELECT NEW dat.dto.MovieOverviewDto(m,
+                    (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
+                    FROM Movie m
+                    ORDER BY m.voteAverage
+                    LIMIT :limit""";
+
+            TypedQuery<MovieOverviewDto> query = em.createQuery(jpql, MovieOverviewDto.class);
+            query.setParameter("accountId", accountId);
+            query.setParameter("limit", limit);
+            List<MovieOverviewDto> movies = query.getResultList();
+
+            return movies;
+
+        }
+    }
+
+
     public NameMovieListDto getMoviesWithPerson(int personId, Integer accountId) {
 
         try (EntityManager em = emf.createEntityManager()) {
@@ -129,6 +152,7 @@ public class MovieDao {
         }
 
     }
+
 
     public NameMovieListDto getMoviesInCollection(int collectionId, Integer accountId) {
 
@@ -172,6 +196,7 @@ public class MovieDao {
         }
 
     }
+
 
     public MovieDetailsDto getMovieDetails(int movieId) {
 

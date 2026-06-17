@@ -24,6 +24,7 @@ public class Routes {
     private static EndpointGroup movieRoutes() {
         return () -> {
             get("/search", MovieController::searchMovies, Roles.ANYONE);
+            get("/top-rated",  MovieController::getTopRatedMovies, Roles.ANYONE);
             get("/recommendations", MovieController::getMovieRecommendations, Roles.USER);
             get("/", MovieController::getAllMoviesWithRating, Roles.USER);
             post("/update", MovieController::updateMovies, Roles.USER);  // TODO: Turn into ADMIN endpoint

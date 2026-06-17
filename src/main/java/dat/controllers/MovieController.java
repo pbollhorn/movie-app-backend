@@ -34,6 +34,14 @@ public class MovieController {
         ctx.json(movies);
     }
 
+    public static void getTopRatedMovies(Context ctx) {
+
+        Integer accountId = SecurityController.getAccountIdFromToken(ctx);
+
+        List<MovieOverviewDto> movies = movieDao.getTopRatedMovies(accountId, MOVIE_LIMIT);
+        ctx.json(movies);
+    }
+
     public static void getMoviesWithPerson(Context ctx) {
 
         Integer accountId = SecurityController.getAccountIdFromToken(ctx);
