@@ -114,6 +114,7 @@ public class MovieDao {
                     SELECT NEW dat.dto.MovieOverviewDto(m,
                     (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
                     FROM Movie m
+                    WHERE m.voteCount >= 1000
                     ORDER BY m.voteAverage DESC
                     LIMIT :limit""";
 
