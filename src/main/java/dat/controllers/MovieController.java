@@ -38,7 +38,7 @@ public class MovieController {
 
         Integer accountId = SecurityController.getAccountIdFromToken(ctx);
 
-        List<MovieOverviewDto> movies = movieDao.getTopRatedMovies(accountId, MOVIE_LIMIT);
+        List<MovieOverviewDto> movies = movieDao.getTopRatedMovies(accountId, 100);
         ctx.json(movies);
     }
 
