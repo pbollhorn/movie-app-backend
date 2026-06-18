@@ -106,22 +106,26 @@ public class MovieDao {
     }
 
 
-    public List<MovieOverviewDto> getTopRatedMovies(Integer accountId, int limit) {
+    public List<MovieOverviewDto> getTop100Movies(Integer accountId) {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            String jpql = """
+            String jpql = "SELECT AVG(m.voteAverage) FROM Movie m WHERE m.voteCount >= 1000";
+            TypedQuery<Double> query = em.createQuery(jpql, Double.class);
+            Double globalMean = query.getSingleResult();
+
+            jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m,
                     (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
                     FROM Movie m
                     WHERE m.voteCount >= 1000
-                    ORDER BY m.voteAverage DESC
-                    LIMIT :limit""";
+                    ORDER BY (m.voteCount / (m.voteCount + 1000.0)) * m.voteAverage + (1000.0 / (m.voteCount + 1000.0) * :globalMean) DESC
+                    LIMIT 100""";
 
-            TypedQuery<MovieOverviewDto> query = em.createQuery(jpql, MovieOverviewDto.class);
-            query.setParameter("accountId", accountId);
-            query.setParameter("limit", limit);
-            List<MovieOverviewDto> movies = query.getResultList();
+            TypedQuery<MovieOverviewDto> newQuery = em.createQuery(jpql, MovieOverviewDto.class);
+            newQuery.setParameter("accountId", accountId);
+            newQuery.setParameter("globalMean", globalMean);
+            List<MovieOverviewDto> movies = newQuery.getResultList();
 
             return movies;
 

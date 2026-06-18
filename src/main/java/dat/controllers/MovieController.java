@@ -34,11 +34,11 @@ public class MovieController {
         ctx.json(movies);
     }
 
-    public static void getTopRatedMovies(Context ctx) {
+    public static void getTop100Movies(Context ctx) {
 
         Integer accountId = SecurityController.getAccountIdFromToken(ctx);
 
-        List<MovieOverviewDto> movies = movieDao.getTopRatedMovies(accountId, 100);
+        List<MovieOverviewDto> movies = movieDao.getTop100Movies(accountId);
         ctx.json(movies);
     }
 
