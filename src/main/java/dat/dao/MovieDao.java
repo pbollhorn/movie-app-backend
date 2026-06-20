@@ -1,12 +1,14 @@
 package dat.dao;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+
 import java.util.stream.Collectors;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
 
 import dat.entities.Account;
 import dat.entities.Rating;
@@ -49,8 +51,7 @@ public class MovieDao {
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = "SELECT m.id FROM Movie m";
-            TypedQuery<Integer> query = em.createQuery(jpql, Integer.class);
-            return new HashSet<Integer>(query.getResultList());
+            return new HashSet<>(em.createQuery(jpql, Integer.class).getResultList());
 
         }
 
@@ -64,33 +65,30 @@ public class MovieDao {
             String sql = """
                     SELECT id FROM movie
                     WHERE TRIM(LOWER(:title)) = LOWER(title)
-                    ORDER BY votecount DESC
-                    LIMIT :limit""";
-            Query query = em.createNativeQuery(sql, Integer.class);
-            query.setParameter("title", title);
-            query.setParameter("limit", limit);
-            List<Integer> movieIds = query.getResultList();
+                    ORDER BY votecount DESC""";
+            List<Integer> movieIds = em.createNativeQuery(sql, Integer.class)
+                    .setParameter("title", title)
+                    .setMaxResults(limit)
+                    .getResultList();
 
             sql = """
                     SELECT id FROM movie
                     WHERE :title <<% title AND id NOT IN :movieIds
-                    ORDER BY STRICT_WORD_SIMILARITY(:title, title) DESC, votecount DESC
-                    LIMIT :limit""";
-            query = em.createNativeQuery(sql, Integer.class);
-            query.setParameter("title", title);
-            query.setParameter("movieIds", movieIds.isEmpty() ? List.of(0) : movieIds);
-            query.setParameter("limit", limit - movieIds.size());
-            movieIds.addAll(query.getResultList());
+                    ORDER BY STRICT_WORD_SIMILARITY(:title, title) DESC, votecount DESC""";
+            movieIds.addAll(em.createNativeQuery(sql, Integer.class)
+                    .setParameter("title", title)
+                    .setParameter("movieIds", movieIds.isEmpty() ? List.of(0) : movieIds)
+                    .setMaxResults(limit - movieIds.size())
+                    .getResultList());
 
             String jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m,
                     (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
                     FROM Movie m WHERE m.id IN :movieIds""";
-
-            TypedQuery<MovieOverviewDto> newQuery = em.createQuery(jpql, MovieOverviewDto.class);
-            newQuery.setParameter("accountId", accountId);
-            newQuery.setParameter("movieIds", movieIds);
-            List<MovieOverviewDto> movieDtos = newQuery.getResultList();
+            List<MovieOverviewDto> movieDtos = em.createQuery(jpql, MovieOverviewDto.class)
+                    .setParameter("accountId", accountId)
+                    .setParameter("movieIds", movieIds)
+                    .getResultList();
 
             // Map from ID to DTO for lookup
             Map<Integer, MovieOverviewDto> dtoMap = movieDtos.stream()
@@ -109,7 +107,7 @@ public class MovieDao {
      * Gets the top 100 movies ranked by the IMDb weighted rating formula
      * (see <a href="https://web.archive.org/web/20260311072638/https://help.imdb.com/article/imdb/track-movies-tv/ratings-faq/G67Y87TFYYP6TWAV">IMDb Ratings FAQ</a>).
      *
-     * @param accountId Account ID to get this apps (True, False, Null) ratings for the {@link MovieOverviewDto} instances
+     * @param accountId Account ID to get this app's (True, False, Null) ratings for the {@link MovieOverviewDto} instances
      * @return List of top 100 ranked {@link MovieOverviewDto} instances
      * @see
      */
@@ -288,39 +286,37 @@ public class MovieDao {
 
             // Get list of id of movies, which the user have rated positively
             String jpql = "SELECT r.movie.id FROM Rating r WHERE r.account.id = :accountId AND rating=TRUE";
-            TypedQuery<Integer> query = em.createQuery(jpql, Integer.class);
-            query.setParameter("accountId", accountId);
-            List<Integer> movieIds = query.getResultList();
+            List<Integer> movieIds = em.createQuery(jpql, Integer.class)
+                    .setParameter("accountId", accountId)
+                    .getResultList();
 
             // Get list of director ids which have made movies, which the user have rated positively
             jpql = "SELECT p.id FROM Person p JOIN Credit c ON c.person.id=p.id WHERE c.job='Director' AND c.movie.id IN :movieIds";
-            query = em.createQuery(jpql, Integer.class);
-            query.setParameter("movieIds", movieIds);
-            List<Integer> directorIds = query.getResultList();
+            List<Integer> directorIds = em.createQuery(jpql, Integer.class)
+                    .setParameter("movieIds", movieIds)
+                    .getResultList();
 
             // Select all movies from these directors
             jpql = "SELECT m.id FROM Movie m JOIN Credit c ON c.movie.id=m.id WHERE c.job='Director' AND c.person.id IN :directorIds";
-            query = em.createQuery(jpql, Integer.class);
-            query.setParameter("directorIds", directorIds);
-            movieIds = query.getResultList();
-            movieIds.forEach(System.out::println);
+            movieIds = em.createQuery(jpql, Integer.class)
+                    .setParameter("directorIds", directorIds)
+                    .getResultList();
 
             // Exclude movies already rated by user. and ORDER BY and LIMIT
             jpql = """
                     SELECT m.id FROM Movie m WHERE m.id IN :movieIds AND m.id NOT IN
                             (SELECT r.movie.id FROM Rating r WHERE r.account.id =:accountId)
-                    ORDER BY m.voteAverage DESC NULLS LAST LIMIT:
-                    limit """;
-            query = em.createQuery(jpql, Integer.class);
-            query.setParameter("movieIds", movieIds);
-            query.setParameter("accountId", accountId);
-            query.setParameter("limit", limit);
-            movieIds = query.getResultList();
+                    ORDER BY m.voteAverage DESC NULLS LAST""";
+            movieIds = em.createQuery(jpql, Integer.class)
+                    .setParameter("movieIds", movieIds)
+                    .setParameter("accountId", accountId)
+                    .setMaxResults(limit)
+                    .getResultList();
 
             jpql = "SELECT NEW dat.dto.MovieOverviewDto(m) FROM Movie m WHERE m.id IN :movieIds ORDER BY m.voteAverage DESC NULLS LAST";
-            TypedQuery<MovieOverviewDto> newQuery = em.createQuery(jpql, MovieOverviewDto.class);
-            newQuery.setParameter("movieIds", movieIds);
-            List<MovieOverviewDto> recommendations = newQuery.getResultList();
+            List<MovieOverviewDto> recommendations = em.createQuery(jpql, MovieOverviewDto.class)
+                    .setParameter("movieIds", movieIds)
+                    .getResultList();
 
             return recommendations;
 
