@@ -131,8 +131,7 @@ public class MovieDao {
                     FROM Movie m
                     WHERE m.voteCount >= :minVotes
                     ORDER BY (m.voteAverage * m.voteCount / (m.voteCount + :minVotes)) +
-                    (1.0 * :mean * :minVotes / (m.voteCount + :minVotes)) DESC
-                    """;
+                    (1.0 * :mean * :minVotes / (m.voteCount + :minVotes)) DESC""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
                     .setParameter("minVotes", MIN_VOTE_COUNT)
@@ -151,21 +150,21 @@ public class MovieDao {
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = "SELECT p.name FROM Person p WHERE p.id = :personId";
-            TypedQuery<String> query = em.createQuery(jpql, String.class);
-            query.setParameter("personId", personId);
-            String name = query.getSingleResult();
+            String personName = em.createQuery(jpql, String.class)
+                    .setParameter("personId", personId)
+                    .getSingleResult();
 
             jpql = """
                     SELECT DISTINCT NEW dat.dto.MovieOverviewDto(m,
                     (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
                     FROM Movie m JOIN Credit c ON m.id=c.movie.id
                     WHERE c.person.id=:personId ORDER BY m.releaseDate""";
-            TypedQuery<MovieOverviewDto> newQuery = em.createQuery(jpql, MovieOverviewDto.class);
-            newQuery.setParameter("personId", personId);
-            newQuery.setParameter("accountId", accountId);
-            List<MovieOverviewDto> movieList = newQuery.getResultList();
+            List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
+                    .setParameter("personId", personId)
+                    .setParameter("accountId", accountId)
+                    .getResultList();
 
-            return new NameMovieListDto(name, movieList);
+            return new NameMovieListDto(personName, movies);
 
         }
 
@@ -177,9 +176,9 @@ public class MovieDao {
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = "SELECT c.name FROM Collection c WHERE c.id = :collectionId";
-            TypedQuery<String> query = em.createQuery(jpql, String.class);
-            query.setParameter("collectionId", collectionId);
-            String name = query.getSingleResult();
+            String collectionName = em.createQuery(jpql, String.class)
+                    .setParameter("collectionId", collectionId)
+                    .getSingleResult();
 
             jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m,
@@ -187,12 +186,12 @@ public class MovieDao {
                     FROM Movie m
                     WHERE m.collection.id=:collectionId
                     ORDER BY m.releaseDate""";
-            TypedQuery<MovieOverviewDto> newQuery = em.createQuery(jpql, MovieOverviewDto.class);
-            newQuery.setParameter("collectionId", collectionId);
-            newQuery.setParameter("accountId", accountId);
-            List<MovieOverviewDto> movieList = newQuery.getResultList();
+            List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
+                    .setParameter("collectionId", collectionId)
+                    .setParameter("accountId", accountId)
+                    .getResultList();
 
-            return new NameMovieListDto(name, movieList);
+            return new NameMovieListDto(collectionName, movies);
 
         }
 
@@ -206,11 +205,12 @@ public class MovieDao {
             String jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m, r.rating)
                     FROM Rating r JOIN Movie m ON r.movie.id = m.id WHERE r.account.id =:accountId
-                    ORDER BY m.title """;
+                    ORDER BY m.title""";
+            List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
+                    .setParameter("accountId", accountId)
+                    .getResultList();
 
-            TypedQuery<MovieOverviewDto> query = em.createQuery(jpql, MovieOverviewDto.class);
-            query.setParameter("accountId", accountId);
-            return query.getResultList();
+            return movies;
         }
 
     }
@@ -227,11 +227,10 @@ public class MovieDao {
             String jpql = """
                     SELECT NEW dat.dto.CreditDto(c.id, p.id, p.name, c.job, c.department, c.character)
                     FROM Person p JOIN Credit c ON c.person.id = p.id WHERE c.movie.id =:movieId
-                    ORDER BY c.rankInMovie """;
-
-            TypedQuery<CreditDto> query = em.createQuery(jpql, CreditDto.class);
-            query.setParameter("movieId", movieId);
-            List<CreditDto> credits = query.getResultList();
+                    ORDER BY c.rankInMovie""";
+            List<CreditDto> credits = em.createQuery(jpql, CreditDto.class)
+                    .setParameter("movieId", movieId)
+                    .getResultList();
 
             return new MovieDetailsDto(m, credits);
 
@@ -248,11 +247,11 @@ public class MovieDao {
 
             // First try to update existing rating
             String jpql = "UPDATE Rating r SET r.rating =:rating WHERE r.account.id=:accountId AND r.movie.id = :movieId";
-            Query query = em.createQuery(jpql);
-            query.setParameter("accountId", accountId);
-            query.setParameter("movieId", movieId);
-            query.setParameter("rating", rating);
-            int rowsAffected = query.executeUpdate();
+            int rowsAffected = em.createQuery(jpql)
+                    .setParameter("accountId", accountId)
+                    .setParameter("movieId", movieId)
+                    .setParameter("rating", rating)
+                    .executeUpdate();
 
             // Create new rating, if rating does not already exist
             if (rowsAffected == 0) {
@@ -273,10 +272,10 @@ public class MovieDao {
         try (EntityManager em = emf.createEntityManager()) {
             String jpql = "DELETE FROM Rating r WHERE r.account.id = :accountId AND r.movie.id = :movieId";
             em.getTransaction().begin();
-            Query query = em.createQuery(jpql);
-            query.setParameter("accountId", accountId);
-            query.setParameter("movieId", movieId);
-            int rowsAffected = query.executeUpdate();
+            int rowsAffected = em.createQuery(jpql)
+                    .setParameter("accountId", accountId)
+                    .setParameter("movieId", movieId)
+                    .executeUpdate();
             em.getTransaction().commit();
         }
 
