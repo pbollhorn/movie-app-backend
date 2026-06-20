@@ -120,9 +120,9 @@ public class MovieDao {
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = "SELECT AVG(m.voteAverage) FROM Movie m WHERE m.voteCount >= :minVotes";
-            TypedQuery<Double> query = em.createQuery(jpql, Double.class);
-            query.setParameter("minVotes", MIN_VOTE_COUNT);
-            Double mean = query.getSingleResult();
+            Double mean = em.createQuery(jpql, Double.class)
+                    .setParameter("minVotes", MIN_VOTE_COUNT)
+                    .getSingleResult();
 
             // TODO: Kan dette skrives mere effektivt
             jpql = """
@@ -132,13 +132,13 @@ public class MovieDao {
                     WHERE m.voteCount >= :minVotes
                     ORDER BY (m.voteAverage * m.voteCount / (m.voteCount + :minVotes)) +
                     (1.0 * :mean * :minVotes / (m.voteCount + :minVotes)) DESC
-                    LIMIT 100""";
-
-            TypedQuery<MovieOverviewDto> newQuery = em.createQuery(jpql, MovieOverviewDto.class);
-            newQuery.setParameter("accountId", accountId);
-            newQuery.setParameter("minVotes", MIN_VOTE_COUNT);
-            newQuery.setParameter("mean", mean);
-            List<MovieOverviewDto> movies = newQuery.getResultList();
+                    """;
+            List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
+                    .setParameter("accountId", accountId)
+                    .setParameter("minVotes", MIN_VOTE_COUNT)
+                    .setParameter("mean", mean)
+                    .setMaxResults(100)
+                    .getResultList();
 
             return movies;
 
