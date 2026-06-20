@@ -105,26 +105,38 @@ public class MovieDao {
 
     }
 
-
+    /**
+     * Gets the top 100 movies ranked by the IMDb weighted rating formula
+     * (see <a href="https://web.archive.org/web/20260311072638/https://help.imdb.com/article/imdb/track-movies-tv/ratings-faq/G67Y87TFYYP6TWAV">IMDb Ratings FAQ</a>).
+     *
+     * @param accountId Account ID to get this apps (True, False, Null) ratings for the {@link MovieOverviewDto} instances
+     * @return List of top 100 ranked {@link MovieOverviewDto} instances
+     * @see
+     */
     public List<MovieOverviewDto> getTop100Movies(Integer accountId) {
+
+        final int MIN_VOTE_COUNT = 1000;
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            String jpql = "SELECT AVG(m.voteAverage) FROM Movie m WHERE m.voteCount >= 1000";
+            String jpql = "SELECT AVG(m.voteAverage) FROM Movie m WHERE m.voteCount >= :minVotes";
             TypedQuery<Double> query = em.createQuery(jpql, Double.class);
-            Double globalMean = query.getSingleResult();
+            query.setParameter("minVotes", MIN_VOTE_COUNT);
+            Double mean = query.getSingleResult();
 
             jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m,
                     (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
                     FROM Movie m
-                    WHERE m.voteCount >= 1000
-                    ORDER BY (m.voteCount / (m.voteCount + 1000.0)) * m.voteAverage + (1000.0 / (m.voteCount + 1000.0) * :globalMean) DESC
+                    WHERE m.voteCount >= :minVotes
+                    ORDER BY (m.voteAverage * m.voteCount / (m.voteCount + :minVotes)) +
+                    (:mean * :minVotes / (m.voteCount + :minVotes)) DESC
                     LIMIT 100""";
 
             TypedQuery<MovieOverviewDto> newQuery = em.createQuery(jpql, MovieOverviewDto.class);
             newQuery.setParameter("accountId", accountId);
-            newQuery.setParameter("globalMean", globalMean);
+            newQuery.setParameter("minVotes", MIN_VOTE_COUNT);
+            newQuery.setParameter("mean", mean);
             List<MovieOverviewDto> movies = newQuery.getResultList();
 
             return movies;
