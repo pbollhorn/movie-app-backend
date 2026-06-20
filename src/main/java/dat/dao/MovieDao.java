@@ -124,13 +124,14 @@ public class MovieDao {
             query.setParameter("minVotes", MIN_VOTE_COUNT);
             Double mean = query.getSingleResult();
 
+            // TODO: Kan dette skrives mere effektivt
             jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m,
                     (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
                     FROM Movie m
                     WHERE m.voteCount >= :minVotes
                     ORDER BY (m.voteAverage * m.voteCount / (m.voteCount + :minVotes)) +
-                    (:mean * :minVotes / (m.voteCount + :minVotes)) DESC
+                    (1.0 * :mean * :minVotes / (m.voteCount + :minVotes)) DESC
                     LIMIT 100""";
 
             TypedQuery<MovieOverviewDto> newQuery = em.createQuery(jpql, MovieOverviewDto.class);
