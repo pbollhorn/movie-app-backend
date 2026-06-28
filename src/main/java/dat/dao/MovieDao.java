@@ -224,7 +224,7 @@ public class MovieDao {
             // Find credits for movie
             String jpql = """
                     SELECT NEW dat.dto.TmdbCreditDto(c.id, p.id, p.name, c.job, c.department, c.character)
-                    FROM Person p JOIN Credit c ON c.person.id = p.id WHERE c.movie.id =:movieId
+                    FROM Credit c JOIN Person p ON c.person.id = p.id WHERE c.movie.id =:movieId
                     ORDER BY c.rankInMovie""";
             List<TmdbCreditDto> credits = em.createQuery(jpql, TmdbCreditDto.class)
                     .setParameter("movieId", movieId)
