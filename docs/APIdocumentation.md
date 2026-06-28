@@ -1,54 +1,69 @@
-# sp-2-team-5: Movie Recommendation API
+# MovieApp Backend API
 
 ## Endpoints
 
-URL for API'en er: https://movie.jcoder.dk/api
+URL for the API: https://movie.jcoder.dk/api
 
-| Method | URL                               | Request Body (JSON)                        | Response (JSON)                         | Roles  |
-|--------|-----------------------------------|--------------------------------------------|-----------------------------------------|--------|
-| POST   | /auth/register                    | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
-| POST   | /auth/login                       | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
-| GET    | /movies                           | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
-| GET    | /movies/(id)                      | (empty)                                    | movieDetails                            | ANYONE | 
-| PUT    | /movies/(id)                      | `{"rating": Boolean}`                      | (empty)                                 | USER   |
-| DELETE | /movies/(id)                      | (empty)                                    | (empty)                                 | USER   |
-| GET    | /movies/recommendations           | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
-| GET    | /movies/search?text=(String)      | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
-| GET    | /movies/search-open?text=(String) | (empty)                                    | `[movieOverview,movieOverview,...]`     | ANYONE |
+| Method | URL                           | Request Body (JSON)                        | Response (JSON)                         | Roles  |
+|--------|-------------------------------|--------------------------------------------|-----------------------------------------|--------|
+| POST   | /auth/register                | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
+| POST   | /auth/login                   | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
+| GET    | /movies                       | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
+| GET    | /movies/(id)                  | (empty)                                    | movieDetails                            | ANYONE | 
+| PUT    | /movies/(id)                  | `{"rating": Boolean}`                      | (empty)                                 | USER   |
+| DELETE | /movies/(id)                  | (empty)                                    | (empty)                                 | USER   |
+| GET    | /movies/recommendations       | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
+| GET    | /movies/search?title=(String) | (empty)                                    | `[movieOverview,movieOverview,...]`     | ANYONE |
 
 ```
 movieOverview =
 {
-    "id": Number (samme id som på TMDB),
+    "id": Number (TMDB movie id),
     "title": String,
-    "originalTitle": String,
+    "originalLanguage": String (ISO 639-1 code),
     "releaseDate": [Number,Number,Number] ([YYYY,MM,DD]),
-    "score": Number (fra 0.0 til 10.0, eller NULL hvis filmen har mindre end 10 stemmer),
+    "voteAverage": Number (from 1.0 to 10.0),
     "posterPath": String,
+    "directors": String[],
+    "genres": String[],
     "rating": Boolean
 }
 
 movieDetails =
 {
-    "id": Number (samme id som på TMDB),
+    "id": Number (TMDB movie id),
     "title": String,
     "originalTitle": String,
+    "originalLanguage": String (ISO 639-1 code),
     "releaseDate": [Number,Number,Number] ([YYYY,MM,DD]),
-    "score": Number (fra 0.0 til 10.0, eller NULL hvis filmen har mindre end 10 stemmer),
+    "voteAverage": Number (from 1.0 to 10.0)
+    "voteCount": Number,
     "backdropPath": String,
-    "overview": String
+    "overview": String,
+    "runtime": Number,
+    "genres": String[],
+    "collection": {id: Number, name: String} or NULL if movie is not part of a collection,
+    "credits": CreditDto[]
 }
 
-"rating" er:
- - TRUE hvis brugeren kan lide filmen
- - FALSE hvis brugeren ikke kan lide filmen
- - NULL hvis brugeren ikke har udtrykt sin holdning til filmen
+CreditDto =
+{
+    "id": String ("department_personId"),
+    "personId": Number,
+    "name": String,
+    "department": String,
+    "jobsInDepartment": String[],
+    "characters": String[]
+}
+
+"rating" is:
+ - TRUE if the user likes the movie
+ - FALSE if the user does not like the movie
+ - NULL if the user has not given his/her opinion of the movie
 ```
 
 ## Status på implementation
 
-- Jeg har fået implementeret alle ovenstående endpoints.
 - Mine endpoints giver fejlkoder i tilfælde af fejl, men ikke altid de korrekte fejlkoder (4xx for Client Error, 5xx
   Server Error)
 - Jeg har ikke fået skrevet særligt mange tests
-- Min kode trænger til noget cleanup, f.eks. har jeg både en AbstractDao og en GenericDao
