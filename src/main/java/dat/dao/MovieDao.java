@@ -239,7 +239,7 @@ public class MovieDao {
                 }
                 credit.jobsInDepartment().add(c.job());
                 if ("Cast".equals(c.department())) {
-                    if (c.character() != null) {
+                    if (!c.character().isBlank()) {
                         credit.characters().add(c.character());
                     }
                     credit.jobsInDepartment().subList(1, credit.jobsInDepartment().size()).clear(); // Avoids multiple "Cast Member" jobs
