@@ -7,7 +7,7 @@ import static io.javalin.apibuilder.ApiBuilder.*;
 
 import dat.controllers.MovieController;
 import dat.controllers.SecurityController;
-import dat.enums.Roles;
+import dat.enums.Role;
 
 public class Routes {
 
@@ -23,35 +23,35 @@ public class Routes {
 
     private static EndpointGroup movieRoutes() {
         return () -> {
-            get("/search", MovieController::searchMovies, Roles.ANYONE);
-            get("/top100",  MovieController::getTop100Movies, Roles.ANYONE);
-            get("/ratings", MovieController::getAllMoviesWithRating, Roles.USER);
-            get("/recommendations", MovieController::getMovieRecommendations, Roles.USER);
-            post("/update", MovieController::updateMovies, Roles.USER);  // TODO: Turn into ADMIN endpoint
-            get("/person/{id}", MovieController::getMoviesWithPerson, Roles.ANYONE);
-            get("/collection/{id}", MovieController::getMoviesInCollection, Roles.ANYONE);
-            put("/{id}/ratings", MovieController::updateOrCreateMovieRating, Roles.USER);
-            delete("/{id}/ratings", MovieController::deleteMovieRating, Roles.USER);
-            get("/{id}", MovieController::getMovieDetails, Roles.ANYONE);
+            get("/search", MovieController::searchMovies, Role.ANYONE);
+            get("/top100",  MovieController::getTop100Movies, Role.ANYONE);
+            get("/ratings", MovieController::getAllMoviesWithRating, Role.USER);
+            get("/recommendations", MovieController::getMovieRecommendations, Role.USER);
+            post("/update", MovieController::updateMovies, Role.ADMIN);  // TODO: Turn into ADMIN endpoint
+            get("/person/{id}", MovieController::getMoviesWithPerson, Role.ANYONE);
+            get("/collection/{id}", MovieController::getMoviesInCollection, Role.ANYONE);
+            put("/{id}/ratings", MovieController::updateOrCreateMovieRating, Role.USER);
+            delete("/{id}/ratings", MovieController::deleteMovieRating, Role.USER);
+            get("/{id}", MovieController::getMovieDetails, Role.ANYONE);
         };
     }
 
 
     private static EndpointGroup authRoutes() {
         return () -> {
-            post("/register", SecurityController::register, Roles.ANYONE);
-            post("/login", SecurityController::login, Roles.ANYONE);
-            get("/verify", SecurityController::verify, Roles.ANYONE);
-            get("/tokenlifespan", SecurityController::timeToLive, Roles.ANYONE);
-            get("/healthcheck", SecurityController::healthCheck, Roles.ANYONE);
+            post("/register", SecurityController::register, Role.ANYONE);
+            post("/login", SecurityController::login, Role.ANYONE);
+            get("/verify", SecurityController::verify, Role.ANYONE);
+            get("/tokenlifespan", SecurityController::timeToLive, Role.ANYONE);
+            get("/healthcheck", SecurityController::healthCheck, Role.ANYONE);
         };
     }
 
     private static EndpointGroup rolesTestRoutes() {
         return () -> {
-            get("/anyone", ctx -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from open to ANYONE")), Roles.ANYONE);
-            get("/user", ctx -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from USER protected")), Roles.USER);
-            get("/admin", ctx -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from ADMIN protected")), Roles.ADMIN);
+            get("/anyone", ctx -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from open to ANYONE")), Role.ANYONE);
+            get("/user", ctx -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from USER protected")), Role.USER);
+            get("/admin", ctx -> ctx.json(jsonMapper.createObjectNode().put("msg", "Hello from ADMIN protected")), Role.ADMIN);
         };
     }
 

@@ -9,7 +9,6 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 import dat.entities.*;
-import dat.enums.Roles;
 import dat.utils.PropertyReader;
 
 public class HibernateConfig {
@@ -38,7 +37,6 @@ public class HibernateConfig {
         configuration.addAnnotatedClass(Movie.class);
         configuration.addAnnotatedClass(MovieGenre.class);
         configuration.addAnnotatedClass(Person.class);
-        configuration.addAnnotatedClass(Roles.class); // TODO: Why is this here?
     }
 
     private static EntityManagerFactory createEMF(boolean forTest) {

@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import dat.dto.ErrorMessage;
 import dat.entities.Account;
-import dat.enums.Roles;
+import dat.enums.Role;
 import dat.exceptions.ApiException;
 import dat.exceptions.DaoException;
 import dat.exceptions.ValidationException;
@@ -60,7 +60,6 @@ public class SecurityController {
         } catch (EntityNotFoundException | ValidationException | DaoException e) {
             logger.error("Error logging in user", e);
             throw new ApiException(401, "Could not verify user", e);
-            //ctx.status(HttpStatus.UNAUTHORIZED).json(new ErrorMessage("Could not verify user " + e.getMessage()));
         }
     }
 
@@ -94,7 +93,7 @@ public class SecurityController {
         // 1. Check if endpoint is open to all
         // If the endpoint is not protected with roles or is open to ANYONE role, then skip
         Set<RouteRole> permittedRoles = ctx.routeRoles();
-        if (permittedRoles.isEmpty() || permittedRoles.contains(Roles.ANYONE)) {
+        if (permittedRoles.isEmpty() || permittedRoles.contains(Role.ANYONE)) {
             return;
         }
 
@@ -171,7 +170,7 @@ public class SecurityController {
 
     private static boolean userHasAllowedRole(UserDTO user, Set<RouteRole> allowedRoles) {
         return user.getRoles().stream()
-                .anyMatch(role -> allowedRoles.contains(Roles.valueOf(role.toUpperCase())));
+                .anyMatch(role -> allowedRoles.contains(Role.valueOf(role.toUpperCase())));
     }
 
     private static String createToken(UserDTO user) {

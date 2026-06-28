@@ -6,7 +6,7 @@ GET {{url}}/movies/search?title=goblets
 Authorization: Bearer {{token}}
 
 ###
-GET {{url}}/movies/top-rated
+GET {{url}}/movies/top100
 Authorization: Bearer {{token}}
 
 ###
@@ -14,14 +14,23 @@ GET {{url}}/movies/recommendations
 Authorization: Bearer {{token}}
 
 ###
-GET {{url}}/movies
+GET {{url}}/movies/ratings
 Authorization: Bearer {{token}}
 
 ###
 GET {{url}}/movies/19995
 
 ###
-PUT {{url}}/movies/299536
+PUT {{url}}/movies/299536/ratings
+Authorization: Bearer {{token}}
+Content-Type: "application/json"
+
+{
+    "rating": true
+}
+
+###
+PUT {{url}}/movies/12231/ratings
 Authorization: Bearer {{token}}
 Content-Type: "application/json"
 
@@ -30,26 +39,7 @@ Content-Type: "application/json"
 }
 
 ###
-PUT {{url}}/movies/12231
-Authorization: Bearer {{token}}
-Content-Type: "application/json"
-
-{
-    "rating": false
-}
-
-###
-PUT {{url}}/movies/1426674
-Authorization: Bearer {{token}}
-Content-Type: "application/json"
-
-{
-    "rating": false
-}
-
-
-###
-DELETE {{url}}/movies/488
+DELETE {{url}}/movies/488/ratings
 Authorization: Bearer {{token}}
 
 ###
