@@ -8,15 +8,15 @@ URL for the API: https://movie.jcoder.dk/api
 |--------|-------------------------------|--------------------------------------------|-----------------------------------------|--------|
 | POST   | /auth/register                | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
 | POST   | /auth/login                   | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
-| GET    | /movies                       | (empty)                                    | `MovieOverviewDto[]`                    | USER   |
-| GET    | /movies/(id)                  | (empty)                                    | `MovieDetailsDto`                       | ANYONE | 
-| PUT    | /movies/(id)                  | `{"rating": Boolean}`                      | (empty)                                 | USER   |
-| DELETE | /movies/(id)                  | (empty)                                    | (empty)                                 | USER   |
-| GET    | /movies/recommendations       | (empty)                                    | `MovieOverviewDto[]`                    | USER   |
+| GET    | /movies/(id)                  | (empty)                                    | `MovieDetailsDto`                       | ANYONE |
 | GET    | /movies/top100                | (empty)                                    | `MovieOverviewDto[]`                    | ANYONE |
 | GET    | /movies/search?title=(String) | (empty)                                    | `MovieOverviewDto[]`                    | ANYONE |
 | GET    | /movies/person/(id)           | (empty)                                    | `NameMovieListDto`                      | ANYONE |
 | GET    | /movies/collection/(id)       | (empty)                                    | `NameMovieListDto`                      | ANYONE |
+| GET    | /movies/ratings               | (empty)                                    | `MovieOverviewDto[]`                    | USER   |
+| PUT    | /movies/(id)/ratings          | `{"rating": Boolean}`                      | (empty)                                 | USER   |
+| DELETE | /movies/(id)/ratings          | (empty)                                    | (empty)                                 | USER   |
+| GET    | /movies/recommendations       | (empty)                                    | `MovieOverviewDto[]`                    | USER   |
 | POST   | /movies/update                | (empty)                                    | `'Started MovieUpdateTask'`             | USER   |
 
 ```
