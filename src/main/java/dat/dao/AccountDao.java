@@ -11,20 +11,20 @@ import dat.entities.Account;
 import dat.exceptions.DaoException;
 import dat.exceptions.ValidationException;
 
-public class SecurityDao {
+public class AccountDao {
 
-    private static SecurityDao instance;
+    private static AccountDao instance;
     private static EntityManagerFactory emf;
 
-    private final Logger logger = LoggerFactory.getLogger(SecurityDao.class);
+    private final Logger logger = LoggerFactory.getLogger(AccountDao.class);
 
-    private SecurityDao(EntityManagerFactory emf) {
+    private AccountDao(EntityManagerFactory emf) {
         this.emf = emf;
     }
 
-    public static SecurityDao getInstance(EntityManagerFactory emf) {
+    public static AccountDao getInstance(EntityManagerFactory emf) {
         if (instance == null) {
-            instance = new SecurityDao(emf);
+            instance = new AccountDao(emf);
         }
         return instance;
     }
@@ -43,21 +43,22 @@ public class SecurityDao {
         }
     }
 
-    public UserDTO getVerifiedUser(String email, String password) throws ValidationException, DaoException {
+    public UserDTO getVerifiedAccount(String email, String password) throws ValidationException, DaoException {
 
         Account account;
         try (EntityManager em = emf.createEntityManager()) {
             String jpql = "SELECT a FROM Account a WHERE a.email=:email";
-            TypedQuery<Account> query = em.createQuery(jpql, Account.class);
-            query.setParameter("email", email);
-            account = query.getSingleResult();
+            account = em.createQuery(jpql, Account.class)
+                    .setParameter("email", email)
+                    .getSingleResult();
         }
 
-        if (!account.verifyPassword(password)) {
-            logger.error("{} {}", account.getEmail(), account.getHashedPassword());  // TODO: Insecure to log this?
+        if (account.verifyPassword(password)) {
+            return new UserDTO(account.getId().toString(), Set.of(account.getRole().toString()));
+        } else {
             throw new ValidationException("Password does not match");
         }
-        return new UserDTO(account.getId().toString(), Set.of(account.getRole().toString()));
+
     }
 
 }

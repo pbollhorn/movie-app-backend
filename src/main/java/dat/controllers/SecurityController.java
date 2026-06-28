@@ -11,7 +11,7 @@ import java.util.Set;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dat.config.HibernateConfig;
-import dat.dao.SecurityDao;
+import dat.dao.AccountDao;
 import dk.bugelhartmann.UserDTO;
 import dk.bugelhartmann.ITokenSecurity;
 import dk.bugelhartmann.TokenSecurity;
@@ -37,7 +37,7 @@ public class SecurityController {
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final ITokenSecurity tokenSecurity = new TokenSecurity();
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-    private static final SecurityDao securityDAO = SecurityDao.getInstance(emf);
+    private static final AccountDao accountDao = AccountDao.getInstance(emf);
     private static final Logger logger = LoggerFactory.getLogger(SecurityController.class);
 
     // Health check for the API. Used in deployment
@@ -51,7 +51,7 @@ public class SecurityController {
         ObjectNode returnJson = objectMapper.createObjectNode();
         try {
             UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
-            UserDTO verifiedUser = securityDAO.getVerifiedUser(userInput.getUsername(), userInput.getPassword());
+            UserDTO verifiedUser = accountDao.getVerifiedAccount(userInput.getUsername(), userInput.getPassword());
             String token = createToken(verifiedUser);
             returnJson.put("token", token)
                     .put("username", verifiedUser.getUsername());
@@ -68,7 +68,7 @@ public class SecurityController {
         ObjectNode returnJson = objectMapper.createObjectNode();
         try {
             UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
-            Account createdUserAccount = securityDAO.createAccount(userInput.getUsername(), userInput.getPassword());
+            Account createdUserAccount = accountDao.createAccount(userInput.getUsername(), userInput.getPassword());
             String token = createToken(new UserDTO(createdUserAccount.getId().toString(), Set.of("USER")));
             returnJson.put("token", token)
                     .put("username", createdUserAccount.getEmail());

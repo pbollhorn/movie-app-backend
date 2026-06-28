@@ -9,8 +9,8 @@ import dat.config.ApplicationConfig;
 import dat.config.HibernateConfig;
 import dat.utils.PropertyReader;
 import dat.routes.Routes;
+import dat.dao.AccountDao;
 import dat.dao.MovieDao;
-import dat.dao.SecurityDao;
 
 public class Main {
 
@@ -26,7 +26,7 @@ public class Main {
                 ----------------------------------------------------------\n""");
 
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-        SecurityDao securityDAO = SecurityDao.getInstance(emf);
+        AccountDao accountDAO = AccountDao.getInstance(emf);
         MovieDao movieDAO = MovieDao.getInstance(emf);
 
 
