@@ -232,12 +232,17 @@ public class MovieDao {
                 String id = c.department() + "_" + c.personId(); // String with this format "department_personId"
                 CreditDto credit = creditMap.get(id);
                 if (credit == null) {
-                    credit = new CreditDto(id, c.personId(), c.name(), new ArrayList<String>(), c.department(), new ArrayList<String>());
+                    List<String> jobsInDepartment = new ArrayList<>();
+                    List<String> characters = new ArrayList<>();
+                    credit = new CreditDto(id, c.personId(), c.name(), c.department(), jobsInDepartment, characters);
                     creditMap.put(id, credit);
                 }
                 credit.jobsInDepartment().add(c.job());
-                if (c.character() != null) {
-                    credit.characters().add(c.character());
+                if ("Cast".equals(c.department())) {
+                    if (c.character() != null) {
+                        credit.characters().add(c.character());
+                    }
+                    credit.jobsInDepartment().subList(1, credit.jobsInDepartment().size()).clear(); // Avoids multiple "Cast Member" jobs
                 }
             }
             List<CreditDto> credits = creditMap.values().stream().toList();
