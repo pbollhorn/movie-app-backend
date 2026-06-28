@@ -72,14 +72,14 @@ public class MovieUpdateTask implements Runnable {
                 // This creates the cast member as a person in the database
                 // (or overwrites with same data if already in database)
                 Person person = personDao.update(c);
-                movie.addCredit(c.id(), person, "Cast Member", "Cast", c.character(), rankInMovie);
+                movie.addCredit(c.id(), person,"Cast", "Cast Member", c.character(), rankInMovie);
                 rankInMovie++;
             }
             for (TmdbCreditDto c : movieDto.credits().crew()) {
                 // This creates the crew member as a person in the database
                 // (or overwrites with same data if already in database)
                 Person person = personDao.update(c);
-                movie.addCredit(c.id(), person, c.job(), c.department(), null, rankInMovie);
+                movie.addCredit(c.id(), person, c.department(), c.job(), null, rankInMovie);
                 rankInMovie++;
             }
 

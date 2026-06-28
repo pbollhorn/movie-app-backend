@@ -21,8 +21,8 @@ public class Credit {
     @JoinColumn(nullable = false)
     private Person person;
 
-    private String job;
     private String department;
+    private String job;
 
     @Column(length = 1000)
     private String character;
