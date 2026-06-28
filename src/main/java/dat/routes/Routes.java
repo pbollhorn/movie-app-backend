@@ -25,14 +25,14 @@ public class Routes {
         return () -> {
             get("/search", MovieController::searchMovies, Roles.ANYONE);
             get("/top100",  MovieController::getTop100Movies, Roles.ANYONE);
+            get("/ratings", MovieController::getAllMoviesWithRating, Roles.USER);
             get("/recommendations", MovieController::getMovieRecommendations, Roles.USER);
-            get("/", MovieController::getAllMoviesWithRating, Roles.USER);
             post("/update", MovieController::updateMovies, Roles.USER);  // TODO: Turn into ADMIN endpoint
             get("/person/{id}", MovieController::getMoviesWithPerson, Roles.ANYONE);
             get("/collection/{id}", MovieController::getMoviesInCollection, Roles.ANYONE);
+            put("/{id}/ratings", MovieController::updateOrCreateMovieRating, Roles.USER);
+            delete("/{id}/ratings", MovieController::deleteMovieRating, Roles.USER);
             get("/{id}", MovieController::getMovieDetails, Roles.ANYONE);
-            put("/{id}", MovieController::updateOrCreateMovieRating, Roles.USER);
-            delete("/{id}", MovieController::deleteMovieRating, Roles.USER);
         };
     }
 
