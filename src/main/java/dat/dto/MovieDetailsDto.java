@@ -17,13 +17,13 @@ public record MovieDetailsDto(Integer id,
                               Integer runtime,
                               String[] genres,
                               CollectionDto collection,
-                              List<CreditDto> credits) {
+                              List<TmdbCreditDto> credits) {
 
     public record CollectionDto(Integer id, String name) {
     }
 
     // Constructor which constructs from Movie entity and list of credits
-    public MovieDetailsDto(Movie m, List<CreditDto> credits) {
+    public MovieDetailsDto(Movie m, List<TmdbCreditDto> credits) {
         this(m.getId(),
                 m.getTitle(),
                 m.getOriginalTitle(),

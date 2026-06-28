@@ -221,12 +221,12 @@ public class MovieDao {
             // Find Movie entity, TODO: Some error handling in case m is null
             Movie m = em.find(Movie.class, movieId);
 
-            // Find persons list
+            // Find credits for movie
             String jpql = """
-                    SELECT NEW dat.dto.CreditDto(c.id, p.id, p.name, c.job, c.department, c.character)
+                    SELECT NEW dat.dto.TmdbCreditDto(c.id, p.id, p.name, c.job, c.department, c.character)
                     FROM Person p JOIN Credit c ON c.person.id = p.id WHERE c.movie.id =:movieId
                     ORDER BY c.rankInMovie""";
-            List<CreditDto> credits = em.createQuery(jpql, CreditDto.class)
+            List<TmdbCreditDto> credits = em.createQuery(jpql, TmdbCreditDto.class)
                     .setParameter("movieId", movieId)
                     .getResultList();
 
