@@ -8,15 +8,15 @@ URL for the API: https://movie.jcoder.dk/api
 |--------|-------------------------------|--------------------------------------------|-----------------------------------------|--------|
 | POST   | /auth/register                | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
 | POST   | /auth/login                   | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
-| GET    | /movies                       | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
-| GET    | /movies/(id)                  | (empty)                                    | movieDetails                            | ANYONE | 
+| GET    | /movies                       | (empty)                                    | `movieOverviewDto[]`                    | USER   |
+| GET    | /movies/(id)                  | (empty)                                    | movieDetailsDto                         | ANYONE | 
 | PUT    | /movies/(id)                  | `{"rating": Boolean}`                      | (empty)                                 | USER   |
 | DELETE | /movies/(id)                  | (empty)                                    | (empty)                                 | USER   |
-| GET    | /movies/recommendations       | (empty)                                    | `[movieOverview,movieOverview,...]`     | USER   |
-| GET    | /movies/search?title=(String) | (empty)                                    | `[movieOverview,movieOverview,...]`     | ANYONE |
+| GET    | /movies/recommendations       | (empty)                                    | `movieOverviewDto[]`                    | USER   |
+| GET    | /movies/search?title=(String) | (empty)                                    | `movieOverviewDto[]`                    | ANYONE |
 
 ```
-movieOverview =
+movieOverviewDto =
 {
     "id": Number (TMDB movie id),
     "title": String,
@@ -29,7 +29,7 @@ movieOverview =
     "rating": Boolean
 }
 
-movieDetails =
+movieDetailsDto =
 {
     "id": Number (TMDB movie id),
     "title": String,
@@ -43,10 +43,10 @@ movieDetails =
     "runtime": Number,
     "genres": String[],
     "collection": {id: Number, name: String} or NULL if movie is not part of a collection,
-    "credits": CreditDto[]
+    "credits": creditDto[]
 }
 
-CreditDto =
+creditDto =
 {
     "id": String ("department_personId"),
     "personId": Number,
