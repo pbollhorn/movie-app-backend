@@ -68,7 +68,7 @@ public class SecurityController {
         ObjectNode returnJson = objectMapper.createObjectNode();
         try {
             UserDTO userInput = ctx.bodyAsClass(UserDTO.class);
-            Account createdUserAccount = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
+            Account createdUserAccount = securityDAO.createAccount(userInput.getUsername(), userInput.getPassword());
             String token = createToken(new UserDTO(createdUserAccount.getId().toString(), Set.of("USER")));
             returnJson.put("token", token)
                     .put("username", createdUserAccount.getEmail());

@@ -29,17 +29,17 @@ public class SecurityDao {
         return instance;
     }
 
-
-    // TODO: Method from GenericDao.java. Should be integrated properly.
-    public Account create(Account account) {
+    public Account createAccount(String email, String password) {
         try (EntityManager em = emf.createEntityManager()) {
+            Account account = new Account(email, password);
             em.getTransaction().begin();
             em.persist(account);
             em.getTransaction().commit();
+            logger.info("Created account with email: " + email);
             return account;
         } catch (Exception e) {
-            logger.error("Error persisting object to db", e);
-            throw new DaoException("Error persisting object to db. ", e);
+            logger.error("Error creating account", e);
+            throw new DaoException("Error creating account", e);
         }
     }
 
@@ -58,19 +58,6 @@ public class SecurityDao {
             throw new ValidationException("Password does not match");
         }
         return new UserDTO(account.getId().toString(), Set.of(account.getRole().toString()));
-    }
-
-
-    public Account createUser(String email, String password) {
-        Account account = new Account(email, password);
-        try {
-            account = this.create(account);
-            logger.info("User created (email {})", email);
-            return account;
-        } catch (Exception e) {
-            logger.error("Error creating account", e);
-            throw new EntityExistsException("Error creating account", e);
-        }
     }
 
 }
