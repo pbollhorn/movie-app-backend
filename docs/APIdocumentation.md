@@ -8,15 +8,19 @@ URL for the API: https://movie.jcoder.dk/api
 |--------|-------------------------------|--------------------------------------------|-----------------------------------------|--------|
 | POST   | /auth/register                | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
 | POST   | /auth/login                   | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
-| GET    | /movies                       | (empty)                                    | `movieOverviewDto[]`                    | USER   |
-| GET    | /movies/(id)                  | (empty)                                    | movieDetailsDto                         | ANYONE | 
+| GET    | /movies                       | (empty)                                    | `MovieOverviewDto[]`                    | USER   |
+| GET    | /movies/(id)                  | (empty)                                    | `MovieDetailsDto`                       | ANYONE | 
 | PUT    | /movies/(id)                  | `{"rating": Boolean}`                      | (empty)                                 | USER   |
 | DELETE | /movies/(id)                  | (empty)                                    | (empty)                                 | USER   |
-| GET    | /movies/recommendations       | (empty)                                    | `movieOverviewDto[]`                    | USER   |
-| GET    | /movies/search?title=(String) | (empty)                                    | `movieOverviewDto[]`                    | ANYONE |
+| GET    | /movies/recommendations       | (empty)                                    | `MovieOverviewDto[]`                    | USER   |
+| GET    | /movies/top100                | (empty)                                    | `MovieOverviewDto[]`                    | ANYONE |
+| GET    | /movies/search?title=(String) | (empty)                                    | `MovieOverviewDto[]`                    | ANYONE |
+| GET    | /movies/person/(id)           | (empty)                                    | `NameMovieListDto`                      | ANYONE |
+| GET    | /movies/collection/(id)       | (empty)                                    | `NameMovieListDto`                      | ANYONE |
+| POST   | /movies/update                | (empty)                                    | 200                                     | USER   |
 
 ```
-movieOverviewDto =
+MovieOverviewDto =
 {
     "id": Number (TMDB movie id),
     "title": String,
@@ -29,7 +33,13 @@ movieOverviewDto =
     "rating": Boolean
 }
 
-movieDetailsDto =
+NameMovieListDto =
+{
+    "name": String,
+    "movies": MovieOverviewDto[]
+}
+
+MovieDetailsDto =
 {
     "id": Number (TMDB movie id),
     "title": String,
@@ -43,10 +53,10 @@ movieDetailsDto =
     "runtime": Number,
     "genres": String[],
     "collection": {id: Number, name: String} or NULL if movie is not part of a collection,
-    "credits": creditDto[]
+    "credits": CreditDto[]
 }
 
-creditDto =
+CreditDto =
 {
     "id": String ("department_personId"),
     "personId": Number,
