@@ -43,32 +43,33 @@ public class SecurityDao {
         }
     }
 
-    public UserDTO getVerifiedUser(String username, String password) throws ValidationException, DaoException {
+    public UserDTO getVerifiedUser(String email, String password) throws ValidationException, DaoException {
 
-        Account userAccount;
+        Account account;
         try (EntityManager em = emf.createEntityManager()) {
-            String jpql = "SELECT u FROM Account u WHERE u.username=:username";
+            String jpql = "SELECT a FROM Account a WHERE a.email=:email";
             TypedQuery<Account> query = em.createQuery(jpql, Account.class);
-            query.setParameter("username", username);
-            userAccount = query.getSingleResult();
+            query.setParameter("email", email);
+            account = query.getSingleResult();
         }
 
-        if (!userAccount.verifyPassword(password)) {
-            logger.error("{} {}", userAccount.getUsername(), userAccount.getPassword());
+        if (!account.verifyPassword(password)) {
+            logger.error("{} {}", account.getEmail(), account.getHashedPassword());  // TODO: Insecure to log this?
             throw new ValidationException("Password does not match");
         }
-        return new UserDTO(userAccount.getId().toString(), Set.of(userAccount.getRole().toString()));
+        return new UserDTO(account.getId().toString(), Set.of(account.getRole().toString()));
     }
 
-    public Account createUser(String username, String password) {
-        Account userAccount = new Account(username, password);
+
+    public Account createUser(String email, String password) {
+        Account account = new Account(email, password);
         try {
-            userAccount = this.create(userAccount);
-            logger.info("User created (username {})", username);
-            return userAccount;
+            account = this.create(account);
+            logger.info("User created (email {})", email);
+            return account;
         } catch (Exception e) {
-            logger.error("Error creating user", e);
-            throw new EntityExistsException("Error creating user", e);
+            logger.error("Error creating account", e);
+            throw new EntityExistsException("Error creating account", e);
         }
     }
 

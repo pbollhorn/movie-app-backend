@@ -71,7 +71,7 @@ public class SecurityController {
             Account createdUserAccount = securityDAO.createUser(userInput.getUsername(), userInput.getPassword());
             String token = createToken(new UserDTO(createdUserAccount.getId().toString(), Set.of("USER")));
             returnJson.put("token", token)
-                    .put("username", createdUserAccount.getUsername());
+                    .put("username", createdUserAccount.getEmail());
 
             ctx.status(HttpStatus.CREATED).json(returnJson);
         } catch (EntityExistsException e) {

@@ -22,9 +22,9 @@ public class Account {
     private Integer id;
 
     @Column(unique = true)
-    private String username;
+    private String email;
 
-    private String password;
+    private String hashedPassword;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -34,14 +34,14 @@ public class Account {
     private Set<Rating> ratings;
 
 
-    public Account(String userName, String userPass) {
-        this.username = userName;
-        this.password = BCrypt.hashpw(userPass, BCrypt.gensalt());
+    public Account(String email, String password) {
+        this.email = email;
+        this.hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
         this.role = Role.USER;
     }
 
-    public boolean verifyPassword(String pw) {
-        return BCrypt.checkpw(pw, this.password);
+    public boolean verifyPassword(String password) {
+        return BCrypt.checkpw(password, this.hashedPassword);
     }
 
 
