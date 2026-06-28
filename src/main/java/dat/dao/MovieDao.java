@@ -1,10 +1,6 @@
 package dat.dao;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-
+import java.util.*;
 import java.util.stream.Collectors;
 
 import jakarta.persistence.EntityManager;
@@ -226,9 +222,25 @@ public class MovieDao {
                     SELECT NEW dat.dto.TmdbCreditDto(c.id, p.id, p.name, c.job, c.department, c.character)
                     FROM Credit c JOIN Person p ON c.person.id = p.id WHERE c.movie.id =:movieId
                     ORDER BY c.rankInMovie""";
-            List<TmdbCreditDto> credits = em.createQuery(jpql, TmdbCreditDto.class)
+            List<TmdbCreditDto> TmdbCreditDtos = em.createQuery(jpql, TmdbCreditDto.class)
                     .setParameter("movieId", movieId)
                     .getResultList();
+
+            // Merge credits together within same department
+            LinkedHashMap<String, CreditDto> creditMap = new LinkedHashMap<String, CreditDto>();
+            for (TmdbCreditDto c : TmdbCreditDtos) {
+                String id = c.department() + "_" + c.personId(); // String with this format "department_personId"
+                CreditDto credit = creditMap.get(id);
+                if (credit == null) {
+                    credit = new CreditDto(id, c.personId(), c.name(), new ArrayList<String>(), c.department(), new ArrayList<String>());
+                    creditMap.put(id, credit);
+                }
+                credit.jobsInDepartment().add(c.job());
+                if (c.character() != null) {
+                    credit.characters().add(c.character());
+                }
+            }
+            List<CreditDto> credits = creditMap.values().stream().toList();
 
             return new MovieDetailsDto(m, credits);
 

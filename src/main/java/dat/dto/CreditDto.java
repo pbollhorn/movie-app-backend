@@ -1,10 +1,12 @@
 package dat.dto;
 
-public record CreditDto(String id,
+import java.util.List;
+
+public record CreditDto(String id, // String with this format "department_personId"
                         Integer personId,
                         String name,
-                        String jobs, // Multiple jobs in same department are joined with ", "
+                        List<String> jobsInDepartment,
                         String department,
-                        String characters) // Multiple characters are joined with " / "
+                        List<String> characters)
 {
 }
