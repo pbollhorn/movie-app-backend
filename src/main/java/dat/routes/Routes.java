@@ -6,6 +6,7 @@ import io.javalin.apibuilder.EndpointGroup;
 import static io.javalin.apibuilder.ApiBuilder.*;
 
 import dat.controllers.MovieController;
+import dat.controllers.GenreController;
 import dat.controllers.SecurityController;
 import dat.enums.Role;
 
@@ -16,6 +17,7 @@ public class Routes {
     public static EndpointGroup getRoutes() {
         return () -> {
             path("movies", movieRoutes());
+            path("genres", genreRoutes());
             path("auth", authRoutes());
             path("roles-test", rolesTestRoutes());
         };
@@ -27,12 +29,18 @@ public class Routes {
             get("/top100",  MovieController::getTop100Movies, Role.ANYONE);
             get("/ratings", MovieController::getAllMoviesWithRating, Role.USER);
             get("/recommendations", MovieController::getMovieRecommendations, Role.USER);
-            post("/update", MovieController::updateMovies, Role.ADMIN);  // TODO: Turn into ADMIN endpoint
+            post("/update", MovieController::updateMovies, Role.ADMIN);
             get("/person/{id}", MovieController::getMoviesWithPerson, Role.ANYONE);
             get("/collection/{id}", MovieController::getMoviesInCollection, Role.ANYONE);
             put("/{id}/ratings", MovieController::updateOrCreateMovieRating, Role.USER);
             delete("/{id}/ratings", MovieController::deleteMovieRating, Role.USER);
             get("/{id}", MovieController::getMovieDetails, Role.ANYONE);
+        };
+    }
+
+    private static EndpointGroup genreRoutes() {
+        return () -> {
+            get("/", GenreController::getAllGenres, Role.ANYONE);
         };
     }
 

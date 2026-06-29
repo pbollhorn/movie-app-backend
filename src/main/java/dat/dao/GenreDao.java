@@ -1,5 +1,7 @@
 package dat.dao;
 
+import java.util.List;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -32,6 +34,19 @@ public class GenreDao {
             em.getTransaction().commit();
 
             return genre;
+        }
+
+    }
+
+
+    public List<TmdbGenreDto> getAllGenres() {
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+            String jpql = "SELECT NEW dat.dto.TmdbGenreDto(g.id, g.name) FROM Genre g ORDER BY g.name";
+            List<TmdbGenreDto> genres = em.createQuery(jpql, TmdbGenreDto.class).getResultList();
+            return genres;
+
         }
 
     }
