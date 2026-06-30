@@ -36,9 +36,14 @@ public class MovieController {
     public static void getTop100Movies(Context ctx) {
 
         Integer accountId = SecurityController.getAccountIdFromToken(ctx);
+        Integer genreId = ctx.queryParamAsClass("genreId", Integer.class).allowNullable().get();
 
-//        List<MovieOverviewDto> movies = movieDao.getTop100Movies(accountId);
-        List<MovieOverviewDto> movies = movieDao.getTop100MoviesByGenre(12, accountId);
+        List<MovieOverviewDto> movies;
+        if (genreId == null) {
+            movies = movieDao.getTop100Movies(accountId);
+        } else {
+            movies = movieDao.getTop100MoviesByGenre(genreId, accountId);
+        }
         ctx.json(movies);
     }
 
