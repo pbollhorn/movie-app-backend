@@ -10,7 +10,7 @@ URL for the API: https://movie.jcoder.dk/api
 | POST    | /auth/login                   | `{"username": String, "password": String}` | `{"token": String, "username": String}` | ANYONE |
 | GET     | /genres                       | (empty)                                    | `TmdbGenreDto`                          | ANYONE |
 | GET     | /movies/(id)                  | (empty)                                    | `MovieDetailsDto`                       | ANYONE |
-| GET     | /movies/top100                | (empty)                                    | `MovieOverviewDto[]`                    | ANYONE |
+| GET     | /movies/top100?genreId=(id)   | (empty)                                    | `MovieOverviewDto[]`                    | ANYONE |
 | GET     | /movies/search?title=(String) | (empty)                                    | `MovieOverviewDto[]`                    | ANYONE |
 | GET     | /movies/person/(id)           | (empty)                                    | `NameMovieListDto`                      | ANYONE |
 | GET     | /movies/collection/(id)       | (empty)                                    | `NameMovieListDto`                      | ANYONE |
