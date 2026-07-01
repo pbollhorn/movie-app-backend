@@ -23,13 +23,6 @@ public class Movie {
     @Id
     private Integer id;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
     @Column(nullable = false)
     private String title;
 
@@ -61,6 +54,13 @@ public class Movie {
     @ManyToOne(cascade = CascadeType.MERGE)
     private Collection collection;
 
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
 
     public Movie(TmdbMovieDto m) {
         this.id = m.id();
@@ -75,7 +75,6 @@ public class Movie {
         this.backdropPath = m.backdropPath();
         this.posterPath = m.posterPath();
         this.overview = m.overview();
-        this.voteAverage = m.voteAverage();
         this.runtime = m.runtime();
         this.tagline = m.tagline();
         this.status = m.status();
