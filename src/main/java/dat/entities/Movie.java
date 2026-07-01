@@ -1,14 +1,18 @@
 package dat.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import lombok.*;
 
 import dat.dto.TmdbMovieDto;
+
 
 @ToString
 @Getter
@@ -18,6 +22,13 @@ public class Movie {
 
     @Id
     private Integer id;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 
     @Column(nullable = false)
     private String title;
