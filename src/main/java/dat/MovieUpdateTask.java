@@ -42,6 +42,9 @@ public class MovieUpdateTask implements Runnable {
 
         for (int movieId : movieIds) {
 
+            // TODO: Delete this logging line
+            logger.info("movieId: " + movieId);
+
             TmdbMovieDto movieDto;
             try {
                 movieDto = TmdbService.getMovieDetails(movieId);
