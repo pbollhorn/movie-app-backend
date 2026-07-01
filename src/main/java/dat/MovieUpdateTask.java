@@ -83,6 +83,7 @@ public class MovieUpdateTask implements Runnable {
                 rankInMovie++;
             }
 
+            movie.setLastTmdbSyncToNow();
             movieDao.update(movie);
 
             // TODO: After update, unsued MovieGenres and Credits are removed, but there may be roque Genres and Persons

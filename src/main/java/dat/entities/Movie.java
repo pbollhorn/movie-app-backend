@@ -1,14 +1,12 @@
 package dat.entities;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import lombok.*;
 
 import dat.dto.TmdbMovieDto;
@@ -54,13 +52,7 @@ public class Movie {
     @ManyToOne(cascade = CascadeType.MERGE)
     private Collection collection;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
+    private OffsetDateTime lastTmdbSync;
 
     public Movie(TmdbMovieDto m) {
         this.id = m.id();
@@ -110,6 +102,10 @@ public class Movie {
                 .map(c -> c.getPerson().getName())
                 .toArray(String[]::new);
         return directorArray;
+    }
+
+    public void setLastTmdbSyncToNow() {
+        this.lastTmdbSync = OffsetDateTime.now();
     }
 
 }
