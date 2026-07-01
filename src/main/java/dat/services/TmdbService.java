@@ -59,6 +59,10 @@ public class TmdbService {
                         "&page=" + page;
                 String json = getDataFromTmdb(url);
 
+                // TODO: Delete these lines
+                System.out.println("url: "+url);
+                System.out.println("json: "+json);
+                System.out.println();
 
                 try {
                     JsonNode results = objectMapper.readTree(json).path("results");

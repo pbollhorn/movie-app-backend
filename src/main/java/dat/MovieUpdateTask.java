@@ -42,9 +42,6 @@ public class MovieUpdateTask implements Runnable {
 
         for (int movieId : movieIds) {
 
-            // TODO: Delete this logging line
-            logger.info("movieId: " + movieId);
-
             TmdbMovieDto movieDto;
             try {
                 movieDto = TmdbService.getMovieDetails(movieId);
@@ -56,7 +53,6 @@ public class MovieUpdateTask implements Runnable {
                 }
                 continue;
             }
-
 
             Movie movie = new Movie(movieDto);
 
@@ -88,6 +84,8 @@ public class MovieUpdateTask implements Runnable {
 
             movie.setLastTmdbSyncToNow();
             movieDao.update(movie);
+            // TODO: Delete this line
+            System.out.println("movieId: " + movieId);
 
             // TODO: After update, unsued MovieGenres and Credits are removed, but there may be roque Genres and Persons
         }
