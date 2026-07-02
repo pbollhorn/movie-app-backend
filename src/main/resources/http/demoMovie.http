@@ -6,7 +6,7 @@ GET {{url}}/movies/search?title=goblets
 Authorization: Bearer {{token}}
 
 ###
-GET {{url}}/movies/top100
+GET {{url}}/movies/top100?genreId=12
 Authorization: Bearer {{token}}
 
 ###

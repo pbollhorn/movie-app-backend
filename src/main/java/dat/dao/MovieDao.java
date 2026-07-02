@@ -78,9 +78,10 @@ public class MovieDao {
                     .getResultList());
 
             String jpql = """
-                    SELECT NEW dat.dto.MovieOverviewDto(m,
-                    (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
-                    FROM Movie m WHERE m.id IN :movieIds""";
+                    SELECT NEW dat.dto.MovieOverviewDto(m, r.rating)
+                    FROM Movie m
+                    LEFT JOIN Rating r ON r.movie.id = m.id AND r.account.id = :accountId
+                    WHERE m.id IN :movieIds""";
             List<MovieOverviewDto> movieDtos = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
                     .setParameter("movieIds", movieIds)
@@ -118,7 +119,6 @@ public class MovieDao {
                     .setParameter("minVotes", MIN_VOTE_COUNT)
                     .getSingleResult();
 
-            // TODO: Kan dette skrives mere effektivt
             jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m, r.rating)
                     FROM Movie m
@@ -151,11 +151,10 @@ public class MovieDao {
                     .setParameter("genreId", genreId)
                     .getSingleResult();
 
-            // TODO: Kan dette skrives mere effektivt
             jpql = """
-                    SELECT NEW dat.dto.MovieOverviewDto(mg.movie,
-                    (SELECT r.rating FROM Rating r WHERE r.movie.id=mg.movie.id AND r.account.id=:accountId))
+                    SELECT NEW dat.dto.MovieOverviewDto(mg.movie, r.rating)
                     FROM MovieGenre mg
+                    LEFT JOIN Rating r ON r.movie.id=mg.movie.id AND r.account.id=:accountId
                     WHERE mg.movie.voteCount >= :minVotes AND mg.genre.id=:genreId
                     ORDER BY (mg.movie.voteAverage * mg.movie.voteCount / (mg.movie.voteCount + :minVotes)) +
                     (1.0 * :mean * :minVotes / (mg.movie.voteCount + :minVotes)) DESC""";
@@ -182,9 +181,10 @@ public class MovieDao {
                     .getSingleResult();
 
             jpql = """
-                    SELECT DISTINCT NEW dat.dto.MovieOverviewDto(m,
-                    (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
-                    FROM Movie m JOIN Credit c ON m.id=c.movie.id
+                    SELECT DISTINCT NEW dat.dto.MovieOverviewDto(m, r.rating)
+                    FROM Movie m
+                    LEFT JOIN Rating r ON r.movie.id = m.id AND r.account.id = :accountId
+                    JOIN Credit c ON m.id=c.movie.id
                     WHERE c.person.id=:personId ORDER BY m.releaseDate""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("personId", personId)
@@ -208,9 +208,9 @@ public class MovieDao {
                     .getSingleResult();
 
             jpql = """
-                    SELECT NEW dat.dto.MovieOverviewDto(m,
-                    (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
+                    SELECT NEW dat.dto.MovieOverviewDto(m, r.rating)
                     FROM Movie m
+                    LEFT JOIN Rating r ON r.movie.id = m.id AND r.account.id = :accountId
                     WHERE m.collection.id=:collectionId
                     ORDER BY m.releaseDate""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
