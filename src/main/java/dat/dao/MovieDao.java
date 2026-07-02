@@ -120,9 +120,9 @@ public class MovieDao {
 
             // TODO: Kan dette skrives mere effektivt
             jpql = """
-                    SELECT NEW dat.dto.MovieOverviewDto(m,
-                    (SELECT r.rating FROM Rating r WHERE r.movie.id=m.id AND r.account.id=:accountId))
+                    SELECT NEW dat.dto.MovieOverviewDto(m, r.rating)
                     FROM Movie m
+                    LEFT JOIN Rating r ON r.movie.id = m.id AND r.account.id = :accountId
                     WHERE m.voteCount >= :minVotes
                     ORDER BY (m.voteAverage * m.voteCount / (m.voteCount + :minVotes)) +
                     (1.0 * :mean * :minVotes / (m.voteCount + :minVotes)) DESC""";
