@@ -30,6 +30,7 @@ public class Movie {
     private String originalLanguage;
     private Double voteAverage;
     private Integer voteCount;
+    private Double popularity;
     private LocalDate releaseDate;
     private String backdropPath;
     private String posterPath;
@@ -63,6 +64,7 @@ public class Movie {
         this.originalLanguage = m.originalLanguage();
         this.voteAverage = m.voteAverage();
         this.voteCount = m.voteCount();
+        this.popularity = m.popularity();
         this.releaseDate = m.releaseDate();
         this.backdropPath = m.backdropPath();
         this.posterPath = m.posterPath();

@@ -17,6 +17,7 @@ public record TmdbMovieDto(Integer id,
                            Double voteAverage,
                            @JsonProperty("vote_count")
                            Integer voteCount,
+                           Double popularity,
                            @JsonProperty("release_date")
                            LocalDate releaseDate,
                            @JsonProperty("backdrop_path")

@@ -84,8 +84,6 @@ public class MovieUpdateTask implements Runnable {
 
             movie.setLastTmdbSyncToNow();
             movieDao.update(movie);
-            // TODO: Delete this line
-            System.out.println("movieId: " + movieId);
 
             // TODO: After update, unsued MovieGenres and Credits are removed, but there may be roque Genres and Persons
         }
