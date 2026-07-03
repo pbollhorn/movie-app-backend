@@ -2,6 +2,7 @@ package dat.dao;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.time.LocalDate;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -103,15 +104,19 @@ public class MovieDao {
 
     public List<MovieOverviewDto> getPopularMovies(Integer accountId) {
 
+        LocalDate cutoffDate = LocalDate.now().minusDays(90);
+
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m, r.rating)
                     FROM Movie m
                     LEFT JOIN Rating r ON r.movie.id = m.id AND r.account.id = :accountId
+                    WHERE m.releaseDate >= :cutoffDate
                     ORDER BY m.popularity DESC NULLS last""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
+                    .setParameter("cutoffDate", cutoffDate)
                     .setMaxResults(100)
                     .getResultList();
 
@@ -123,16 +128,19 @@ public class MovieDao {
 
     public List<MovieOverviewDto> getPopularMoviesByGenre(int genreId, Integer accountId) {
 
+        LocalDate cutoffDate = LocalDate.now().minusDays(90);
+
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(mg.movie, r.rating)
                     FROM MovieGenre mg
                     LEFT JOIN Rating r ON r.movie.id=mg.movie.id AND r.account.id=:accountId
-                    WHERE mg.genre.id=:genreId
+                    WHERE mg.movie.releaseDate >= :cutoffDate AND mg.genre.id=:genreId
                     ORDER BY mg.movie.popularity DESC NULLS last""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
+                    .setParameter("cutoffDate", cutoffDate)
                     .setParameter("genreId", genreId)
                     .setMaxResults(100)
                     .getResultList();
