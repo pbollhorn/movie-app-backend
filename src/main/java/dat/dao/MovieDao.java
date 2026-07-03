@@ -104,7 +104,7 @@ public class MovieDao {
 
     public List<MovieOverviewDto> getPopularMovies(Integer accountId) {
 
-        LocalDate cutoffDate = LocalDate.now().minusDays(90);
+        LocalDate cutoffDate = LocalDate.now().minusDays(365);
 
         try (EntityManager em = emf.createEntityManager()) {
 
@@ -117,7 +117,7 @@ public class MovieDao {
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
                     .setParameter("cutoffDate", cutoffDate)
-                    .setMaxResults(100)
+                    .setMaxResults(20)
                     .getResultList();
 
             return movies;
@@ -128,7 +128,7 @@ public class MovieDao {
 
     public List<MovieOverviewDto> getPopularMoviesByGenre(int genreId, Integer accountId) {
 
-        LocalDate cutoffDate = LocalDate.now().minusDays(90);
+        LocalDate cutoffDate = LocalDate.now().minusDays(365);
 
         try (EntityManager em = emf.createEntityManager()) {
 
@@ -142,7 +142,7 @@ public class MovieDao {
                     .setParameter("accountId", accountId)
                     .setParameter("cutoffDate", cutoffDate)
                     .setParameter("genreId", genreId)
-                    .setMaxResults(100)
+                    .setMaxResults(20)
                     .getResultList();
 
             return movies;
