@@ -26,6 +26,7 @@ public class Routes {
     private static EndpointGroup movieRoutes() {
         return () -> {
             get("/search", MovieController::searchMovies, Role.ANYONE);
+            get("/popular",  MovieController::getPopularMovies, Role.ANYONE);
             get("/top100",  MovieController::getTop100Movies, Role.ANYONE);
             get("/ratings", MovieController::getAllMoviesWithRating, Role.USER);
             get("/recommendations", MovieController::getMovieRecommendations, Role.USER);

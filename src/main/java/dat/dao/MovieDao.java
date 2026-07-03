@@ -100,6 +100,49 @@ public class MovieDao {
 
     }
 
+
+    public List<MovieOverviewDto> getPopularMovies(Integer accountId) {
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+            String jpql = """
+                    SELECT NEW dat.dto.MovieOverviewDto(m, r.rating)
+                    FROM Movie m
+                    LEFT JOIN Rating r ON r.movie.id = m.id AND r.account.id = :accountId
+                    ORDER BY m.popularity DESC NULLS last""";
+            List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
+                    .setParameter("accountId", accountId)
+                    .setMaxResults(100)
+                    .getResultList();
+
+            return movies;
+
+        }
+    }
+
+
+    public List<MovieOverviewDto> getPopularMoviesByGenre(int genreId, Integer accountId) {
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+            String jpql = """
+                    SELECT NEW dat.dto.MovieOverviewDto(mg.movie, r.rating)
+                    FROM MovieGenre mg
+                    LEFT JOIN Rating r ON r.movie.id=mg.movie.id AND r.account.id=:accountId
+                    WHERE mg.genre.id=:genreId
+                    ORDER BY mg.movie.popularity DESC NULLS last""";
+            List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
+                    .setParameter("accountId", accountId)
+                    .setParameter("genreId", genreId)
+                    .setMaxResults(100)
+                    .getResultList();
+
+            return movies;
+
+        }
+    }
+
+
     /**
      * Gets the top 100 movies ranked by the IMDb weighted rating formula
      * (see <a href="https://web.archive.org/web/20260311072638/https://help.imdb.com/article/imdb/track-movies-tv/ratings-faq/G67Y87TFYYP6TWAV">IMDb Ratings FAQ</a>).
