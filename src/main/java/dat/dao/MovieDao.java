@@ -164,7 +164,7 @@ public class MovieDao {
         try (EntityManager em = emf.createEntityManager()) {
 
             String sql = """
-                    SELECT percentile_cont(0.90)
+                    SELECT percentile_cont(0.95)
                     WITHIN GROUP (ORDER BY m.votecount)
                     FROM movie m""";
             int minVotes = (int) em.createNativeQuery(sql, Integer.class)
@@ -201,7 +201,7 @@ public class MovieDao {
         try (EntityManager em = emf.createEntityManager()) {
 
             String sql = """
-                    SELECT percentile_cont(0.90)
+                    SELECT percentile_cont(0.95)
                     WITHIN GROUP (ORDER BY m.votecount)
                     FROM movie m JOIN movie_genre mg ON mg.movie_id=m.id WHERE mg.genre_id=:genreId""";
             int minVotes = (int) em.createNativeQuery(sql, Integer.class)
