@@ -164,7 +164,7 @@ public class MovieDao {
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = "SELECT COUNT(m) FROM Movie m";
-            int movieCount = em.createQuery(jpql, Integer.class).getSingleResult();
+            long movieCount = em.createQuery(jpql, Long.class).getSingleResult();
             int minVotes = minVotesByMovieCount(movieCount);
 
             jpql = "SELECT AVG(m.voteAverage) FROM Movie m WHERE m.voteCount >= :minVotes";
@@ -197,11 +197,13 @@ public class MovieDao {
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = "SELECT COUNT(mg.movie.id) FROM MovieGenre mg WHERE mg.genre.id=:genreId";
-            int movieCount = em.createQuery(jpql, Integer.class).getSingleResult();
+            long movieCount = em.createQuery(jpql, Long.class)
+                    .setParameter("genreId", genreId)
+                    .getSingleResult();
             int minVotes = minVotesByMovieCount(movieCount);
 
             jpql = "SELECT AVG(mg.movie.voteAverage) FROM MovieGenre mg WHERE mg.movie.voteCount >= :minVotes AND mg.genre.id =:genreId";
-            Double mean = em.createQuery(jpql, Double.class)
+            double mean = em.createQuery(jpql, Double.class)
                     .setParameter("minVotes", minVotes)
                     .setParameter("genreId", genreId)
                     .getSingleResult();
@@ -226,7 +228,7 @@ public class MovieDao {
         }
     }
 
-    private int minVotesByMovieCount(int movieCount) {
+    private int minVotesByMovieCount(long movieCount) {
 
         if (movieCount > 100000)
             return 5000;
