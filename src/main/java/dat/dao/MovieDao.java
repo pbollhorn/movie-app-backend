@@ -163,11 +163,16 @@ public class MovieDao {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            String jpql = "SELECT COUNT(m) FROM Movie m";
-            long movieCount = em.createQuery(jpql, Long.class).getSingleResult();
-            int minVotes = minVotesByMovieCount(movieCount);
+            String sql = """
+                    SELECT percentile_cont(0.90)
+                    WITHIN GROUP (ORDER BY m.votecount) AS percentile
+                    FROM movie m""";
+            int minVotes = (int) em.createNativeQuery(sql, Integer.class)
+                    .getSingleResult();
+            System.out.println("genreId: All genres");
+            System.out.println("minVotes: " + minVotes);
 
-            jpql = "SELECT AVG(m.voteAverage) FROM Movie m WHERE m.voteCount >= :minVotes";
+            String jpql = "SELECT AVG(m.voteAverage) FROM Movie m WHERE m.voteCount >= :minVotes";
             double mean = em.createQuery(jpql, Double.class)
                     .setParameter("minVotes", minVotes)
                     .getSingleResult();
@@ -196,15 +201,17 @@ public class MovieDao {
 
         try (EntityManager em = emf.createEntityManager()) {
 
-            String jpql = "SELECT COUNT(mg.movie.id) FROM MovieGenre mg WHERE mg.genre.id=:genreId";
-            long movieCount = em.createQuery(jpql, Long.class)
+            String sql = """
+                    SELECT percentile_cont(0.90)
+                    WITHIN GROUP (ORDER BY m.votecount) AS percentile
+                    FROM movie m JOIN movie_genre mg ON mg.movie_id=m.id WHERE mg.genre_id=:genreId""";
+            int minVotes = (int) em.createNativeQuery(sql, Integer.class)
                     .setParameter("genreId", genreId)
                     .getSingleResult();
-            int minVotes = minVotesByMovieCount(movieCount);
-            System.out.println("movieCount: "+movieCount);
-            System.out.println("minVotes: "+minVotes);
+            System.out.println("genreId: " + genreId);
+            System.out.println("minVotes: " + minVotes);
 
-            jpql = "SELECT AVG(mg.movie.voteAverage) FROM MovieGenre mg WHERE mg.movie.voteCount >= :minVotes AND mg.genre.id =:genreId";
+            String jpql = "SELECT AVG(mg.movie.voteAverage) FROM MovieGenre mg WHERE mg.movie.voteCount >= :minVotes AND mg.genre.id =:genreId";
             double mean = em.createQuery(jpql, Double.class)
                     .setParameter("minVotes", minVotes)
                     .setParameter("genreId", genreId)
@@ -230,19 +237,19 @@ public class MovieDao {
         }
     }
 
-    private int minVotesByMovieCount(long movieCount) {
-
-        if (movieCount > 100000)
-            return 3000;
-
-        if (movieCount > 10000)
-            return 2000;
-
-        if (movieCount > 5000)
-            return 1000;
-
-        return 300;
-    }
+//    private int minVotesByMovieCount(long movieCount) {
+//
+//        if (movieCount > 100000)
+//            return 3000;
+//
+//        if (movieCount > 10000)
+//            return 2000;
+//
+//        if (movieCount > 5000)
+//            return 1000;
+//
+//        return 300;
+//    }
 
     public NameMovieListDto getMoviesWithPerson(int personId, Integer accountId) {
 

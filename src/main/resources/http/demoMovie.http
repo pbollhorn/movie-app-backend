@@ -10,7 +10,7 @@ GET {{url}}/movies/popular?genreId=12
 Authorization: Bearer {{token}}
 
 ###
-GET {{url}}/movies/top100?genreId=12
+GET {{url}}/movies/top100
 Authorization: Bearer {{token}}
 
 ###
