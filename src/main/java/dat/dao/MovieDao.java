@@ -231,12 +231,12 @@ public class MovieDao {
     private int minVotesByMovieCount(long movieCount) {
 
         if (movieCount > 100000)
-            return 5000;
+            return 3000;
 
         if (movieCount > 10000)
-            return 2500;
+            return 1000;
 
-        return 500;
+        return 300;
     }
 
     public NameMovieListDto getMoviesWithPerson(int personId, Integer accountId) {
