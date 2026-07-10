@@ -201,6 +201,8 @@ public class MovieDao {
                     .setParameter("genreId", genreId)
                     .getSingleResult();
             int minVotes = minVotesByMovieCount(movieCount);
+            System.out.println("movieCount: "+movieCount);
+            System.out.println("minVotes: "+minVotes);
 
             jpql = "SELECT AVG(mg.movie.voteAverage) FROM MovieGenre mg WHERE mg.movie.voteCount >= :minVotes AND mg.genre.id =:genreId";
             double mean = em.createQuery(jpql, Double.class)
@@ -234,6 +236,9 @@ public class MovieDao {
             return 3000;
 
         if (movieCount > 10000)
+            return 2000;
+
+        if (movieCount > 5000)
             return 1000;
 
         return 300;
