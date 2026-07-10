@@ -165,16 +165,16 @@ public class MovieDao {
 
             String sql = """
                     SELECT percentile_cont(0.90)
-                    WITHIN GROUP (ORDER BY m.votecount) AS percentile
+                    WITHIN GROUP (ORDER BY m.votecount)
                     FROM movie m""";
             int minVotes = (int) em.createNativeQuery(sql, Integer.class)
                     .getSingleResult();
             System.out.println("genreId: All genres");
             System.out.println("minVotes: " + minVotes);
 
-            String jpql = "SELECT AVG(m.voteAverage) FROM Movie m WHERE m.voteCount >= :minVotes";
+            String jpql = "SELECT AVG(m.voteAverage) FROM Movie m";
             double mean = em.createQuery(jpql, Double.class)
-                    .setParameter("minVotes", minVotes)
+//                    .setParameter("minVotes", minVotes)
                     .getSingleResult();
 
             jpql = """
@@ -203,7 +203,7 @@ public class MovieDao {
 
             String sql = """
                     SELECT percentile_cont(0.90)
-                    WITHIN GROUP (ORDER BY m.votecount) AS percentile
+                    WITHIN GROUP (ORDER BY m.votecount)
                     FROM movie m JOIN movie_genre mg ON mg.movie_id=m.id WHERE mg.genre_id=:genreId""";
             int minVotes = (int) em.createNativeQuery(sql, Integer.class)
                     .setParameter("genreId", genreId)
@@ -211,9 +211,9 @@ public class MovieDao {
             System.out.println("genreId: " + genreId);
             System.out.println("minVotes: " + minVotes);
 
-            String jpql = "SELECT AVG(mg.movie.voteAverage) FROM MovieGenre mg WHERE mg.movie.voteCount >= :minVotes AND mg.genre.id =:genreId";
+            String jpql = "SELECT AVG(mg.movie.voteAverage) FROM MovieGenre mg WHERE mg.genre.id =:genreId";
             double mean = em.createQuery(jpql, Double.class)
-                    .setParameter("minVotes", minVotes)
+//                    .setParameter("minVotes", minVotes)
                     .setParameter("genreId", genreId)
                     .getSingleResult();
 
