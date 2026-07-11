@@ -123,7 +123,7 @@ public class MovieDao {
                     .getResultList();
 
             jpql = "SELECT DATEDIFF(DAY, m.releaseDate, CURRENT_DATE) FROM Movie m WHERE m.id=1275779";
-            Integer diff = em.createQuery(jpql, Integer.class).getSingleResult();
+            Long diff = em.createQuery(jpql, Long.class).getSingleResult();
             System.out.println("diff: " + diff);
 
 
