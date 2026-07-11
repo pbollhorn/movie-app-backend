@@ -118,8 +118,8 @@ public class MovieDao {
                     ORDER BY m.popularity * EXP(-0.0231 * DATEDIFF(DAY, m.releaseDate, CURRENT_DATE)) DESC NULLS last""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
-                    .setParameter("cutoffDate", cutoffDate)
-                    .setParameter("maxDays", MAX_DAYS_POPULAR)
+//                    .setParameter("cutoffDate", cutoffDate)
+//                    .setParameter("maxDays", MAX_DAYS_POPULAR)
                     .setMaxResults(20)
                     .getResultList();
 
@@ -143,8 +143,8 @@ public class MovieDao {
                     ORDER BY mg.movie.popularity * EXP(-0.0231 * DATEDIFF(DAY, mg.movie.releaseDate, CURRENT_DATE)) DESC NULLS last""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
-                    .setParameter("cutoffDate", cutoffDate)
-                    .setParameter("maxDays", MAX_DAYS_POPULAR)
+//                    .setParameter("cutoffDate", cutoffDate)
+//                    .setParameter("maxDays", MAX_DAYS_POPULAR)
                     .setParameter("genreId", genreId)
                     .setMaxResults(20)
                     .getResultList();
