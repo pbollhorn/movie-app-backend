@@ -116,18 +116,13 @@ public class MovieDao {
                     FROM Movie m
                     LEFT JOIN Rating r ON r.movie.id = m.id AND r.account.id = :accountId
                     WHERE m.releaseDate >= :cutoffDate
-                    ORDER BY m.popularity * ( 1.0 - DATEDIFF(DAY, m.releaseDate, CURRENT_DATE)/(1.0*:maxDays) ) DESC NULLS last""";
+                    ORDER BY m.popularity * ( 1.0 - 1.0 * DATEDIFF(DAY, m.releaseDate, CURRENT_DATE)/:maxDays ) DESC NULLS last""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
                     .setParameter("cutoffDate", cutoffDate)
                     .setParameter("maxDays", MAX_DAYS_POPULAR)
                     .setMaxResults(20)
                     .getResultList();
-
-            jpql = "SELECT DATEDIFF(DAY, m.releaseDate, CURRENT_DATE) FROM Movie m WHERE m.id=1275779";
-            Long diff = em.createQuery(jpql, Long.class).getSingleResult();
-            System.out.println("diff: " + diff);
-
 
             return movies;
 
