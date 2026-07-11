@@ -115,8 +115,7 @@ public class MovieDao {
                     SELECT NEW dat.dto.MovieOverviewDto(m, r.rating)
                     FROM Movie m
                     LEFT JOIN Rating r ON r.movie.id = m.id AND r.account.id = :accountId
-                    WHERE m.releaseDate >= :cutoffDate
-                    ORDER BY m.popularity * ( 1.0 - 1.0 * DATEDIFF(DAY, m.releaseDate, CURRENT_DATE)/:maxDays ) DESC NULLS last""";
+                    ORDER BY m.popularity * EXP(-0.0231 * DATEDIFF(DAY, m.releaseDate, CURRENT_DATE)) DESC NULLS last""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
                     .setParameter("cutoffDate", cutoffDate)
@@ -140,8 +139,8 @@ public class MovieDao {
                     SELECT NEW dat.dto.MovieOverviewDto(mg.movie, r.rating)
                     FROM MovieGenre mg
                     LEFT JOIN Rating r ON r.movie.id=mg.movie.id AND r.account.id=:accountId
-                    WHERE mg.movie.releaseDate >= :cutoffDate AND mg.genre.id=:genreId
-                    ORDER BY mg.movie.popularity * ( 1.0 - 1.0 * DATEDIFF(DAY, mg.movie.releaseDate, CURRENT_DATE)/:maxDays ) DESC NULLS last""";
+                    WHERE mg.genre.id=:genreId
+                    ORDER BY mg.movie.popularity * EXP(-0.0231 * DATEDIFF(DAY, mg.movie.releaseDate, CURRENT_DATE)) DESC NULLS last""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
                     .setParameter("cutoffDate", cutoffDate)
