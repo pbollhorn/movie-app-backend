@@ -131,7 +131,8 @@ public class MovieDao {
 
     public List<MovieOverviewDto> getPopularMoviesByGenre(int genreId, Integer accountId) {
 
-        LocalDate cutoffDate = LocalDate.now().minusDays(MAX_DAYS_POPULAR);
+//        LocalDate cutoffDate = LocalDate.now().minusDays(MAX_DAYS_POPULAR);
+        LocalDate cutoffDate = LocalDate.now().minusDays(3);
 
         try (EntityManager em = emf.createEntityManager()) {
 
