@@ -14,7 +14,7 @@ import dat.dto.*;
 
 public class MovieDao {
 
-    private static final int MAX_DAYS_POPULAR = 365;
+    private static final int MAX_DAYS_POPULAR = 90;
     private static final int MIN_VOTE_COUNT = 5000;
     private static final double MEAN_TMDB_SCORE = 6.031;
 
@@ -116,7 +116,7 @@ public class MovieDao {
                     FROM Movie m
                     LEFT JOIN Rating r ON r.movie.id = m.id AND r.account.id = :accountId
                     WHERE m.releaseDate >= :cutoffDate
-                    ORDER BY m.popularity * EXP(-0.0231 * DATEDIFF(DAY, m.releaseDate, CURRENT_DATE)) DESC NULLS last""";
+                    ORDER BY m.popularity DESC NULLS last""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
                     .setParameter("cutoffDate", cutoffDate)
@@ -131,8 +131,7 @@ public class MovieDao {
 
     public List<MovieOverviewDto> getPopularMoviesByGenre(int genreId, Integer accountId) {
 
-//        LocalDate cutoffDate = LocalDate.now().minusDays(MAX_DAYS_POPULAR);
-        LocalDate cutoffDate = LocalDate.now().minusDays(3);
+        LocalDate cutoffDate = LocalDate.now().minusDays(MAX_DAYS_POPULAR);
 
         try (EntityManager em = emf.createEntityManager()) {
 
@@ -141,7 +140,7 @@ public class MovieDao {
                     FROM MovieGenre mg
                     LEFT JOIN Rating r ON r.movie.id=mg.movie.id AND r.account.id=:accountId
                     WHERE mg.movie.releaseDate >= :cutoffDate AND mg.genre.id=:genreId
-                    ORDER BY mg.movie.popularity * EXP(-0.0231 * DATEDIFF(DAY, mg.movie.releaseDate, CURRENT_DATE)) DESC NULLS last""";
+                    ORDER BY mg.movie.popularity DESC NULLS last""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
                     .setParameter("cutoffDate", cutoffDate)
