@@ -18,7 +18,7 @@
         <file>logs/debug.log</file>
         <append>true</append>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSSx, UTC} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss, UTC} UTC [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
