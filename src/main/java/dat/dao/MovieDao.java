@@ -14,7 +14,7 @@ import dat.dto.*;
 
 public class MovieDao {
 
-    private static final int MAX_DAYS_POPULAR = 90;
+    private static final int MAX_DAYS_POPULAR = 365;
     private static final int MIN_VOTE_COUNT = 5000;
     private static final double MEAN_TMDB_SCORE = 6.031;
 
