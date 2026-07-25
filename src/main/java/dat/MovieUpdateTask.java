@@ -52,12 +52,12 @@ public class MovieUpdateTask implements Runnable {
                 if (e.getCode() == 404) {
                     logger.info("Deleting movie with id=" + movieId + " due to 404 from TMDB");
                     movieDao.deleteById(movieId);
-                    continue;
                 }
                 if (e.getCode() == 429) {
                     logger.error("Stopping MovieUpdateTask immediately due to code 429");
                     return;
                 }
+                continue;
             }
 
             Movie movie = new Movie(movieDto);
