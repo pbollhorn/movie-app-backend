@@ -51,7 +51,7 @@ public class Movie {
     private Set<Credit> credits = new HashSet<>();
 
     @ToString.Exclude
-    @OneToMany(mappedBy ="movie", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy ="movie", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Rating> ratings = new HashSet<>();
 
     @ManyToOne(cascade = CascadeType.MERGE)

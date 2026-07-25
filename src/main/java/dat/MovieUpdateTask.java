@@ -34,13 +34,11 @@ public class MovieUpdateTask implements Runnable {
         logger.info("Started MovieUpdateTask");
         long startTime = System.currentTimeMillis();
 
-//        // Get all movieIds currently in database
-//        Set<Integer> movieIds = movieDao.getAllMovieIds();
-//
-//        // Add new movies from TMDB
-//        movieIds.addAll(TmdbService.discoverMovieIds());
+        // Get all movieIds currently in database
+        Set<Integer> movieIds = movieDao.getAllMovieIds();
 
-        Set<Integer> movieIds = movieDao.getMovieIdsWhereLastTmdbSyncIsNull();
+        // Add new movies from TMDB
+        movieIds.addAll(TmdbService.discoverMovieIds());
 
         for (int movieId : movieIds) {
 
@@ -50,11 +48,11 @@ public class MovieUpdateTask implements Runnable {
             } catch (ApiException e) {
                 logger.info("Caught ApiException: " + e.getCode() + " " + e.getMessage());
                 if (e.getCode() == 404) {
-                    logger.info("Deleting movie with id=" + movieId + " due to 404 from TMDB");
+                    logger.info("Deleting movie with id=" + movieId + " due to code 404 from TMDB");
                     movieDao.deleteById(movieId);
                 }
                 if (e.getCode() == 429) {
-                    logger.error("Stopping MovieUpdateTask immediately due to code 429");
+                    logger.error("Stopping MovieUpdateTask immediately due to code 429 from TMDB");
                     return;
                 }
                 continue;

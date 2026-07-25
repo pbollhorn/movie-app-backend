@@ -60,15 +60,6 @@ public class MovieDao {
         }
     }
 
-    public Set<Integer> getMovieIdsWhereLastTmdbSyncIsNull() {
-        try (EntityManager em = emf.createEntityManager()) {
-
-            String jpql = "SELECT m.id FROM Movie m WHERE m.lastTmdbSync IS NULL";
-            return new HashSet<>(em.createQuery(jpql, Integer.class).getResultList());
-
-        }
-    }
-
     public Set<Integer> getAllMovieIds() {
 
         try (EntityManager em = emf.createEntityManager()) {
