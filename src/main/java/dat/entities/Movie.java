@@ -50,6 +50,10 @@ public class Movie {
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<Credit> credits = new HashSet<>();
 
+    @ToString.Exclude
+    @OneToMany(mappedBy ="movie", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<Rating> ratings = new HashSet<>();
+
     @ManyToOne(cascade = CascadeType.MERGE)
     private Collection collection;
 
