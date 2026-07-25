@@ -3,6 +3,7 @@ package dat;
 import java.util.List;
 import java.util.Set;
 
+import dat.dao.CollectionDao;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import dat.services.TmdbService;
 public class MovieUpdateTask implements Runnable {
 
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
+    private static final CollectionDao collectionDao = CollectionDao.getInstance(emf);
     private static final GenreDao genreDao = GenreDao.getInstance(emf);
     private static final MovieDao movieDao = MovieDao.getInstance(emf);
     private static final PersonDao personDao = PersonDao.getInstance(emf);
@@ -97,17 +99,35 @@ public class MovieUpdateTask implements Runnable {
 
 
         // Delete unwanted movies
-        movieIds = movieDao.getUnwantedMovieIds();
-        for (int movieId : movieIds) {
-            logger.info("Deleting movie with id=" + movieId + " because it is no longer wanted");
-            movieDao.deleteById(movieId);
+        try {
+            int deletedCount = movieDao.deleteUnwantedMovies();
+            logger.info("Deleted " + deletedCount + " unwanted movies");
+        } catch (Exception e) {
+            logger.error("Failed to delete unwanted movies", e);
         }
 
+        // Delete orphaned genres
+        try {
+            int deletedCount = genreDao.deleteOrphanedGenres();
+            logger.info("Deleted " + deletedCount + " orphaned genres");
+        } catch (Exception e) {
+            logger.error("Failed to delete orphaned genres", e);
+        }
+
+        // Delete orphaned persons
         try {
             int deletedCount = personDao.deleteOrphanedPersons();
             logger.info("Deleted " + deletedCount + " orphaned persons");
         } catch (Exception e) {
             logger.error("Failed to delete orphaned persons", e);
+        }
+
+        // Delete orphaned collections
+        try {
+            int deletedCount = collectionDao.deleteOrphanedCollections();
+            logger.info("Deleted " + deletedCount + " orphaned collections");
+        } catch (Exception e) {
+            logger.error("Failed to delete orphaned collections", e);
         }
 
         logger.info("Finished MovieUpdateTask, milliseconds it took: " + (System.currentTimeMillis() - startTime));

@@ -17,6 +17,6 @@ public class Collection {
     @Id
     private Integer id;
 
-    private String name;  // TODO: name with "Collection" at the end removed
+    private String name;
 
 }

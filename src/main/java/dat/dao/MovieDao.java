@@ -72,15 +72,23 @@ public class MovieDao {
     }
 
     /**
-     * Get the ids of the movies in the database that are no longer wanted.
-     * These are movies where adult=TRUE or video=TRUE or voteCount < 10
-     * due to an update from TMDB.
-     * @return Set of unwanted movie ids
+     * Delete movies in the database that are no longer wanted.
+     * These are movies where adult=TRUE or video=TRUE or voteCount<10 after an update from TMDB.
+     * @return Number of deleted movies
      */
-    public Set<Integer> getUnwantedMovieIds() {
+    public int deleteUnwantedMovies() {
         try (EntityManager em = emf.createEntityManager()) {
-            String jpql = "SELECT m.id FROM Movie m WHERE m.adult=TRUE OR m.video=TRUE OR m.voteCount<10";
-            return new HashSet<>(em.createQuery(jpql, Integer.class).getResultList());
+            em.getTransaction().begin();
+
+            String jpql = "SELECT m FROM Movie m WHERE m.adult=TRUE OR m.video=TRUE OR m.voteCount<10";
+            List<Movie> movies = em.createQuery(jpql, Movie.class).getResultList();
+
+            for (Movie m : movies) {
+                em.remove(m); // Triggers cascade delete on Credits, MovieGenres and Ratings
+            }
+
+            em.getTransaction().commit();
+            return movies.size();
         }
     }
 

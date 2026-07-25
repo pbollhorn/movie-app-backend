@@ -26,29 +26,36 @@ public class GenreDao {
 
     // Update genre (or create it if it does not already exist)
     public Genre update(TmdbGenreDto tmdbGenreDto) {
-
         try (EntityManager em = emf.createEntityManager()) {
-
             em.getTransaction().begin();
             Genre genre = em.merge(new Genre(tmdbGenreDto));
             em.getTransaction().commit();
-
             return genre;
         }
-
     }
 
 
     public List<TmdbGenreDto> getAllGenres() {
-
         try (EntityManager em = emf.createEntityManager()) {
-
             String jpql = "SELECT NEW dat.dto.TmdbGenreDto(g.id, g.name) FROM Genre g ORDER BY g.name";
             List<TmdbGenreDto> genres = em.createQuery(jpql, TmdbGenreDto.class).getResultList();
             return genres;
-
         }
+    }
 
+    /**
+     * Delete genres in the database that are orphaned.
+     * These are genres that are not associated with any movie after an update from TMDB.
+     * @return Number of deleted genres
+     */
+    public int deleteOrphanedGenres() {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            String jpql = "DELETE FROM Genre g WHERE g.id NOT IN (SELECT mg.genre.id FROM MovieGenre mg)";
+            int deletedCount = em.createQuery(jpql).executeUpdate();
+            em.getTransaction().commit();
+            return deletedCount;
+        }
     }
 
 }

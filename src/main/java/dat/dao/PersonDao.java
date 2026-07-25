@@ -1,8 +1,5 @@
 package dat.dao;
 
-import java.util.List;
-
-import dat.entities.Movie;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -36,6 +33,11 @@ public class PersonDao {
 
     }
 
+    /**
+     * Delete persons in the database that are orphaned.
+     * These are persons that have no credits after an update from TMDB.
+     * @return Number of deleted persons
+     */
     public int deleteOrphanedPersons() {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();

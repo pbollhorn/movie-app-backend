@@ -1,5 +1,6 @@
 package dat;
 
+import dat.dao.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
@@ -9,8 +10,6 @@ import dat.config.ApplicationConfig;
 import dat.config.HibernateConfig;
 import dat.utils.PropertyReader;
 import dat.routes.Routes;
-import dat.dao.AccountDao;
-import dat.dao.MovieDao;
 
 public class Main {
 
@@ -27,8 +26,10 @@ public class Main {
 
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
         AccountDao accountDAO = AccountDao.getInstance(emf);
+        CollectionDao collectionDao = CollectionDao.getInstance(emf);
+        GenreDao genreDao = GenreDao.getInstance(emf);
         MovieDao movieDAO = MovieDao.getInstance(emf);
-
+        PersonDao personDao = PersonDao.getInstance(emf);
 
         // Install pg_trgm extension if not already installed
         // Create indexes in database, if not already created
