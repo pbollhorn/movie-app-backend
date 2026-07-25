@@ -40,7 +40,7 @@ public class MovieUpdateTask implements Runnable {
 //        // Add new movies from TMDB
 //        movieIds.addAll(TmdbService.discoverMovieIds());
 
-        Set<Integer> movieIds = Set.of(42137, 283069, 627384);
+        Set<Integer> movieIds = movieDao.getMovieIdsWhereLastTmdbSyncIsNull();
 
         for (int movieId : movieIds) {
 
@@ -50,14 +50,14 @@ public class MovieUpdateTask implements Runnable {
             } catch (ApiException e) {
                 logger.info("Caught ApiException: " + e.getCode() + " " + e.getMessage());
                 if (e.getCode() == 404) {
-                    // TODO: What happens with ratings?
+                    logger.info("Deleting movie with id=" + movieId + " due to 404 from TMDB");
                     movieDao.deleteById(movieId);
+                    continue;
                 }
                 if (e.getCode() == 429) {
                     logger.error("Stopping MovieUpdateTask immediately due to code 429");
                     return;
                 }
-                continue;
             }
 
             Movie movie = new Movie(movieDto);
@@ -77,7 +77,7 @@ public class MovieUpdateTask implements Runnable {
                 // This creates the cast member as a person in the database
                 // (or overwrites with same data if already in database)
                 Person person = personDao.update(c);
-                movie.addCredit(c.id(), person,"Cast", "Cast Member", c.character(), rankInMovie);
+                movie.addCredit(c.id(), person, "Cast", "Cast Member", c.character(), rankInMovie);
                 rankInMovie++;
             }
             for (TmdbCreditDto c : movieDto.credits().crew()) {
