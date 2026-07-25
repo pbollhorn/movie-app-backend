@@ -1,41 +1,62 @@
 @startuml
 object Account {
-    +email
-    +hashedPassword
-    +role
+    +String email
+    +String hashedPassword
+    +Role role
 }
 
 object Collection {
-    +name
+    +String name
 }
 
 object Credit {
-    +department
-    +job
-    +character
-    +rankInMovie
+    +String department
+    +String job
+    +String character
+    +Integer rankInMovie
 }
 
 object Genre {
-    +name
+    +String name
 }
 
 object Movie {
-
+    +String title
+    +String originalTitle
+    +Boolean adult
+    +Boolean video
+    +String originalLanguage
+    +Double voteAverage
+    +Integer voteCount
+    +Double popularity
+    +LocalDate releaseDate
+    +String backdropPath
+    +String posterPath
+    +Integer runtime
+    +String tagline
+    +String status
+    +String overview
+    +OffsetDateTime lastTmdbSync
 }
 
 object MovieGenre {
-    +rankInMovie
+    +Integer rankInMovie
 }
 
 object Person {
-    +name
+    +String name
 }
 
 object Rating {
-    +rating
+    +Boolean rating
 }
 
+Account "1" -- "*" Rating
+Movie "1" -- "*" Rating
 Movie "1" -- "*" Credit
+Person "1" -- "*" Credit
+Movie "1" -- "*" MovieGenre
+Genre "1" -- "*" MovieGenre
+Movie "*" -- "0..1" Collection
 
 @enduml
