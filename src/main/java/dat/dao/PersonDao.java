@@ -40,7 +40,7 @@ public class PersonDao {
 
     public List<Person> getOrphanedPersons() {
         try (EntityManager em = emf.createEntityManager()) {
-            String jpql = "SELECT p FROM Person p LEFT JOIN p.credits c WHERE c IS NULL";
+            String jpql = "SELECT p FROM Person p WHERE p.credits IS EMPTY";
             List<Person> orphanedPersons = em.createQuery(jpql, Person.class).getResultList();
             return orphanedPersons;
         }
