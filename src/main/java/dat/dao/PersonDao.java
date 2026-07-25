@@ -1,5 +1,7 @@
 package dat.dao;
 
+import java.util.List;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -34,6 +36,14 @@ public class PersonDao {
             return person;
         }
 
+    }
+
+    public List<Person> getOrphanedPersons() {
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = "SELECT p FROM Person p LEFT JOIN p.credits c WHERE c IS NULL";
+            List<Person> orphanedPersons = em.createQuery(jpql, Person.class).getResultList();
+            return orphanedPersons;
+        }
     }
 
 }

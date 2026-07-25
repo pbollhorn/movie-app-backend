@@ -103,6 +103,8 @@ public class MovieUpdateTask implements Runnable {
         }
 
 
+        System.out.println(personDao.getOrphanedPersons());
+
         logger.info("Finished MovieUpdateTask, milliseconds it took: " + (System.currentTimeMillis() - startTime));
 
     }
