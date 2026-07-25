@@ -45,6 +45,16 @@ public class MovieDao {
         }
     }
 
+    // TODO: Perhaps some error handling in case m is null
+    public void deleteById(int movieId) {
+        try (EntityManager em = emf.createEntityManager()) {
+            em.getTransaction().begin();
+            Movie movie = em.find(Movie.class, movieId);
+            em.remove(movie);
+            em.getTransaction().commit();
+        }
+    }
+
 
     public Set<Integer> getAllMovieIds() {
 

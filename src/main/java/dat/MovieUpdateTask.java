@@ -46,7 +46,10 @@ public class MovieUpdateTask implements Runnable {
             try {
                 movieDto = TmdbService.getMovieDetails(movieId);
             } catch (ApiException e) {
-                logger.error("Caught ApiException: " + e.getCode() + " " + e.getMessage());
+                logger.info("Caught ApiException: " + e.getCode() + " " + e.getMessage());
+                if (e.getCode() == 404) {
+                    // TODO: Delete movie
+                }
                 if (e.getCode() == 429) {
                     logger.error("Stopping MovieUpdateTask immediately due to code 429");
                     return;
@@ -56,7 +59,7 @@ public class MovieUpdateTask implements Runnable {
 
             Movie movie = new Movie(movieDto);
 
-            // TODO: It may seem wasteful to overwrite genres for each movie, but this
+            // It may seem wasteful to overwrite genres for each movie, but this
             // allows for TMDB genres to change in the middle of an update without affecting this code
             // e.g. if TMDB ads a new genre in the middle of one of my updates
             int rankInMovie = 0;

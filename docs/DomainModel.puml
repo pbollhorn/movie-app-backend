@@ -1,0 +1,41 @@
+@startuml
+object Account {
+    +email
+    +hashedPassword
+    +role
+}
+
+object Collection {
+    +name
+}
+
+object Credit {
+    +department
+    +job
+    +character
+    +rankInMovie
+}
+
+object Genre {
+    +name
+}
+
+object Movie {
+
+}
+
+object MovieGenre {
+    +rankInMovie
+}
+
+object Person {
+    +name
+}
+
+object Rating {
+    +rating
+}
+
+Movie "1" -- "*" Credit
+
+@enduml
