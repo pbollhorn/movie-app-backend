@@ -34,11 +34,13 @@ public class MovieUpdateTask implements Runnable {
         logger.info("Started MovieUpdateTask");
         long startTime = System.currentTimeMillis();
 
-        // Get all movieIds currently in database
-        Set<Integer> movieIds = movieDao.getAllMovieIds();
+//        // Get all movieIds currently in database
+//        Set<Integer> movieIds = movieDao.getAllMovieIds();
+//
+//        // Add new movies from TMDB
+//        movieIds.addAll(TmdbService.discoverMovieIds());
 
-        // Add new movies from TMDB
-        movieIds.addAll(TmdbService.discoverMovieIds());
+        Set<Integer> movieIds = Set.of(42137, 283069, 627384);
 
         for (int movieId : movieIds) {
 
@@ -48,7 +50,8 @@ public class MovieUpdateTask implements Runnable {
             } catch (ApiException e) {
                 logger.info("Caught ApiException: " + e.getCode() + " " + e.getMessage());
                 if (e.getCode() == 404) {
-                    // TODO: Delete movie
+                    // TODO: What happens with ratings?
+                    movieDao.deleteById(movieId);
                 }
                 if (e.getCode() == 429) {
                     logger.error("Stopping MovieUpdateTask immediately due to code 429");
