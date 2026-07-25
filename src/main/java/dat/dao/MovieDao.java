@@ -71,6 +71,18 @@ public class MovieDao {
 
     }
 
+    /**
+     * Get the ids of the movies in the database that are no longer wanted.
+     * These are movies where adult=TRUE or video=TRUE or voteCount < 10
+     * due to an update from TMDB.
+     * @return Set of unwanted movie ids
+     */
+    public Set<Integer> getUnwantedMovieIds() {
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = "SELECT m.id FROM Movie m WHERE m.adult=TRUE OR m.video=TRUE OR m.voteCount<10";
+            return new HashSet<>(em.createQuery(jpql, Integer.class).getResultList());
+        }
+    }
 
     public List<MovieOverviewDto> searchMovies(String title, Integer accountId, int limit) {
 

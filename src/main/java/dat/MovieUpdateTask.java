@@ -37,8 +37,10 @@ public class MovieUpdateTask implements Runnable {
         // Get all movieIds currently in database
         Set<Integer> movieIds = movieDao.getAllMovieIds();
 
-        // Add new movies from TMDB
-        movieIds.addAll(TmdbService.discoverMovieIds());
+//        // Add new movies from TMDB
+//        movieIds.addAll(TmdbService.discoverMovieIds());
+
+        movieIds = Set.of(85);
 
         for (int movieId : movieIds) {
 
@@ -47,13 +49,13 @@ public class MovieUpdateTask implements Runnable {
                 movieDto = TmdbService.getMovieDetails(movieId);
             } catch (ApiException e) {
                 logger.info("Caught ApiException: " + e.getCode() + " " + e.getMessage());
-                if (e.getCode() == 404) {
-                    logger.info("Deleting movie with id=" + movieId + " due to code 404 from TMDB");
-                    movieDao.deleteById(movieId);
-                }
                 if (e.getCode() == 429) {
                     logger.error("Stopping MovieUpdateTask immediately due to code 429 from TMDB");
                     return;
+                }
+                if (e.getCode() == 404) {
+                    logger.info("Deleting movie with id=" + movieId + " due to code 404 from TMDB");
+                    movieDao.deleteById(movieId);
                 }
                 continue;
             }
@@ -73,14 +75,14 @@ public class MovieUpdateTask implements Runnable {
             rankInMovie = 0;
             for (TmdbCreditDto c : movieDto.credits().cast()) {
                 // This creates the cast member as a person in the database
-                // (or overwrites with same data if already in database)
+                // (or overwrites if already in database)
                 Person person = personDao.update(c);
                 movie.addCredit(c.id(), person, "Cast", "Cast Member", c.character(), rankInMovie);
                 rankInMovie++;
             }
             for (TmdbCreditDto c : movieDto.credits().crew()) {
                 // This creates the crew member as a person in the database
-                // (or overwrites with same data if already in database)
+                // (or overwrites if already in database)
                 Person person = personDao.update(c);
                 movie.addCredit(c.id(), person, c.department(), c.job(), null, rankInMovie);
                 rankInMovie++;
@@ -89,8 +91,17 @@ public class MovieUpdateTask implements Runnable {
             movie.setLastTmdbSyncToNow();
             movieDao.update(movie);
 
-            // TODO: After update, unsued MovieGenres and Credits are removed, but there may be roque Genres and Persons
+            // TODO: After update, unused MovieGenres, Credits and Ratings are removed, but there may be roque Genres and Persons
         }
+
+
+        // Delete unwanted movies
+        movieIds = movieDao.getUnwantedMovieIds();
+        for (int movieId : movieIds) {
+            logger.info("Deleting movie with id=" + movieId + " because it is no longer wanted");
+            movieDao.deleteById(movieId);
+        }
+
 
         logger.info("Finished MovieUpdateTask, milliseconds it took: " + (System.currentTimeMillis() - startTime));
 
