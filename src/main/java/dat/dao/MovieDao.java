@@ -45,7 +45,7 @@ public class MovieDao {
         }
     }
 
-    // TODO: Perhaps some better error handling in case m is null
+    // TODO: Perhaps some better error handling in case movie is null
     public Movie deleteById(int movieId) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();

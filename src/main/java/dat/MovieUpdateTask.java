@@ -1,5 +1,6 @@
 package dat;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.EntityManagerFactory;
@@ -102,9 +103,12 @@ public class MovieUpdateTask implements Runnable {
             movieDao.deleteById(movieId);
         }
 
-
-        System.out.println(personDao.getOrphanedPersons());
-        System.out.println(personDao.getOrphanedPersons().size());
+        try {
+            int deletedCount = personDao.deleteOrphanedPersons();
+            logger.info("Deleted " + deletedCount + " orphaned persons");
+        } catch (Exception e) {
+            logger.error("Failed to delete orphaned persons", e);
+        }
 
         logger.info("Finished MovieUpdateTask, milliseconds it took: " + (System.currentTimeMillis() - startTime));
 

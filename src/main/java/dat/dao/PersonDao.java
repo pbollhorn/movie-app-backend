@@ -2,6 +2,7 @@ package dat.dao;
 
 import java.util.List;
 
+import dat.entities.Movie;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 
@@ -26,23 +27,22 @@ public class PersonDao {
 
     // Update person (or create it if it does not already exist)
     public Person update(TmdbCreditDto tmdbCreditDto) {
-
         try (EntityManager em = emf.createEntityManager()) {
-
             em.getTransaction().begin();
             Person person = em.merge(new Person(tmdbCreditDto));
             em.getTransaction().commit();
-
             return person;
         }
 
     }
 
-    public List<Person> getOrphanedPersons() {
+    public int deleteOrphanedPersons() {
         try (EntityManager em = emf.createEntityManager()) {
-            String jpql = "SELECT p FROM Person p WHERE p.credits IS EMPTY";
-            List<Person> orphanedPersons = em.createQuery(jpql, Person.class).getResultList();
-            return orphanedPersons;
+            em.getTransaction().begin();
+            int deletedCount = em.createQuery("DELETE FROM Person p WHERE p.credits IS EMPTY")
+                    .executeUpdate();
+            em.getTransaction().commit();
+            return deletedCount;
         }
     }
 
