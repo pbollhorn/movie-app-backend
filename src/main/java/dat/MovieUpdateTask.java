@@ -40,9 +40,9 @@ public class MovieUpdateTask implements Runnable {
         // Get all movieIds currently in database
         Set<Integer> movieIds = movieDao.getAllMovieIds();
 
+        // TODO: Bring back to normal
 //        // Add new movies from TMDB
 //        movieIds.addAll(TmdbService.discoverMovieIds());
-
         movieIds = Set.of(85);
 
         for (int movieId : movieIds) {

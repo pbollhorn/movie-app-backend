@@ -24,6 +24,7 @@ public class Main {
                 (")_(")                                            (")_(")
                 ----------------------------------------------------------\n""");
 
+        // Initialize DAO singletons
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
         AccountDao accountDAO = AccountDao.getInstance(emf);
         CollectionDao collectionDao = CollectionDao.getInstance(emf);
@@ -31,7 +32,7 @@ public class Main {
         MovieDao movieDAO = MovieDao.getInstance(emf);
         PersonDao personDao = PersonDao.getInstance(emf);
 
-        // Install pg_trgm extension if not already installed
+        // Install pg_trgm extension in database, if not already installed
         // Create indexes in database, if not already created
         String DB_NAME = PropertyReader.getPropertyValue("DB_NAME");
         try (EntityManager em = emf.createEntityManager()) {
@@ -45,7 +46,7 @@ public class Main {
             em.getTransaction().commit();
         }
 
-        // Configure server and start it
+        // Configure Javalin server and start it
         ApplicationConfig
                 .getInstance()
                 .initiateServer()
