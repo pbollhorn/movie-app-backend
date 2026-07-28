@@ -88,12 +88,12 @@ public class MovieDao {
                 .map(MovieOverviewDto::id)
                 .forEach(trendingMovieIds::add);
 
-        for (int genreId : genreDao.getAllGenreIds()) {
-            getPopularMoviesByGenre(genreId, null)
-                    .stream()
-                    .map(MovieOverviewDto::id)
-                    .forEach(trendingMovieIds::add);
-        }
+//        for (int genreId : genreDao.getAllGenreIds()) {
+//            getPopularMoviesByGenre(genreId, null)
+//                    .stream()
+//                    .map(MovieOverviewDto::id)
+//                    .forEach(trendingMovieIds::add);
+//        }
 
         return trendingMovieIds;
 

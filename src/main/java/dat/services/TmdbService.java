@@ -80,6 +80,39 @@ public class TmdbService {
 
     }
 
+    /**
+     * Get ids of trending movies from TMDB.
+     * I.e. the top 20 most popular movies, overall and for each genre, released within the last year.
+     * Please note: This method does not use TMDB's trending endpoint
+     *
+     * @return Set of movie ids
+     */
+    public static Set<Integer> discoverTrendingMovieIds() {
+
+        LocalDate today = LocalDate.now();
+        LocalDate oneYearAgo = LocalDate.now().minusDays(365);
+
+        Set<Integer> trendingMovieIds = new HashSet<>();
+
+        String url = "https://api.themoviedb.org/3/discover/movie?&sort_by=popularity.desc" +
+                "&include_adult=false&include_video=false" +
+                "&vote_count.gte=" + MINIMUM_VOTE_COUNT +
+                "&primary_release_date.lte=" + today +
+                "&primary_release_date.gte=" + oneYearAgo;
+        String json = getDataFromTmdb(url);
+
+        try {
+            JsonNode results = objectMapper.readTree(json).path("results");
+            results.forEach(node -> trendingMovieIds.add(node.path("id").asInt()));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return trendingMovieIds;
+
+    }
+
     public static TmdbMovieDto getMovieDetails(int movieId) {
 
         String url = "https://api.themoviedb.org/3/movie/" + movieId + "?append_to_response=credits";

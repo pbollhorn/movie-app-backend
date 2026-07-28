@@ -56,10 +56,6 @@ public class Main {
                 .checkSecurityRoles()
                 .startServer(7070);
 
-        // TODO: Delete this line
-        System.out.println(movieDao.getTrendingMovieIds());
-        System.out.println(movieDao.getTrendingMovieIds().size());
-
     }
 
 }

@@ -1,5 +1,6 @@
 package dat;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -37,13 +38,15 @@ public class MovieUpdateTask implements Runnable {
         logger.info("Started MovieUpdateTask");
         long startTime = System.currentTimeMillis();
 
-        // Get all movieIds currently in database
-        Set<Integer> movieIds = movieDao.getAllMovieIds();
-
-        // TODO: Bring back to normal
+//        // Get all movieIds currently in database
+//        Set<Integer> movieIds = movieDao.getAllMovieIds();
+//
 //        // Add new movies from TMDB
 //        movieIds.addAll(TmdbService.discoverMovieIds());
-        movieIds = Set.of(85);
+
+        Set<Integer> movieIds = new HashSet<>();
+        movieIds.addAll(movieDao.getTrendingMovieIds());
+        movieIds.addAll(TmdbService.discoverTrendingMovieIds());
 
         for (int movieId : movieIds) {
 
