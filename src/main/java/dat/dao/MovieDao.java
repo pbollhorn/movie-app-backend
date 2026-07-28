@@ -21,7 +21,7 @@ public class MovieDao {
 
     private static MovieDao instance;
     private static EntityManagerFactory emf;
-    private static GenreDao genreDao = GenreDao.getInstance(emf);
+//    private static GenreDao genreDao = GenreDao.getInstance(emf);
 
     private MovieDao(EntityManagerFactory emf) {
         this.emf = emf;
