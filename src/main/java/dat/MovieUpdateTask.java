@@ -138,7 +138,7 @@ public class MovieUpdateTask implements Runnable {
             logger.error("Failed to delete orphaned collections", e);
         }
 
-        logger.info("Finished MovieUpdateTask, milliseconds it took: " + (System.currentTimeMillis() - startTime));
+        logger.info("Finished MovieUpdateTask, seconds it took: " + (System.currentTimeMillis() - startTime)/1000);
 
     }
 
