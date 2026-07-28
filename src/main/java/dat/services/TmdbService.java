@@ -110,7 +110,32 @@ public class TmdbService {
         }
 
         return trendingMovieIds;
+    }
 
+    public static Set<Integer> discoverTrendingMovieIdsByGenreId(int genreId) {
+
+        LocalDate today = LocalDate.now();
+        LocalDate oneYearAgo = LocalDate.now().minusDays(365);
+
+        Set<Integer> trendingMovieIds = new HashSet<>();
+
+        String url = "https://api.themoviedb.org/3/discover/movie?&sort_by=popularity.desc" +
+                "&include_adult=false&include_video=false" +
+                "&vote_count.gte=" + MINIMUM_VOTE_COUNT +
+                "&primary_release_date.lte=" + today +
+                "&primary_release_date.gte=" + oneYearAgo +
+                "&with_genres=" + genreId;
+        String json = getDataFromTmdb(url);
+
+        try {
+            JsonNode results = objectMapper.readTree(json).path("results");
+            results.forEach(node -> trendingMovieIds.add(node.path("id").asInt()));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return trendingMovieIds;
     }
 
     public static TmdbMovieDto getMovieDetails(int movieId) {

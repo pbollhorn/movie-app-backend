@@ -47,6 +47,10 @@ public class MovieUpdateTask implements Runnable {
         Set<Integer> movieIds = new HashSet<>();
         movieIds.addAll(movieDao.getTrendingMovieIds());
         movieIds.addAll(TmdbService.discoverTrendingMovieIds());
+        for (int genreId : genreDao.getAllGenreIds()) {
+            movieIds.addAll(movieDao.getTrendingMovieIdsByGenreId(genreId));
+            movieIds.addAll(TmdbService.discoverTrendingMovieIdsByGenreId(genreId));
+        }
 
         for (int movieId : movieIds) {
 

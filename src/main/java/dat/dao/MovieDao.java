@@ -11,7 +11,6 @@ import dat.entities.Account;
 import dat.entities.Rating;
 import dat.entities.Movie;
 import dat.dto.*;
-import dat.dao.GenreDao;
 
 public class MovieDao {
 
@@ -21,7 +20,6 @@ public class MovieDao {
 
     private static MovieDao instance;
     private static EntityManagerFactory emf;
-//    private static GenreDao genreDao = GenreDao.getInstance(emf);
 
     private MovieDao(EntityManagerFactory emf) {
         this.emf = emf;
@@ -75,7 +73,7 @@ public class MovieDao {
 
     /**
      * Get ids of trending movies from database.
-     * I.e. the top 20 most popular movies, overall and for each genre, released within the last year.
+     * I.e. the top 20 most popular movies released within the last year.
      *
      * @return Set of movie ids
      */
@@ -88,12 +86,24 @@ public class MovieDao {
                 .map(MovieOverviewDto::id)
                 .forEach(trendingMovieIds::add);
 
-//        for (int genreId : genreDao.getAllGenreIds()) {
-//            getPopularMoviesByGenre(genreId, null)
-//                    .stream()
-//                    .map(MovieOverviewDto::id)
-//                    .forEach(trendingMovieIds::add);
-//        }
+        return trendingMovieIds;
+
+    }
+
+    /**
+     * Get ids of trending movies from database for a specific genreId.
+     * I.e. the top 20 most popular movies within that genre released within the last year.
+     *
+     * @return Set of movie ids
+     */
+    public Set<Integer> getTrendingMovieIdsByGenreId(int genreId) {
+
+        Set<Integer> trendingMovieIds = new HashSet<>();
+
+        getPopularMoviesByGenre(genreId, null)
+                    .stream()
+                    .map(MovieOverviewDto::id)
+                    .forEach(trendingMovieIds::add);
 
         return trendingMovieIds;
 
