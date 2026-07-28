@@ -34,12 +34,27 @@ public class GenreDao {
         }
     }
 
-
+    /**
+     * Get all genres from the database.
+     * @return List of TmdbGenreDto
+     */
     public List<TmdbGenreDto> getAllGenres() {
         try (EntityManager em = emf.createEntityManager()) {
             String jpql = "SELECT NEW dat.dto.TmdbGenreDto(g.id, g.name) FROM Genre g ORDER BY g.name";
             List<TmdbGenreDto> genres = em.createQuery(jpql, TmdbGenreDto.class).getResultList();
             return genres;
+        }
+    }
+
+    /**
+     * Get all genre ids from the database
+     * @return List of genre ids
+     */
+    public List<Integer> getAllGenreIds() {
+        try (EntityManager em = emf.createEntityManager()) {
+            String jpql = "SELECT g.id FROM Genre g ORDER BY g.name";
+            List<Integer> genreIds = em.createQuery(jpql, Integer.class).getResultList();
+            return genreIds;
         }
     }
 

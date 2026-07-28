@@ -26,10 +26,10 @@ public class Main {
 
         // Initialize DAO singletons
         EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
-        AccountDao accountDAO = AccountDao.getInstance(emf);
+        AccountDao accountDao = AccountDao.getInstance(emf);
         CollectionDao collectionDao = CollectionDao.getInstance(emf);
         GenreDao genreDao = GenreDao.getInstance(emf);
-        MovieDao movieDAO = MovieDao.getInstance(emf);
+        MovieDao movieDao = MovieDao.getInstance(emf);
         PersonDao personDao = PersonDao.getInstance(emf);
 
         // Install pg_trgm extension in database, if not already installed
@@ -56,6 +56,9 @@ public class Main {
                 .checkSecurityRoles()
                 .startServer(7070);
 
+        // TODO: Delete this line
+        System.out.println(movieDao.getTrendingMovieIds());
+        System.out.println(movieDao.getTrendingMovieIds().size());
 
     }
 

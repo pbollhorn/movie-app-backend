@@ -11,6 +11,7 @@ import dat.entities.Account;
 import dat.entities.Rating;
 import dat.entities.Movie;
 import dat.dto.*;
+import dat.dao.GenreDao;
 
 public class MovieDao {
 
@@ -20,6 +21,7 @@ public class MovieDao {
 
     private static MovieDao instance;
     private static EntityManagerFactory emf;
+    private static GenreDao genreDao = GenreDao.getInstance(emf);
 
     private MovieDao(EntityManagerFactory emf) {
         this.emf = emf;
@@ -53,8 +55,7 @@ public class MovieDao {
             em.remove(movie);
             em.getTransaction().commit();
             return movie;
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
             return null;
         }
@@ -71,9 +72,37 @@ public class MovieDao {
 
     }
 
+
+    /**
+     * Get ids of trending movies from database.
+     * I.e. the top 20 most popular movies, overall and for each genre, released within the last year.
+     *
+     * @return Set of movie ids
+     */
+    public Set<Integer> getTrendingMovieIds() {
+
+        Set<Integer> trendingMovieIds = new HashSet<>();
+
+        getPopularMovies(null)
+                .stream()
+                .map(MovieOverviewDto::id)
+                .forEach(trendingMovieIds::add);
+
+        for (int genreId : genreDao.getAllGenreIds()) {
+            getPopularMoviesByGenre(genreId, null)
+                    .stream()
+                    .map(MovieOverviewDto::id)
+                    .forEach(trendingMovieIds::add);
+        }
+
+        return trendingMovieIds;
+
+    }
+
     /**
      * Delete movies in the database that are no longer wanted.
      * These are movies where adult=TRUE or video=TRUE or voteCount<10 after an update from TMDB.
+     *
      * @return Number of deleted movies
      */
     public int deleteUnwantedMovies() {
