@@ -92,7 +92,7 @@ public class MovieDao {
 
     /**
      * Get ids of trending movies from database for a specific genreId.
-     * I.e. the top 20 most popular movies within that genre released within the last year.
+     * I.e. the top 20 most popular movies with that genre released within the last year.
      *
      * @return Set of movie ids
      */

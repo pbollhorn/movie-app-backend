@@ -52,6 +52,7 @@ public class MovieUpdateTask implements Runnable {
             movieIds.addAll(TmdbService.discoverTrendingMovieIdsByGenreId(genreId));
         }
 
+        logger.info("Requesting details on {} movies from TMDB", movieIds.size());
         for (int movieId : movieIds) {
 
             TmdbMovieDto movieDto;

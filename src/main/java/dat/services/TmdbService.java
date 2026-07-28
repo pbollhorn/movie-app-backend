@@ -82,7 +82,7 @@ public class TmdbService {
 
     /**
      * Get ids of trending movies from TMDB.
-     * I.e. the top 20 most popular movies, overall and for each genre, released within the last year.
+     * I.e. the top 20 most popular movies released within the last year.
      * Please note: This method does not use TMDB's trending endpoint
      *
      * @return Set of movie ids
@@ -112,6 +112,13 @@ public class TmdbService {
         return trendingMovieIds;
     }
 
+    /**
+     * Get ids of trending movies from TMDB for a specific genreId.
+     * I.e. the top 20 most popular movies, with that genre, released within the last year.
+     * Please note: This method does not use TMDB's trending endpoint
+     *
+     * @return Set of movie ids
+     */
     public static Set<Integer> discoverTrendingMovieIdsByGenreId(int genreId) {
 
         LocalDate today = LocalDate.now();
