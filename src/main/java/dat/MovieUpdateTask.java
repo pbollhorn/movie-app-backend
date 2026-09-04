@@ -33,6 +33,12 @@ public class MovieUpdateTask implements Runnable {
 
     private static final Logger logger = LoggerFactory.getLogger(MovieUpdateTask.class);
 
+    /**
+     * This main method runs the MovieUpdateTask.
+     * On the Ubuntu server, a cron job is set to run this main method at the beginning of each week:
+     * m  h  dom mon dow  command
+     * 39 1  *   *   MON  docker exec MovieAPI java -cp /app.jar dat.MovieUpdateTask
+     */
     public static void main(String[] args) {
         new MovieUpdateTask().run();
     }
