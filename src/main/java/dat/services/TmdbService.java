@@ -25,10 +25,10 @@ public class TmdbService {
     private static final int MINIMUM_VOTE_COUNT = 10;
 
     // TMDB says that approx. 50 requests per second are allowed: https://developer.themoviedb.org/docs/rate-limiting
-    // To be on the safe side, this code limits to 40 requests per second
+    // To be on the safe side, this code pauses for 1/40 of a second between requests
     // This rate-limiting also allows the backend to focus on serving requests from frontend
     private static final int MAX_REQUESTS_PER_SECOND = 40;
-    private static final long DELAY_MILLISECONDS = 1000 / MAX_REQUESTS_PER_SECOND;
+    private static final long PAUSE_MILLISECONDS = 1000 / MAX_REQUESTS_PER_SECOND;
 
     private static final String TmdbApiReadAccessToken = PropertyReader.getPropertyValue("TMDB_API_READ_ACCESS_TOKEN");
     private static final HttpClient httpClient = HttpClient.newHttpClient();
@@ -163,9 +163,14 @@ public class TmdbService {
 
     }
 
-    private static String getDataFromTmdb(String url) {
 
-        long startTime = System.currentTimeMillis();
+    /**
+     * Performs a GET request to TMDB's API to get data.
+     *
+     * @param url URL for the GET request
+     * @return The data returned from TMDB's API as a string
+     */
+    private static String getDataFromTmdb(String url) {
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -177,10 +182,8 @@ public class TmdbService {
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
-            long timeSpent = System.currentTimeMillis() - startTime;
-            long timeToSleep = Math.max(DELAY_MILLISECONDS - timeSpent, 0);
             try {
-                Thread.sleep(timeToSleep);
+                Thread.sleep(PAUSE_MILLISECONDS);
             } catch (InterruptedException e) {
             }
 

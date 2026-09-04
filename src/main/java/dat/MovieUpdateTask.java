@@ -102,7 +102,8 @@ public class MovieUpdateTask implements Runnable {
             movie.setLastTmdbSyncToNow();
             movieDao.update(movie);
 
-            // TODO: After update, unused MovieGenres, Credits and Ratings are removed, but there may be roque Genres and Persons
+            // After update of Movie, orphaned MovieGenres, Credits and Ratings are deleted
+            // But orphaned Genres, Persons and Collections are not deleted, and are therefore deleted in the code below.
         }
 
 
