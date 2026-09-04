@@ -24,6 +24,7 @@ import dat.services.TmdbService;
 
 public class MovieUpdateTask implements Runnable {
 
+    // Initialize DAO singletons
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
     private static final CollectionDao collectionDao = CollectionDao.getInstance(emf);
     private static final GenreDao genreDao = GenreDao.getInstance(emf);
@@ -31,6 +32,10 @@ public class MovieUpdateTask implements Runnable {
     private static final PersonDao personDao = PersonDao.getInstance(emf);
 
     private static final Logger logger = LoggerFactory.getLogger(MovieUpdateTask.class);
+
+    public static void main(String[] args) {
+        new MovieUpdateTask().run();
+    }
 
     @Override
     public void run() {
@@ -139,7 +144,7 @@ public class MovieUpdateTask implements Runnable {
             logger.error("Failed to delete orphaned collections", e);
         }
 
-        logger.info("Finished MovieUpdateTask, seconds it took: " + (System.currentTimeMillis() - startTime)/1000);
+        logger.info("Finished MovieUpdateTask, seconds it took: " + (System.currentTimeMillis() - startTime) / 1000);
 
     }
 
