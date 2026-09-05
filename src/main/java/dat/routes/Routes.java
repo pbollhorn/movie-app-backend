@@ -30,7 +30,6 @@ public class Routes {
             get("/top100",  MovieController::getTop100Movies, Role.ANYONE);
             get("/ratings", MovieController::getAllMoviesWithRating, Role.USER);
             get("/recommendations", MovieController::getMovieRecommendations, Role.USER);
-            post("/update", MovieController::updateMovies, Role.ADMIN);
             get("/person/{id}", MovieController::getMoviesWithPerson, Role.ANYONE);
             get("/collection/{id}", MovieController::getMoviesInCollection, Role.ANYONE);
             put("/{id}/ratings", MovieController::updateOrCreateMovieRating, Role.USER);

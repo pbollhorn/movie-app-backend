@@ -110,10 +110,4 @@ public class MovieController {
         ctx.json(movies);
     }
 
-    public static void updateMovies(Context ctx) {
-        Thread thread = new Thread(new MovieUpdateTask());
-        thread.start();
-        ctx.status(202).json("Started MovieUpdateTask");
-    }
-
 }

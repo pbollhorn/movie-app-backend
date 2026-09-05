@@ -40,7 +40,13 @@ public class MovieUpdateTask implements Runnable {
      * 39 1  *   *   MON  docker exec MovieAPI java -cp /app.jar dat.MovieUpdateTask
      */
     public static void main(String[] args) {
-        new MovieUpdateTask().run();
+        try {
+            new MovieUpdateTask().run();
+        } finally {
+            if (emf.isOpen()) {
+                emf.close();
+            }
+        }
     }
 
     @Override

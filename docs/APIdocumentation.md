@@ -18,7 +18,6 @@ URL for the API: https://movie.jcoder.dk/api
 | PUT     | /movies/(id)/ratings          | `{"rating": Boolean}`                      | (empty)                                 | USER   |
 | DELETE  | /movies/(id)/ratings          | (empty)                                    | (empty)                                 | USER   |
 | GET     | /movies/recommendations       | (empty)                                    | `MovieOverviewDto[]`                    | USER   |
-| POST    | /movies/update                | (empty)                                    | `'Started MovieUpdateTask'`             | USER   |
 
 ```
 TmdbGenreDto =
