@@ -123,6 +123,7 @@ public class MovieDao {
             List<Movie> movies = em.createQuery(jpql, Movie.class).getResultList();
 
             for (Movie m : movies) {
+                System.out.println(m);
                 em.remove(m); // Triggers cascade delete on Credits, MovieGenres and Ratings
             }
 
