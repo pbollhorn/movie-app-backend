@@ -1,5 +1,6 @@
 package dat.dao;
 
+import java.time.OffsetDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.time.LocalDate;
@@ -111,7 +112,7 @@ public class MovieDao {
 
     public Set<Integer> getStaleMovieIds() {
 
-        LocalDate cutoffDate = LocalDate.now().minusDays(30);
+        OffsetDateTime cutoffDate = OffsetDateTime.now().minusDays(30);
 
         try (EntityManager em = emf.createEntityManager()) {
 
