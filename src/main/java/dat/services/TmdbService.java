@@ -133,7 +133,6 @@ public class TmdbService {
                 "&primary_release_date.gte=" + oneYearAgo +
                 "&with_genres=" + genreId;
         String json = getDataFromTmdb(url);
-        System.out.println(json);
 
         try {
             JsonNode results = objectMapper.readTree(json).path("results");
