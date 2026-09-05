@@ -40,13 +40,15 @@ public class MovieUpdateTask {
      * 39 1  *   *   MON  docker exec MovieAPI java -cp /app.jar dat.MovieUpdateTask
      */
     public static void main(String[] args) {
-        try {
-            run();
-        } finally {
-            if (emf.isOpen()) {
-                emf.close();
-            }
-        }
+        run();
+
+//        try {
+//            run();
+//        } finally {
+//            if (emf.isOpen()) {
+//                emf.close();
+//            }
+//        }
     }
 
 
