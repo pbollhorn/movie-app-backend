@@ -22,7 +22,7 @@ import dat.entities.Person;
 import dat.exceptions.ApiException;
 import dat.services.TmdbService;
 
-public class MovieUpdateTask implements Runnable {
+public class MovieUpdateTask {
 
     // Initialize DAO singletons
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
@@ -41,7 +41,7 @@ public class MovieUpdateTask implements Runnable {
      */
     public static void main(String[] args) {
         try {
-            new MovieUpdateTask().run();
+            run();
         } finally {
             if (emf.isOpen()) {
                 emf.close();
@@ -49,8 +49,8 @@ public class MovieUpdateTask implements Runnable {
         }
     }
 
-    @Override
-    public void run() {
+
+    static private void run() {
 
         logger.info("Started MovieUpdateTask");
         long startTime = System.currentTimeMillis();
