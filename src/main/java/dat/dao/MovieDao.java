@@ -112,7 +112,7 @@ public class MovieDao {
 
     public Set<Integer> getStaleMovieIds() {
 
-        OffsetDateTime cutoffDate = OffsetDateTime.now().minusDays(30);
+        OffsetDateTime cutoffDate = OffsetDateTime.now().minusDays(90);
 
         try (EntityManager em = emf.createEntityManager()) {
 
