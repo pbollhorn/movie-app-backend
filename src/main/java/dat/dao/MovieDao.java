@@ -101,11 +101,27 @@ public class MovieDao {
         Set<Integer> trendingMovieIds = new HashSet<>();
 
         getPopularMoviesByGenre(genreId, null)
-                    .stream()
-                    .map(MovieOverviewDto::id)
-                    .forEach(trendingMovieIds::add);
+                .stream()
+                .map(MovieOverviewDto::id)
+                .forEach(trendingMovieIds::add);
 
         return trendingMovieIds;
+
+    }
+
+    public Set<Integer> getStaleMovieIds() {
+
+        LocalDate cutoffDate = LocalDate.now().minusDays(30);
+
+        try (EntityManager em = emf.createEntityManager()) {
+
+            String jpql = "SELECT m.id FROM Movie m WHERE m.lastTmdbSync < :cutoffDate";
+            List<Integer> movieIds = em.createQuery(jpql, Integer.class)
+                    .setParameter("cutoffDate", cutoffDate)
+                    .getResultList();
+
+            return new HashSet<>(movieIds);
+        }
 
     }
 

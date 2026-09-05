@@ -62,6 +62,7 @@ public class MovieUpdateTask {
 //        movieIds.addAll(TmdbService.discoverMovieIds());
 
         Set<Integer> movieIds = new HashSet<>();
+        movieIds.addAll(movieDao.getStaleMovieIds());
         movieIds.addAll(movieDao.getTrendingMovieIds());
         movieIds.addAll(TmdbService.discoverTrendingMovieIds());
         for (int genreId : genreDao.getAllGenreIds()) {
