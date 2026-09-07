@@ -62,9 +62,11 @@ public class TmdbService {
             for (int page = 1; ; page++) {
 
                 String url = "https://api.themoviedb.org/3/discover/movie?&sort_by=primary_release_date.asc" +
-                        "&include_adult=false&include_video=false" +
+                        "&include_adult=false" +
+                        "&include_video=false" +
                         "&vote_count.gte=" + MINIMUM_VOTE_COUNT +
                         "&primary_release_date.lte=" + today +
+                        "&primary_release_date.gte=" + startDate +
                         "&primary_release_year=" + year +
                         "&page=" + page;
                 String json = getDataFromTmdb(url);
@@ -105,7 +107,8 @@ public class TmdbService {
         Set<Integer> trendingMovieIds = new HashSet<>();
 
         String url = "https://api.themoviedb.org/3/discover/movie?&sort_by=popularity.desc" +
-                "&include_adult=false&include_video=false" +
+                "&include_adult=false" +
+                "&include_video=false" +
                 "&vote_count.gte=" + MINIMUM_VOTE_COUNT +
                 "&primary_release_date.lte=" + today +
                 "&primary_release_date.gte=" + oneYearAgo;
@@ -137,7 +140,8 @@ public class TmdbService {
         Set<Integer> trendingMovieIds = new HashSet<>();
 
         String url = "https://api.themoviedb.org/3/discover/movie?&sort_by=popularity.desc" +
-                "&include_adult=false&include_video=false" +
+                "&include_adult=false" +
+                "&include_video=false" +
                 "&vote_count.gte=" + MINIMUM_VOTE_COUNT +
                 "&primary_release_date.lte=" + today +
                 "&primary_release_date.gte=" + oneYearAgo +
