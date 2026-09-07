@@ -65,7 +65,7 @@ public class MovieUpdateTask {
 
     static private void run(int daysToLookBack) {
 
-        logger.info("Started MovieUpdateTask");
+        logger.info("Started MovieUpdateTask with daysToLookBack={}", daysToLookBack);
         long startTime = System.currentTimeMillis();
 
         Set<Integer> movieIds = new HashSet<>();
