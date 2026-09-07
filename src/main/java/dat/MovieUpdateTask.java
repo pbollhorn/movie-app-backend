@@ -1,7 +1,7 @@
 package dat;
 
+import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import dat.dao.CollectionDao;
@@ -24,6 +24,8 @@ import dat.services.TmdbService;
 
 public class MovieUpdateTask {
 
+    private static final int YEAR_OF_FIRST_MOVIE = 1874;
+
     // Initialize DAO singletons
     private static final EntityManagerFactory emf = HibernateConfig.getEntityManagerFactory();
     private static final CollectionDao collectionDao = CollectionDao.getInstance(emf);
@@ -37,11 +39,22 @@ public class MovieUpdateTask {
      * This main method runs the MovieUpdateTask.
      * On the Ubuntu server, a cron job is set to run this main method at the beginning of each week:
      * m  h  dom mon dow  command
-     * 39 1  *   *   MON  docker exec MovieAPI java -cp /app.jar dat.MovieUpdateTask
+     * 39 1  *   *   MON  docker exec MovieAPI java -cp /app.jar dat.MovieUpdateTask 7
      */
     public static void main(String[] args) {
+
+        int daysToLookBack;
+
+        if (args.length == 0) {
+            LocalDate today = LocalDate.now();
+            LocalDate startDate = LocalDate.of(YEAR_OF_FIRST_MOVIE, 1, 1);
+            daysToLookBack = (int) (today.toEpochDay() - startDate.toEpochDay());
+        } else {
+            daysToLookBack = Integer.parseInt(args[0]);
+        }
+
         try {
-            run();
+            run(daysToLookBack);
         } finally {
             if (emf.isOpen()) {
                 emf.close();
@@ -50,7 +63,7 @@ public class MovieUpdateTask {
     }
 
 
-    static private void run() {
+    static private void run(int daysToLookBack) {
 
         logger.info("Started MovieUpdateTask");
         long startTime = System.currentTimeMillis();
