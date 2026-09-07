@@ -41,15 +41,6 @@ public class TmdbService {
         return objectMapper;
     }
 
-    // Look all the way back to the year of the first movie
-    public static Set<Integer> discoverMovieIds() {
-        LocalDate today = LocalDate.now();
-        LocalDate startDate = LocalDate.of(YEAR_OF_FIRST_MOVIE, 1, 1);
-        int daysToLookBack = (int) (today.toEpochDay() - startDate.toEpochDay());
-        return discoverMovieIds(daysToLookBack);
-    }
-
-
     public static Set<Integer> discoverMovieIds(int daysToLookBack) {
 
         LocalDate today = LocalDate.now();
