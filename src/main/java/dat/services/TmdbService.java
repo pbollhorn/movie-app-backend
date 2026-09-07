@@ -41,13 +41,23 @@ public class TmdbService {
         return objectMapper;
     }
 
+    // Look all the way back to the year of the first movie
     public static Set<Integer> discoverMovieIds() {
+        LocalDate today = LocalDate.now();
+        LocalDate startDate = LocalDate.of(YEAR_OF_FIRST_MOVIE, 1, 1);
+        int daysToLookBack = (int) (today.toEpochDay() - startDate.toEpochDay());
+        return discoverMovieIds(daysToLookBack);
+    }
+
+
+    public static Set<Integer> discoverMovieIds(int daysToLookBack) {
 
         LocalDate today = LocalDate.now();
+        LocalDate startDate = today.minusDays(daysToLookBack);
 
         Set<Integer> movieIds = new HashSet<>();
 
-        for (int year = YEAR_OF_FIRST_MOVIE; year <= today.getYear(); year++) {
+        for (int year = startDate.getYear(); year <= today.getYear(); year++) {
 
             for (int page = 1; ; page++) {
 

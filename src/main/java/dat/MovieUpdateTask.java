@@ -55,14 +55,14 @@ public class MovieUpdateTask {
         logger.info("Started MovieUpdateTask");
         long startTime = System.currentTimeMillis();
 
-//        // Get all movieIds currently in database
-//        Set<Integer> movieIds = movieDao.getAllMovieIds();
-//
-//        // Add new movies from TMDB
-//        movieIds.addAll(TmdbService.discoverMovieIds());
-
         Set<Integer> movieIds = new HashSet<>();
+
+        // Get all stale movieIds currently in database
         movieIds.addAll(movieDao.getStaleMovieIds());
+
+        // Add new movies from TMDB
+        movieIds.addAll(TmdbService.discoverMovieIds(7));
+
         movieIds.addAll(movieDao.getTrendingMovieIds());
         movieIds.addAll(TmdbService.discoverTrendingMovieIds());
         for (int genreId : genreDao.getAllGenreIds()) {
