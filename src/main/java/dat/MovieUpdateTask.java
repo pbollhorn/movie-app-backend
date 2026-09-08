@@ -74,7 +74,7 @@ public class MovieUpdateTask {
         movieIds.addAll(movieDao.getStaleMovieIds());
 
         // Add new movies from TMDB
-        movieIds.addAll(TmdbService.discoverMovieIds(7));
+        movieIds.addAll(TmdbService.discoverMovieIds(daysToLookBack));
 
         movieIds.addAll(movieDao.getTrendingMovieIds());
         movieIds.addAll(TmdbService.discoverTrendingMovieIds());
