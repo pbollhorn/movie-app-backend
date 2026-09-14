@@ -99,7 +99,7 @@ public class MovieUpdateTask {
             try {
                 movieDto = TmdbService.getMovieDetails(movieId);
             } catch (ApiException e) {
-                logger.info("Caught ApiException: code={} message={}", e.getCode(), e.getMessage());
+                logger.warn("Caught ApiException: code={} message={}", e.getCode(), e.getMessage());
                 if (e.getCode() == 429) {
                     logger.error("Stopping MovieUpdateTask immediately due to code 429 from TMDB");
                     return;
