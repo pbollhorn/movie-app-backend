@@ -251,7 +251,6 @@ public class MovieDao {
      *
      * @param accountId Account ID to get this app's (True, False, Null) ratings for the {@link MovieOverviewDto} instances
      * @return List of top 100 ranked {@link MovieOverviewDto} instances
-     * @see
      */
     public List<MovieOverviewDto> getTop100Movies(Integer accountId) {
 

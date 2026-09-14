@@ -35,11 +35,19 @@ public class MovieUpdateTask {
 
     private static final Logger logger = LoggerFactory.getLogger(MovieUpdateTask.class);
 
+
     /**
-     * This main method runs the MovieUpdateTask.
-     * On the Ubuntu server, a cron job is set to run this main method at the beginning of each week:
+     * Main method for running the MovieUpdateTask.
+     *
+     * Behavior depends on the provided arguments:
+     * - No arguments: Calculates days from YEAR_OF_FIRST_MOVIE to today for a complete update.
+     * - One argument: Parses args[0] as an integer specifying the exact number of days to look back.
+     *
+     * On the Ubuntu server, a cron job is set to run MovieUpdateTask looking back 7 days, at the beginning of each week:
      * m  h  dom mon dow  command
      * 39 1  *   *   MON  docker exec MovieAPI java -cp /app.jar dat.MovieUpdateTask 7
+     * 
+     * @param args command-line arguments (optional: a single integer for days to look back)
      */
     public static void main(String[] args) {
 
@@ -90,13 +98,13 @@ public class MovieUpdateTask {
             try {
                 movieDto = TmdbService.getMovieDetails(movieId);
             } catch (ApiException e) {
-                logger.info("Caught ApiException: " + e.getCode() + " " + e.getMessage());
+                logger.info("Caught ApiException: code={} message={}", e.getCode(), e.getMessage());
                 if (e.getCode() == 429) {
                     logger.error("Stopping MovieUpdateTask immediately due to code 429 from TMDB");
                     return;
                 }
                 if (e.getCode() == 404) {
-                    logger.info("Deleting movie with id=" + movieId + " due to code 404 from TMDB");
+                    logger.info("Deleting movie with id={} due to code 404 from TMDB", movieId);
                     movieDao.deleteById(movieId);
                 }
                 continue;
@@ -136,12 +144,12 @@ public class MovieUpdateTask {
             // After update of Movie, orphaned MovieGenres, Credits and Ratings are deleted
             // But orphaned Genres, Persons and Collections are not deleted, and are therefore deleted in the code below.
         }
-
+        logger.info("Finished updating movies with fresh data from TMDB", movieIds.size());
 
         // Delete unwanted movies
         try {
             int deletedCount = movieDao.deleteUnwantedMovies();
-            logger.info("Deleted " + deletedCount + " unwanted movies");
+            logger.info("Deleted {} unwanted movies", deletedCount);
         } catch (Exception e) {
             logger.error("Failed to delete unwanted movies", e);
         }
@@ -149,7 +157,7 @@ public class MovieUpdateTask {
         // Delete orphaned genres
         try {
             int deletedCount = genreDao.deleteOrphanedGenres();
-            logger.info("Deleted " + deletedCount + " orphaned genres");
+            logger.info("Deleted {} orphaned genres", deletedCount);
         } catch (Exception e) {
             logger.error("Failed to delete orphaned genres", e);
         }
@@ -157,7 +165,7 @@ public class MovieUpdateTask {
         // Delete orphaned persons
         try {
             int deletedCount = personDao.deleteOrphanedPersons();
-            logger.info("Deleted " + deletedCount + " orphaned persons");
+            logger.info("Deleted {} orphaned persons", deletedCount);
         } catch (Exception e) {
             logger.error("Failed to delete orphaned persons", e);
         }
@@ -165,12 +173,12 @@ public class MovieUpdateTask {
         // Delete orphaned collections
         try {
             int deletedCount = collectionDao.deleteOrphanedCollections();
-            logger.info("Deleted " + deletedCount + " orphaned collections");
+            logger.info("Deleted {} orphaned collections", deletedCount);
         } catch (Exception e) {
             logger.error("Failed to delete orphaned collections", e);
         }
 
-        logger.info("Finished MovieUpdateTask, seconds it took: " + (System.currentTimeMillis() - startTime) / 1000);
+        logger.info("Finished MovieUpdateTask in {} seconds", (System.currentTimeMillis() - startTime) / 1000);
 
     }
 
