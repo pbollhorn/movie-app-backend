@@ -22,7 +22,8 @@
         </encoder>
     </appender>
 
-    <root level="warn">
+    <!-- TODO: Set level back to "warn" -->
+    <root level="debug">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
     </root>
