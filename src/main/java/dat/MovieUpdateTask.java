@@ -84,6 +84,7 @@ public class MovieUpdateTask {
         // Add new movies from TMDB
         movieIds.addAll(TmdbService.discoverMovieIds(daysToLookBack));
 
+        // Add the trending movies from database and from TMDB
         movieIds.addAll(movieDao.getTrendingMovieIds());
         movieIds.addAll(TmdbService.discoverTrendingMovieIds());
         for (int genreId : genreDao.getAllGenreIds()) {
@@ -140,9 +141,6 @@ public class MovieUpdateTask {
 
             movie.setLastTmdbSyncToNow();
             movieDao.update(movie);
-
-            // After update of Movie, orphaned MovieGenres, Credits and Ratings are deleted
-            // But orphaned Genres, Persons and Collections are not deleted, and are therefore deleted in the code below.
         }
         logger.info("Finished updating movies with fresh data from TMDB", movieIds.size());
 
@@ -153,6 +151,9 @@ public class MovieUpdateTask {
         } catch (Exception e) {
             logger.error("Failed to delete unwanted movies", e);
         }
+
+        // After update of Movie, orphaned MovieGenres, Credits and Ratings are deleted
+        // But orphaned Genres, Persons and Collections are not deleted, and are therefore deleted in the code below.
 
         // Delete orphaned genres
         try {

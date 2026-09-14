@@ -77,9 +77,3 @@ CreditDto =
  - FALSE if the user does not like the movie
  - NULL if the user has not given his/her opinion of the movie
 ```
-
-## Status på implementation
-
-- Mine endpoints giver fejlkoder i tilfælde af fejl, men ikke altid de korrekte fejlkoder (4xx for Client Error, 5xx
-  Server Error)
-- Jeg har ikke fået skrevet særligt mange tests

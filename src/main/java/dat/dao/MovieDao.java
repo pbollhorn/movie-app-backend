@@ -110,6 +110,11 @@ public class MovieDao {
 
     }
 
+    /**
+     * Get ids of movies from database where lastTmdbSync is older than 90 days.
+     *
+     * @return Set of movie ids
+     */
     public Set<Integer> getStaleMovieIds() {
 
         OffsetDateTime cutoffDate = OffsetDateTime.now().minusDays(90);
