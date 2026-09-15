@@ -23,7 +23,7 @@
     </appender>
 
     <!-- TODO: Set level back to "warn" -->
-    <root level="debug">
+    <root level="info">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILE" />
     </root>
