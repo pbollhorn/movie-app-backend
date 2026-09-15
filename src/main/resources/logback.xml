@@ -10,27 +10,17 @@
         <file>logs/javalin-app.log</file>
         <append>true</append>
         <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
-
-    <appender name="DEBUGFILE" class="ch.qos.logback.core.FileAppender">
-        <file>logs/debug.log</file>
-        <append>true</append>
-        <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss, UTC} UTC [%thread] %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
-    <!-- TODO: Set level back to "warn" -->
-    <root level="info">
-        <appender-ref ref="CONSOLE" />
-        <appender-ref ref="FILE" />
+    <!-- Root log level is "warn" -->
+    <root level="warn">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="FILE"/>
     </root>
 
-    <!-- Adjust log levels for specific packages if needed -->
-    <logger name="dat" level="debug">
-        <appender-ref ref="DEBUGFILE" />
-    </logger>
-</configuration>
+    <!-- For dat package log level is "debug" -->
+    <logger name="dat" level="debug"/>
 
+</configuration>
