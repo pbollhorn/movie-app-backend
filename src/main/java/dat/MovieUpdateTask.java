@@ -38,11 +38,11 @@ public class MovieUpdateTask {
 
     /**
      * Main method for running the MovieUpdateTask.
-     *
+     * <p>
      * Behavior depends on the provided arguments:
      * - No arguments: Calculates days from YEAR_OF_FIRST_MOVIE to today for a complete update.
      * - One argument: Parses args[0] as an integer specifying the exact number of days to look back.
-     *
+     * <p>
      * On the Ubuntu server, a cron job is set to run MovieUpdateTask looking back 7 days, at the beginning of each week:
      * m  h  dom mon dow  command
      * 39 1  *   *   MON  docker exec MovieAPI java -cp /app.jar dat.MovieUpdateTask 7
@@ -113,44 +113,49 @@ public class MovieUpdateTask {
                 continue;
             }
 
-            Movie movie = new Movie(movieDto);
+            try {
+                Movie movie = new Movie(movieDto);
 
-            // It may seem wasteful to overwrite genres for each movie, but this
-            // allows for TMDB genres to change in the middle of an update without affecting this code
-            // e.g. if TMDB ads a new genre in the middle of one of my updates
-            int rankInMovie = 0;
-            for (TmdbGenreDto g : movieDto.genres()) {
-                Genre genre = genreDao.update(g);
-                movie.addGenre(genre, rankInMovie);
-                rankInMovie++;
+                // It may seem wasteful to overwrite genres for each movie, but this
+                // allows for TMDB genres to change in the middle of an update without affecting this code
+                // e.g. if TMDB ads a new genre in the middle of one of my updates
+                int rankInMovie = 0;
+                for (TmdbGenreDto g : movieDto.genres()) {
+                    Genre genre = genreDao.update(g);
+                    movie.addGenre(genre, rankInMovie);
+                    rankInMovie++;
+                }
+
+                rankInMovie = 0;
+                for (TmdbCreditDto c : movieDto.credits().cast()) {
+                    // This creates the cast member as a person in the database
+                    // (or overwrites if already in database)
+                    Person person = personDao.update(c);
+                    movie.addCredit(c.id(), person, "Cast", "Cast Member", c.character(), rankInMovie);
+                    rankInMovie++;
+                }
+                for (TmdbCreditDto c : movieDto.credits().crew()) {
+                    // This creates the crew member as a person in the database
+                    // (or overwrites if already in database)
+                    Person person = personDao.update(c);
+                    movie.addCredit(c.id(), person, c.department(), c.job(), null, rankInMovie);
+                    rankInMovie++;
+                }
+
+                movie.setLastTmdbSyncToNow();
+                movieDao.update(movie);
+            } catch (RuntimeException e) {
+                logger.error("Failed to update/create movie with id={}", movieId, e);
             }
 
-            rankInMovie = 0;
-            for (TmdbCreditDto c : movieDto.credits().cast()) {
-                // This creates the cast member as a person in the database
-                // (or overwrites if already in database)
-                Person person = personDao.update(c);
-                movie.addCredit(c.id(), person, "Cast", "Cast Member", c.character(), rankInMovie);
-                rankInMovie++;
-            }
-            for (TmdbCreditDto c : movieDto.credits().crew()) {
-                // This creates the crew member as a person in the database
-                // (or overwrites if already in database)
-                Person person = personDao.update(c);
-                movie.addCredit(c.id(), person, c.department(), c.job(), null, rankInMovie);
-                rankInMovie++;
-            }
-
-            movie.setLastTmdbSyncToNow();
-            movieDao.update(movie);
         }
-        logger.info("Finished updating movies with fresh data from TMDB", movieIds.size());
+        logger.info("Finished updating/creating movies with fresh data from TMDB", movieIds.size());
 
         // Delete unwanted movies
         try {
             int deletedCount = movieDao.deleteUnwantedMovies();
             logger.info("Deleted {} unwanted movies", deletedCount);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             logger.error("Failed to delete unwanted movies", e);
         }
 
@@ -161,7 +166,7 @@ public class MovieUpdateTask {
         try {
             int deletedCount = genreDao.deleteOrphanedGenres();
             logger.info("Deleted {} orphaned genres", deletedCount);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             logger.error("Failed to delete orphaned genres", e);
         }
 
@@ -169,7 +174,7 @@ public class MovieUpdateTask {
         try {
             int deletedCount = personDao.deleteOrphanedPersons();
             logger.info("Deleted {} orphaned persons", deletedCount);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             logger.error("Failed to delete orphaned persons", e);
         }
 
@@ -177,7 +182,7 @@ public class MovieUpdateTask {
         try {
             int deletedCount = collectionDao.deleteOrphanedCollections();
             logger.info("Deleted {} orphaned collections", deletedCount);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             logger.error("Failed to delete orphaned collections", e);
         }
 
