@@ -46,7 +46,7 @@ public class MovieUpdateTask {
      * On the Ubuntu server, a cron job is set to run MovieUpdateTask looking back 7 days, at the beginning of each week:
      * m  h  dom mon dow  command
      * 39 1  *   *   MON  docker exec MovieAPI java -cp /app.jar dat.MovieUpdateTask 7
-     * 
+     *
      * @param args command-line arguments
      */
     public static void main(String[] args) {
@@ -101,7 +101,7 @@ public class MovieUpdateTask {
             try {
                 movieDto = TmdbService.getMovieDetails(movieId);
             } catch (ApiException e) {
-                logger.warn("Caught ApiException: code={} message={}", e.getCode(), e.getMessage());
+                logger.warn("Caught ApiException for movieId={}: code={} message={}", e.getCode(), e.getMessage(), e);
                 if (e.getCode() == 429) {
                     logger.error("Stopping MovieUpdateTask immediately due to code 429 from TMDB");
                     return;
