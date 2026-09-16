@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import dat.config.HibernateConfig;
 import dat.dao.MovieDao;
 import dat.dto.MovieDetailsDto;
-import dat.MovieUpdateTask;
 import dat.dto.MovieOverviewDto;
 import dat.dto.NameMovieListDto;
 

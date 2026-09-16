@@ -4,12 +4,12 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import dat.dao.CollectionDao;
 import jakarta.persistence.EntityManagerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import dat.config.HibernateConfig;
+import dat.dao.CollectionDao;
 import dat.dao.GenreDao;
 import dat.dao.MovieDao;
 import dat.dao.PersonDao;
@@ -47,7 +47,7 @@ public class MovieUpdateTask {
      * m  h  dom mon dow  command
      * 39 1  *   *   MON  docker exec MovieAPI java -cp /app.jar dat.MovieUpdateTask 7
      * 
-     * @param args command-line arguments (optional: a single integer for days to look back)
+     * @param args command-line arguments
      */
     public static void main(String[] args) {
 
@@ -84,9 +84,11 @@ public class MovieUpdateTask {
         // Add new movies from TMDB
         movieIds.addAll(TmdbService.discoverMovieIds(daysToLookBack));
 
-        // Add the trending movies from database and from TMDB
+        // Add overall trending movies from database and from TMDB
         movieIds.addAll(movieDao.getTrendingMovieIds());
         movieIds.addAll(TmdbService.discoverTrendingMovieIds());
+
+        // Add trending movies from database and from TMDB for individual genres
         for (int genreId : genreDao.getAllGenreIds()) {
             movieIds.addAll(movieDao.getTrendingMovieIdsByGenreId(genreId));
             movieIds.addAll(TmdbService.discoverTrendingMovieIdsByGenreId(genreId));

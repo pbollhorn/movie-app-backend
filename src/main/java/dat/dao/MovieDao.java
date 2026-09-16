@@ -40,9 +40,6 @@ public class MovieDao {
             movie = em.merge(movie);
             em.getTransaction().commit();
             return movie;
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
@@ -54,9 +51,6 @@ public class MovieDao {
             em.remove(movie);
             em.getTransaction().commit();
             return movie;
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            return null;
         }
     }
 
