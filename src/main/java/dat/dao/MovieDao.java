@@ -33,7 +33,12 @@ public class MovieDao {
         return instance;
     }
 
-    // Update movie (or create it if it does not already exist)
+    /**
+     * Updates an existing movie in the database or creates it if it does not already exist.
+     *
+     * @param movie the movie to update or create
+     * @return the updated/created movie
+     */
     public Movie update(Movie movie) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
@@ -43,12 +48,22 @@ public class MovieDao {
         }
     }
 
-    // TODO: Perhaps some better error handling in case movie is null
+
+    /**
+     * Deletes the movie with the given ID from the database.
+     *
+     * @param movieId the ID of the movie to delete
+     * @return the deleted movie, or null if no movie was found with that ID
+     */
     public Movie deleteById(int movieId) {
         try (EntityManager em = emf.createEntityManager()) {
             em.getTransaction().begin();
+
             Movie movie = em.find(Movie.class, movieId);
-            em.remove(movie);
+            if (movie != null) {
+                em.remove(movie);
+            }
+
             em.getTransaction().commit();
             return movie;
         }
