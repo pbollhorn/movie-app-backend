@@ -32,8 +32,6 @@ public class Main {
         MovieDao movieDao = MovieDao.getInstance(emf);
         PersonDao personDao = PersonDao.getInstance(emf);
 
-        System.out.println("Small change");
-
         // Install pg_trgm extension in database, if not already installed
         // Create indexes in database, if not already created
         String DB_NAME = PropertyReader.getPropertyValue("DB_NAME");
