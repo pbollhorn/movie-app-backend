@@ -2,7 +2,7 @@
 
 ## Endpoints
 
-URL for the API: https://movie.jcoder.dk/api
+URL for the API: https://movieapp.jcoder.dk/api
 
 | Method  | URL                           | Request Body (JSON)                        | Response (JSON)                         | Roles  |
 |---------|-------------------------------|--------------------------------------------|-----------------------------------------|--------|
