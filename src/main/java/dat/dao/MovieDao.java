@@ -141,8 +141,8 @@ public class MovieDao {
     }
 
     /**
-     * Delete movies in the database that are no longer wanted.
-     * These are movies where adult=TRUE or video=TRUE or voteCount<10 after an update from TMDB.
+     * Delete movies in the database that are no longer wanted, which can occur after an update from TMDB.
+     * Unwanted movies are movies where adult=TRUE or video=TRUE or voteCount<10.
      *
      * @return Number of deleted movies
      */
