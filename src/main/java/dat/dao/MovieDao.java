@@ -16,7 +16,7 @@ import dat.dto.*;
 public class MovieDao {
 
     private static final int MAX_DAYS_POPULAR = 365;
-    private static final int MIN_VOTE_COUNT = 5000;
+    private static final int MIN_VOTE_COUNT = 1000;
     private static final double MEAN_TMDB_SCORE = 6.031;
 
     private static MovieDao instance;
@@ -268,16 +268,20 @@ public class MovieDao {
      */
     public List<MovieOverviewDto> getTop100Movies(Integer accountId) {
 
+        OffsetDateTime cutoffDate = OffsetDateTime.now().minusDays(MAX_DAYS_POPULAR);
+
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
                     SELECT NEW dat.dto.MovieOverviewDto(m, r.rating)
                     FROM Movie m
                     LEFT JOIN Rating r ON r.movie.id = m.id AND r.account.id = :accountId
+                    WHERE m.releaseDate < :cutoffDate
                     ORDER BY (m.voteAverage * m.voteCount / (m.voteCount + :minVotes)) +
                     (1.0 * :mean * :minVotes / (m.voteCount + :minVotes)) DESC""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
+                    .setParameter("cutoffDate", cutoffDate)
                     .setParameter("minVotes", MIN_VOTE_COUNT)
                     .setParameter("mean", MEAN_TMDB_SCORE)
                     .setMaxResults(100)
@@ -291,6 +295,8 @@ public class MovieDao {
 
     public List<MovieOverviewDto> getTop100MoviesByGenre(int genreId, Integer accountId) {
 
+        OffsetDateTime cutoffDate = OffsetDateTime.now().minusDays(MAX_DAYS_POPULAR);
+
         try (EntityManager em = emf.createEntityManager()) {
 
             String jpql = """
@@ -298,10 +304,12 @@ public class MovieDao {
                     FROM MovieGenre mg
                     LEFT JOIN Rating r ON r.movie.id=mg.movie.id AND r.account.id=:accountId
                     WHERE mg.genre.id=:genreId
+                    AND m.releaseDate < :cutoffDate
                     ORDER BY (mg.movie.voteAverage * mg.movie.voteCount / (mg.movie.voteCount + :minVotes)) +
                     (1.0 * :mean * :minVotes / (mg.movie.voteCount + :minVotes)) DESC""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
                     .setParameter("accountId", accountId)
+                    .setParameter("cutoffDate", cutoffDate)
                     .setParameter("minVotes", MIN_VOTE_COUNT)
                     .setParameter("mean", MEAN_TMDB_SCORE)
                     .setParameter("genreId", genreId)
