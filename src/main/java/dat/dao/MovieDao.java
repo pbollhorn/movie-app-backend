@@ -304,7 +304,7 @@ public class MovieDao {
                     FROM MovieGenre mg
                     LEFT JOIN Rating r ON r.movie.id=mg.movie.id AND r.account.id=:accountId
                     WHERE mg.genre.id=:genreId
-                    AND m.releaseDate < :cutoffDate
+                    AND mg.movie.releaseDate < :cutoffDate
                     ORDER BY (mg.movie.voteAverage * mg.movie.voteCount / (mg.movie.voteCount + :minVotes)) +
                     (1.0 * :mean * :minVotes / (mg.movie.voteCount + :minVotes)) DESC""";
             List<MovieOverviewDto> movies = em.createQuery(jpql, MovieOverviewDto.class)
