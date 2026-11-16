@@ -268,7 +268,7 @@ public class MovieDao {
      */
     public List<MovieOverviewDto> getTop100Movies(Integer accountId) {
 
-        OffsetDateTime cutoffDate = OffsetDateTime.now().minusDays(MAX_DAYS_POPULAR);
+        LocalDate cutoffDate = LocalDate.now().minusDays(MAX_DAYS_POPULAR);
 
         try (EntityManager em = emf.createEntityManager()) {
 
@@ -295,7 +295,7 @@ public class MovieDao {
 
     public List<MovieOverviewDto> getTop100MoviesByGenre(int genreId, Integer accountId) {
 
-        OffsetDateTime cutoffDate = OffsetDateTime.now().minusDays(MAX_DAYS_POPULAR);
+        LocalDate cutoffDate = LocalDate.now().minusDays(MAX_DAYS_POPULAR);
 
         try (EntityManager em = emf.createEntityManager()) {
 
