@@ -15,7 +15,7 @@ import dat.dto.*;
 
 public class MovieDao {
 
-    private static final int MAX_DAYS_POPULAR = 365;
+    private static final int DAYS_IN_ONE_YEAR = 365;
     private static final int MIN_VOTE_COUNT = 1000;
     private static final double MEAN_TMDB_SCORE = 6.031;
 
@@ -212,7 +212,7 @@ public class MovieDao {
 
     public List<MovieOverviewDto> getPopularMovies(Integer accountId) {
 
-        LocalDate cutoffDate = LocalDate.now().minusDays(MAX_DAYS_POPULAR);
+        LocalDate cutoffDate = LocalDate.now().minusDays(DAYS_IN_ONE_YEAR);
 
         try (EntityManager em = emf.createEntityManager()) {
 
@@ -236,7 +236,7 @@ public class MovieDao {
 
     public List<MovieOverviewDto> getPopularMoviesByGenre(int genreId, Integer accountId) {
 
-        LocalDate cutoffDate = LocalDate.now().minusDays(MAX_DAYS_POPULAR);
+        LocalDate cutoffDate = LocalDate.now().minusDays(DAYS_IN_ONE_YEAR);
 
         try (EntityManager em = emf.createEntityManager()) {
 
@@ -268,7 +268,7 @@ public class MovieDao {
      */
     public List<MovieOverviewDto> getTop100Movies(Integer accountId) {
 
-        LocalDate cutoffDate = LocalDate.now().minusDays(MAX_DAYS_POPULAR);
+        LocalDate cutoffDate = LocalDate.now().minusDays(DAYS_IN_ONE_YEAR);
 
         try (EntityManager em = emf.createEntityManager()) {
 
@@ -295,7 +295,7 @@ public class MovieDao {
 
     public List<MovieOverviewDto> getTop100MoviesByGenre(int genreId, Integer accountId) {
 
-        LocalDate cutoffDate = LocalDate.now().minusDays(MAX_DAYS_POPULAR);
+        LocalDate cutoffDate = LocalDate.now().minusDays(DAYS_IN_ONE_YEAR);
 
         try (EntityManager em = emf.createEntityManager()) {
 
